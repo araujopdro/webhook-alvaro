@@ -1,16 +1,17 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+
 const app = express();
-const port = 3000;
+const PORT = 3000;
 
-// Middleware para processar JSON
-app.use(express.json());
+app.use(bodyParser.json());
 
-// Rota para o webhook
 app.post('/webhook', (req, res) => {
-    console.log('Payload recebido:', req.body);
-    res.status(200).send('Webhook recebido com sucesso!');
+    const data = req.body;
+    console.log(data); // Processar os dados recebidos
+    res.status(200).send({ status: 'success' });
 });
 
-app.listen(port, () => {
-    console.log(`Servidor ouvindo na porta ${port}`);
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
