@@ -87,6 +87,8 @@ function HandleMachineStatus(e){
             //status z
             //send status to sendpulse using the token
             //requisição para sendpulse
+        default:
+            console.log("Event Handled")
     }
 }
 
