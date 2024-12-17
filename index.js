@@ -20,18 +20,13 @@ app.listen(PORT, () => {
 app.post('/taxi_webhook_setup', (req, res) => {
     const data = req.body;
     console.log(data);
-    
+    // {
+    //     "id_corrida": "{{id_corrida}}",
+    //     "contact_id": "{{contact_id}}",
+    //     "lat_partida": "{{lat_partida}}",
+    //     "lng_partida": "{{lng_partida}}"
+    // }
 
-    // axios.post(`${taxi_base_url}/cadastrarWebhook`, data)
-    // .then(response => {
-
-    //     console.log(response.data);
-    
-    
-    // })
-    // .catch(error => {
-    //     console.error('Error making POST request:', error);
-    // });
 
     res.status(200).send({ status: 'success', body: {...req.body} });
 });
@@ -51,7 +46,7 @@ app.post('/get_sendpulse_token', (req, res) => {
 app.post('/webhook_listener', (req, res) => {
     const event = req.body;  
     
-    console.log('Received Status event:');
+    console.log(event);
     HandleMachineStatus(event)
     
     res.status(200).send('Event received');
@@ -99,7 +94,8 @@ function HandleMachineStatus(e){
             console.log(`${e.id_mch} (N): Nenhum condutor aceitou a solicitação.`)
             break;
         case 'A':
-            console.log(`${e.id_mch} (A): Solicitação aceita por um condutor.`)
+            console.log('\x1b[41m%s\x1b[0m', `${e.id_mch} (A): Solicitação aceita por um condutor.`)
+            if(e.motorista) console.log(`${e.motorista.nome}`)
             break;
         case 'S':
             console.log(`${e.id_mch} (S): Solicitação em espera até a conclusão de uma anterior.`)
@@ -116,14 +112,14 @@ function HandleMachineStatus(e){
         case 'F':
             console.log(`${e.id_mch} (F): Corrida concluída.`)
             break;
-        case 'E':
+        case 'C':
             console.log(`${e.id_mch} (C): Solicitação cancelada.`)
             break;
-        case 'E':
+        case 'R':
             console.log(`${e.id_mch} (R): Pagamento pendente de confirmação.`)
             break;
         default:
-            console.log("event not handled ;-;")
+            console.log(`(${e.status_solicitacao}): event not handled ;-;`)
             break;
     }
 }
