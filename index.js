@@ -70,11 +70,10 @@ app.post('/webhook_listener', (req, res) => {
     
     res.status(200).send('Event received');
 });
-
+ 
 //
-app.post('/are_you_there', (req, res) => {
-    const event = req.body;  
-    
+app.get('/are_you_there', (req, res) => {
+    console.log(req)
     console.log('Yes');
     
     res.status(200).send('Event received');
