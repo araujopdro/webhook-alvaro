@@ -51,8 +51,8 @@ app.post('/get_sendpulse_token', (req, res) => {
 app.post('/webhook_listener', (req, res) => {
     const event = req.body;  
     
-    console.log('Received Status event:', event);
-    //HandleMachineStatus(event)
+    console.log('Received Status event:');
+    HandleMachineStatus(event)
     
     res.status(200).send('Event received');
 });
@@ -75,23 +75,43 @@ app.get('/are_you_there', (req, res) => {
 });
 
 
+// 
+// Arredores local (A): Condutor próximo ao local de embarque.
+// Cheguei ao local (C): Condutor chegou ao local de embarque.
+// Entrada do passageiro (E): Passageiro entrou no veículo.
+// Partida prolongada (O): Passageiro demorou para embarcar.
+// Alteração de trajeto (T): Passageiro alterou o trajeto.
+
+
 //
 function HandleMachineStatus(e){
-    switch(e.status){
-        case 'x':
-            //status X
-            //send status to sendpulse using the token
-            //requisição para sendpulse
-        case 'y':
-            //status y
-            //send status to sendpulse using the token
-            //requisição para sendpulse
-        case 'z':
-            //status z
-            //send status to sendpulse using the token
-            //requisição para sendpulse
+    switch(e.status_solicitacao){
+        case 'D':
+            console.log(`${e.id_mch} (D): Solicitação aberta e ainda não atribuída a um condutor.`)
+        case 'G':
+            console.log(`${e.id_mch} (G): Esperando um condutor aceitar a solicitação.`)
+        case 'P':
+            console.log(`${e.id_mch} (P): Solicitação não aceita, aguardando aceitação.`)
+        case 'N':
+            console.log(`${e.id_mch} (N): Nenhum condutor aceitou a solicitação.`)
+        case 'A':
+            console.log(`${e.id_mch} (A): Solicitação aceita por um condutor.`)
+        case 'S':
+            console.log(`${e.id_mch} (S): Solicitação em espera até a conclusão de uma anterior.`)
+        case 'E':
+            console.log(`${e.id_mch} (E): Corrida iniciada.`)
+        case 'R':
+            console.log(`${e.id_mch} (R): Parada concluída.`)
+        case 'S':
+            console.log(`${e.id_mch} (S): Solicitação finalizada pelo condutor.`)
+        case 'F':
+            console.log(`${e.id_mch} (F): Corrida concluída.`)
+        case 'E':
+            console.log(`${e.id_mch} (C): Solicitação cancelada.`)
+        case 'E':
+            console.log(`${e.id_mch} (R): Pagamento pendente de confirmação.`)
         default:
-            console.log("Event Handled")
+            console.log("event not handled ;-;")
     }
 }
 
