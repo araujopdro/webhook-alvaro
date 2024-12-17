@@ -73,7 +73,6 @@ app.post('/webhook_listener', (req, res) => {
  
 //
 app.get('/are_you_there', (req, res) => {
-    console.log(req)
     console.log('Yes');
     
     res.status(200).send('Event received');
