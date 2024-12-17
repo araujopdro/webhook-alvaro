@@ -51,7 +51,7 @@ app.post('/get_sendpulse_token', (req, res) => {
 app.post('/webhook_listener', (req, res) => {
     const event = req.body;  
     
-    console.log('Received webhook event:', event);
+    console.log('Received Status event:', event);
     //HandleMachineStatus(event)
     
     res.status(200).send('Event received');
@@ -61,7 +61,7 @@ app.post('/webhook_listener', (req, res) => {
 app.post('/webhook_listener_posicao', (req, res) => {
     const event = req.body;  
     
-    console.log('Received webhook event:', event);
+    console.log('Received Posicao event:', event);
     //HandleMachineStatus(event)
     
     res.status(200).send('Event received');
