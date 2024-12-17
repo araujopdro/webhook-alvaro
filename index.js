@@ -88,30 +88,43 @@ function HandleMachineStatus(e){
     switch(e.status_solicitacao){
         case 'D':
             console.log(`${e.id_mch} (D): Solicitação aberta e ainda não atribuída a um condutor.`)
+            break;
         case 'G':
             console.log(`${e.id_mch} (G): Esperando um condutor aceitar a solicitação.`)
+            break;
         case 'P':
             console.log(`${e.id_mch} (P): Solicitação não aceita, aguardando aceitação.`)
+            break;
         case 'N':
             console.log(`${e.id_mch} (N): Nenhum condutor aceitou a solicitação.`)
+            break;
         case 'A':
             console.log(`${e.id_mch} (A): Solicitação aceita por um condutor.`)
+            break;
         case 'S':
             console.log(`${e.id_mch} (S): Solicitação em espera até a conclusão de uma anterior.`)
+            break;
         case 'E':
             console.log(`${e.id_mch} (E): Corrida iniciada.`)
+            break;
         case 'R':
             console.log(`${e.id_mch} (R): Parada concluída.`)
+            break;
         case 'S':
             console.log(`${e.id_mch} (S): Solicitação finalizada pelo condutor.`)
+            break;
         case 'F':
             console.log(`${e.id_mch} (F): Corrida concluída.`)
+            break;
         case 'E':
             console.log(`${e.id_mch} (C): Solicitação cancelada.`)
+            break;
         case 'E':
             console.log(`${e.id_mch} (R): Pagamento pendente de confirmação.`)
+            break;
         default:
             console.log("event not handled ;-;")
+            break;
     }
 }
 
