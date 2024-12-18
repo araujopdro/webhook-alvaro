@@ -118,7 +118,6 @@ function HandleMachineStatus(e){
     switch(e.status_solicitacao){
         case 'D':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (D): Solicitação aberta e ainda não atribuída a um condutor.`)
-            flow = 
             break;
         case 'G':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (G): Esperando um condutor aceitar a solicitação.`)
