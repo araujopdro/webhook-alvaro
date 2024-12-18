@@ -177,15 +177,15 @@ async function SendPulseFlowRun(bot_id){
     } catch (error) {
         if (error.status === 401) {
             try {
-                const form_data = new FormData();
-                form_data.append('grant_type', 'client_credentials');
-                form_data.append('client_id', `${process.env.CLIENT_ID}`);
-                form_data.append('client_secret', `${process.env.CLIENT_SECRET}`);
+                // const form_data = new FormData();
+                // form_data.append('grant_type', 'client_credentials');
+                // form_data.append('client_id', `${process.env.CLIENT_ID}`);
+                // form_data.append('client_secret', `${process.env.CLIENT_SECRET}`);
 
-                console.log(process.env.CLIENT_ID, process.env.CLIENT_SECRET)
-
-                const response = await axios.post(`${sendpulse_base_url}/oauth/access_token`, form_data, {
-                    headers: { "Content-Type": "multipart/form-data" },
+                const response = await axios.post(`${sendpulse_base_url}/oauth/access_token`, {
+                    'grant_type': 'client_credentials',
+                    'client_id': process.env.CLIENT_ID,
+                    'client_secret': process.env.CLIENT_SECRET
                 })
                 
                 sendpulse_tkn = response.data.access_token
