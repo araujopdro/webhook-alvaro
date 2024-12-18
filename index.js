@@ -169,6 +169,7 @@ async function SendPulseFlowRun(bot_id){
         console.log(sendpulse_tkn)
         const response = await axios.get(`${sendpulse_base_url}/whatsapp/flows/?bod_id=${bot_id}`, {
             headers: {
+                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${sendpulse_tkn}`
             }
         })
