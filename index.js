@@ -186,6 +186,8 @@ async function SendPulseFlowRun(bot_id){
                     'grant_type': 'client_credentials',
                     'client_id': process.env.CLIENT_ID,
                     'client_secret': process.env.CLIENT_SECRET
+                }, {
+                    'Content-Type': 'application/json',
                 })
                 
                 sendpulse_tkn = response.data.access_token
