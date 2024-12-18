@@ -182,6 +182,8 @@ async function SendPulseFlowRun(bot_id){
                 form_data.append('client_id', process.env.CLIENT_ID);
                 form_data.append('client_secret', process.env.CLIENT_SECRET);
 
+                console.log(process.env.CLIENT_ID, process.env.CLIENT_SECRET)
+
                 const response = await axios({
                     method: "POST",
                     url: `${sendpulse_base_url}/oauth/access_token`,
