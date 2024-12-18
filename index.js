@@ -107,7 +107,7 @@ app.get('/are_you_there', (req, res) => {
 //
 function HandleMachineStatus(e){
     const event_corrida_idx = corridas.findIndex((c) => c.id_corrida === e.id_mch)
-    const event_corrida = corridas[event_corrida_idx] ? corridas[event_corrida_idx] : null
+    const event_corrida = event_corrida_idx >= 0 ? corridas[event_corrida_idx] : null
     console.log(corridas)
     console.log(event_corrida_idx)
     if(event_corrida != null) return;
