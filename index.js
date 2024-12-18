@@ -158,8 +158,8 @@ function HandleMachineStatus(e){
     }
 }
 app.get('/runflow', (req, res) => {
-    SendPulseFlowRun('671c1c15e2674ddd100159df')
-    
+    const flows = SendPulseFlowRun('671c1c15e2674ddd100159df')
+    console.log(flows)
     res.status(200).send('Event received');
 });
 
