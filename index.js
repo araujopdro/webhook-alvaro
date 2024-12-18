@@ -5,22 +5,23 @@ const axios = require('axios');
 const app = express();
 const PORT = 3000;
 
-const taxi_base_url = "https://api-trial.taximachine.com.br/api/integracao";
+const taxi_base_url = "https://api.taximachine.com.br/api/integracao";
 const sendpulse_base_url = "https://api.sendpulse.com";
 
 let sendpulse_tkn;
+
+const corridas = [];
 
 app.use(bodyParser.json());
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
-
 //
-app.post('/taxi_webhook_setup', (req, res) => {
+app.post('/corrida_setup', (req, res) => {
     const data = req.body;
-    console.log(data);
-    // {
+    corridas.push({...data})
+    // corridas.push({
     //     "id_corrida": "{{id_corrida}}",
     //     "contact_id": "{{contact_id}}",
     //     "lat_partida": "{{lat_partida}}",
@@ -46,7 +47,7 @@ app.post('/get_sendpulse_token', (req, res) => {
 app.post('/webhook_listener', (req, res) => {
     const event = req.body;  
     
-    console.log(event);
+    //console.log(event);
     HandleMachineStatus(event)
     
     res.status(200).send('Event received');
@@ -112,6 +113,10 @@ app.get('/are_you_there', (req, res) => {
 
 //
 function HandleMachineStatus(e){
+    const event_corrida_idx = corridas.findIndex((c) => c.id_corrida === e.id_mch)
+    const event_corrida = corridas[event_corrida_idx] ? corridas[event_corrida_idx] : null
+    
+    if(event_corrida != null) return;
     switch(e.status_solicitacao){
         case 'D':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (D): Solicitação aberta e ainda não atribuída a um condutor.`)
