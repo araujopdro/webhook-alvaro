@@ -177,11 +177,17 @@ async function SendPulseFlowRun(bot_id){
     } catch (error) {
         if (error.status === 401) {
             try {
-                const response = await axios.post(`${sendpulse_base_url}/oauth/access_token`, {
-                    "grant_type":"client_credentials",
-                    "client_id":process.env.CLIENT_ID,
-                    "client_secret":process.env.CLIENT_SECRET,
-                });
+                const form_data = new FormData();
+                form_data.append('grant_type', 'client_credentials');
+                form_data.append('client_id', process.env.CLIENT_ID);
+                form_data.append('client_secret', process.env.CLIENT_SECRET);
+
+                const response = await axios({
+                    method: "POST",
+                    url: `${sendpulse_base_url}/oauth/access_token`,
+                    data: form_data,
+                    headers: { "Content-Type": "multipart/form-data" },
+                })
                 
                 sendpulse_tkn = response.data.access_token
                 return SendPulseFlowRun(bot_id);  // try again with new token
