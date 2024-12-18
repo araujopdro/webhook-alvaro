@@ -158,8 +158,8 @@ function HandleMachineStatus(e){
     }
 }
 app.get('/runflow', (req, res) => {
-    const flows = SendPulseFlowRun('671c1c15e2674ddd100159df')
-    console.log(flows)
+    SendPulseFlowRun('671c1c15e2674ddd100159df')
+
     res.status(200).send('Event received');
 });
 
@@ -171,6 +171,8 @@ async function SendPulseFlowRun(bot_id){
                 'Authorization': `Bearer ${sendpulse_tkn}`
             }
         })
+
+        console.log(response.data)
         return response.data; // return if successful
     } catch (error) {
         if (error.status === 401) {
@@ -186,6 +188,8 @@ async function SendPulseFlowRun(bot_id){
             } catch (tokenError) {
                 console.error('Error getting SendPulse Access Token:', tokenError);  // error getting new token
             }
+        } else {
+            console.error('Error:', error);  // error getting new token
         }
     }
 }
