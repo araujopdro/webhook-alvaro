@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
@@ -7,11 +9,12 @@ const PORT = 3000;
 
 const taxi_base_url = "https://api.taximachine.com.br/api/integracao";
 const sendpulse_base_url = "https://api.sendpulse.com";
+const corridas = [];
 
 let sendpulse_tkn;
 
-const corridas = [];
 
+//
 app.use(bodyParser.json());
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
@@ -108,11 +111,14 @@ app.get('/are_you_there', (req, res) => {
 function HandleMachineStatus(e){
     const event_corrida_idx = corridas.findIndex((c) => c.id_corrida === e.id_mch)
     const event_corrida = event_corrida_idx >= 0 ? corridas[event_corrida_idx] : null
-    
     if(event_corrida == null) return;
+    
+    let flow
+
     switch(e.status_solicitacao){
         case 'D':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (D): Solicitação aberta e ainda não atribuída a um condutor.`)
+            flow = 
             break;
         case 'G':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (G): Esperando um condutor aceitar a solicitação.`)
@@ -154,19 +160,47 @@ function HandleMachineStatus(e){
     }
 }
 
+//https://api.sendpulse.com/whatsapp/flows?bot_id=671c1c15e2674ddd100159df
+function SendPulseFlowRun(bot_id){
+    ///checks the validity of the current sendpulse token
+    axios.get(`${sendpulse_base_url}/whatsapp/flows/?bod_id=${bot_id}`, {
+        headers: {
+            'Authorization': `Bearer ${sendpulse_tkn}`
+        }
+    })
+    .then(function (response) {
+        // handle success
+        console.log(response);
+    })
+    .catch(function (error) {
+        // handle error
+        console.log(error);
+    })
 
-//
-// function GetSendPulseToken(){
-//     axios.post(`${sendpulse_base_url}/oauth/access_token`, data)
-//     .then(response => {
-//         console.log(response.data);
-//         if(response.data) sendpulse_tkn = response.data.access_token
-//         return response.data
-//     })
-//     .catch(error => {
-//         console.error('Error making POST request:', error);
-//     });
-// }
+//    GetSendPulseToken()
+}
+
+// {
+//     "contact_id": "string",
+//     "flow_id": "string",
+//     "external_data": {
+//       "tracking_number": "1234-0987-5678-9012"
+//     }
+//   }
+
+
+function GetSendPulseToken(){
+    axios.post(`${sendpulse_base_url}/oauth/access_token`, data)
+    .then(response => {
+        console.log(response.data);
+        if(response.data) sendpulse_tkn = response.data.access_token
+        return response.data
+    })
+    .catch(error => {
+        console.error('Error making POST request:', error);
+    });
+}
+
 //eived webhook event: {
 
 // {
