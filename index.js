@@ -179,8 +179,8 @@ async function SendPulseFlowRun(bot_id){
             try {
                 const form_data = new FormData();
                 form_data.append('grant_type', 'client_credentials');
-                form_data.append('client_id', process.env.CLIENT_ID);
-                form_data.append('client_secret', process.env.CLIENT_SECRET);
+                form_data.append('client_id', `${process.env.CLIENT_ID}`);
+                form_data.append('client_secret', `${process.env.CLIENT_SECRET}`);
 
                 console.log(process.env.CLIENT_ID, process.env.CLIENT_SECRET)
 
