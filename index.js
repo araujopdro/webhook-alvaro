@@ -20,15 +20,8 @@ app.listen(PORT, () => {
 //
 app.post('/corrida_setup', (req, res) => {
     const data = req.body;
+    console.log(`corrida cadastrada pelo bot: ${data.id_corrida}`)
     corridas.push({...data})
-    // corridas.push({
-    //     "id_corrida": "{{id_corrida}}",
-    //     "contact_id": "{{contact_id}}",
-    //     "lat_partida": "{{lat_partida}}",
-    //     "lng_partida": "{{lng_partida}}"
-    // }
-
-
     res.status(200).send({ status: 'success', body: {...req.body} });
 });
 
