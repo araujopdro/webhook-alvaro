@@ -166,6 +166,7 @@ app.get('/runflow', (req, res) => {
 //https://api.sendpulse.com/whatsapp/flows?bot_id=671c1c15e2674ddd100159df
 async function SendPulseFlowRun(bot_id){
     try {
+        console.log(sendpulse_tkn)
         const response = await axios.get(`${sendpulse_base_url}/whatsapp/flows/?bod_id=${bot_id}`, {
             headers: {
                 'Authorization': `Bearer ${sendpulse_tkn}`
