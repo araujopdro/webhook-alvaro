@@ -108,9 +108,8 @@ app.get('/are_you_there', (req, res) => {
 function HandleMachineStatus(e){
     const event_corrida_idx = corridas.findIndex((c) => c.id_corrida === e.id_mch)
     const event_corrida = event_corrida_idx >= 0 ? corridas[event_corrida_idx] : null
-    console.log(corridas)
-    console.log(event_corrida_idx)
-    if(event_corrida != null) return;
+    
+    if(event_corrida == null) return;
     switch(e.status_solicitacao){
         case 'D':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (D): Solicitação aberta e ainda não atribuída a um condutor.`)
