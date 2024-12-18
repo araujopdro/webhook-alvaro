@@ -166,24 +166,19 @@ app.get('/runflow', (req, res) => {
 //https://api.sendpulse.com/whatsapp/flows?bot_id=671c1c15e2674ddd100159df
 async function SendPulseFlowRun(bot_id){
     try {
-        console.log(sendpulse_tkn)
-        const response = await axios.get(`${sendpulse_base_url}/whatsapp/flows/?bod_id=${bot_id}`, {
+        console.log(`sendpulse tkn: `,sendpulse_tkn)
+        const response = await axios.get(`https://api.sendpulse.com/whatsapp/flows?bot_id=671c1c15e2674ddd100159df`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${sendpulse_tkn}`
             }
         })
 
-        console.log(response.data)
+        console.log(`flow: `,response.data)
         return response.data; // return if successful
     } catch (error) {
         if (error.status === 401) {
             try {
-                // const form_data = new FormData();
-                // form_data.append('grant_type', 'client_credentials');
-                // form_data.append('client_id', `${process.env.CLIENT_ID}`);
-                // form_data.append('client_secret', `${process.env.CLIENT_SECRET}`);
-
                 const response = await axios.post(`${sendpulse_base_url}/oauth/access_token`, {
                     'grant_type': 'client_credentials',
                     'client_id': process.env.CLIENT_ID,
