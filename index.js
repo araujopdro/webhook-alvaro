@@ -77,49 +77,81 @@ app.get('/are_you_there', (req, res) => {
 // Partida prolongada (O): Passageiro demorou para embarcar.
 // Alteração de trajeto (T): Passageiro alterou o trajeto.
 
+// {
+//     "success": true,
+//     "response": {
+//         "lat_taxi": "-30.847289096",
+//         "lng_taxi": "-51.802969872",
+//         "lat_condutor": "-30.847289096",
+//         "lng_condutor": "-51.802969872",
+//         "condutor_id": "1081033"
+//     }
+// }
+
+// {
+//     "success": true,
+//     "response": {
+//         "lat_taxi": "-30.848417046",
+//         "lng_taxi": "-51.799381077",
+//         "lat_condutor": "-30.848417046",
+//         "lng_condutor": "-51.799381077",
+//         "condutor_id": "1081033"
+//     }
+// }
+
+// {
+//     "success": true,
+//     "response": {
+//         "lat_taxi": "-30.848414512",
+//         "lng_taxi": "-51.799343526",
+//         "lat_condutor": "-30.848414512",
+//         "lng_condutor": "-51.799343526",
+//         "condutor_id": "1081033"
+//     }
+// }
 
 //
 function HandleMachineStatus(e){
     switch(e.status_solicitacao){
         case 'D':
-            console.log(`${e.id_mch} (D): Solicitação aberta e ainda não atribuída a um condutor.`)
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (D): Solicitação aberta e ainda não atribuída a um condutor.`)
             break;
         case 'G':
-            console.log(`${e.id_mch} (G): Esperando um condutor aceitar a solicitação.`)
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (G): Esperando um condutor aceitar a solicitação.`)
             break;
         case 'P':
-            console.log(`${e.id_mch} (P): Solicitação não aceita, aguardando aceitação.`)
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (P): Solicitação não aceita, aguardando aceitação.`)
             break;
         case 'N':
-            console.log(`${e.id_mch} (N): Nenhum condutor aceitou a solicitação.`)
+            console.log('\x1b[41m%s\x1b[0m', `${e.id_mch} (N): Nenhum condutor aceitou a solicitação.`)
             break;
         case 'A':
             console.log('\x1b[41m%s\x1b[0m', `${e.id_mch} (A): Solicitação aceita por um condutor.`)
             if(e.motorista) console.log(`${e.motorista.nome}`)
             break;
         case 'S':
-            console.log(`${e.id_mch} (S): Solicitação em espera até a conclusão de uma anterior.`)
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (S): Solicitação em espera até a conclusão de uma anterior.`)
             break;
         case 'E':
-            console.log(`${e.id_mch} (E): Corrida iniciada.`)
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (E): Corrida iniciada.`)
             break;
         case 'R':
-            console.log(`${e.id_mch} (R): Parada concluída.`)
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (R): Parada concluída.`)
             break;
         case 'S':
-            console.log(`${e.id_mch} (S): Solicitação finalizada pelo condutor.`)
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (S): Solicitação finalizada pelo condutor.`)
             break;
         case 'F':
-            console.log(`${e.id_mch} (F): Corrida concluída.`)
+            console.log('\x1b[42m%s\x1b[0m', `${e.id_mch} (F): Corrida concluída.`)
             break;
         case 'C':
-            console.log(`${e.id_mch} (C): Solicitação cancelada.`)
+            console.log('\x1b[41m%s\x1b[0m', `${e.id_mch} (C): Solicitação cancelada.`)
             break;
         case 'R':
-            console.log(`${e.id_mch} (R): Pagamento pendente de confirmação.`)
+            console.log('\x1b[41m%s\x1b[0m', `${e.id_mch} (R): Pagamento pendente de confirmação.`)
             break;
         default:
-            console.log(`(${e.status_solicitacao}): event not handled ;-;`)
+            console.log('\x1b[31m%s\x1b[0m', `${e.id_mch} (${e.status_solicitacao}): event not handled ;-;`)
             break;
     }
 }
