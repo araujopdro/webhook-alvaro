@@ -13,7 +13,6 @@ const corridas = [];
 
 let sendpulse_tkn;
 
-
 //
 app.use(bodyParser.json());
 app.listen(PORT, () => {
@@ -163,24 +162,32 @@ app.get('/runflow', (req, res) => {
     
     res.status(200).send('Event received');
 });
-//https://api.sendpulse.com/whatsapp/flows?bot_id=671c1c15e2674ddd100159df
-function SendPulseFlowRun(bot_id){
-    ///checks the validity of the current sendpulse token
-    axios.get(`${sendpulse_base_url}/whatsapp/flows/?bod_id=${bot_id}`, {
-        headers: {
-            'Authorization': `Bearer ${sendpulse_tkn}`
-        }
-    })
-    .then(function (response) {
-        // handle success
-        console.log(response);
-    })
-    .catch(function (error) {
-        // handle error
-        console.log(error);
-    })
 
-//    GetSendPulseToken()
+//https://api.sendpulse.com/whatsapp/flows?bot_id=671c1c15e2674ddd100159df
+async function SendPulseFlowRun(bot_id){
+    try {
+        const response = await axios.get(`${sendpulse_base_url}/whatsapp/flows/?bod_id=${bot_id}`, {
+            headers: {
+                'Authorization': `Bearer ${sendpulse_tkn}`
+            }
+        })
+        return response.data; // return if successful
+    } catch (error) {
+        if (error.status === 401) {
+            try {
+                const response = await axios.post(`${sendpulse_base_url}/oauth/access_token`, {
+                    "grant_type":"client_credentials",
+                    "client_id":process.env.CLIENT_ID,
+                    "client_secret":process.env.CLIENT_SECRET,
+                });
+                
+                sendpulse_tkn = response.data.access_token
+                return SendPulseFlowRun(bot_id);  // try again with new token
+            } catch (tokenError) {
+                console.error('Error getting SendPulse Access Token:', tokenError);  // error getting new token
+            }
+        }
+    }
 }
 
 // {
@@ -190,19 +197,6 @@ function SendPulseFlowRun(bot_id){
 //       "tracking_number": "1234-0987-5678-9012"
 //     }
 //   }
-
-
-function GetSendPulseToken(){
-    axios.post(`${sendpulse_base_url}/oauth/access_token`, data)
-    .then(response => {
-        console.log(response.data);
-        if(response.data) sendpulse_tkn = response.data.access_token
-        return response.data
-    })
-    .catch(error => {
-        console.error('Error making POST request:', error);
-    });
-}
 
 //eived webhook event: {
 
