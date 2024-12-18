@@ -158,7 +158,11 @@ function HandleMachineStatus(e){
             break;
     }
 }
-
+app.get('/runflow', (req, res) => {
+    SendPulseFlowRun('671c1c15e2674ddd100159df')
+    
+    res.status(200).send('Event received');
+});
 //https://api.sendpulse.com/whatsapp/flows?bot_id=671c1c15e2674ddd100159df
 function SendPulseFlowRun(bot_id){
     ///checks the validity of the current sendpulse token
