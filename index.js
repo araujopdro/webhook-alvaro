@@ -108,7 +108,8 @@ app.get('/are_you_there', (req, res) => {
 function HandleMachineStatus(e){
     const event_corrida_idx = corridas.findIndex((c) => c.id_corrida === e.id_mch)
     const event_corrida = corridas[event_corrida_idx] ? corridas[event_corrida_idx] : null
-    
+    console.log(corridas)
+    console.log(event_corrida_idx)
     if(event_corrida != null) return;
     switch(e.status_solicitacao){
         case 'D':
@@ -169,6 +170,23 @@ function HandleMachineStatus(e){
 // }
 //eived webhook event: {
 
+// {
+//    id_mch: '00000000',
+//    status_solicitacao: 'D',
+//    data_hora_solicitacao: '2024-12-18T18:34:54+00:00',
+//    chave_trajeto: '4d004765899aeeaf7c7ba406ed777a4a2e87897ca42d432621f0e2cab22184fd',
+//    com_retorno: false,
+//    motorista: {
+//      id: '1080570',
+//      nome: 'Cléuton Dione Neumann Da Silva',
+//      vtr: '',
+//      telefone: '(051) 99770-9270',
+//      cpf: '001.686.680-09',
+//      categoria: 'pop promo',
+//      modelo: 'Hb20 ',
+//      placa: 'RTM0G40'
+//    }
+//  }
 
 
 // Received webhook event: {
