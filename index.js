@@ -192,7 +192,7 @@ async function SendPulseFlowToken(_bot_id, _contact_id){
                 })
                 
                 sendpulse_tkn = response.data.access_token
-                return SendPulseFlowRun(bot_id);  // try again with new token
+                return SendPulseFlowRun(_bot_id, _contact_id);  // try again with new token
             } catch (tokenError) {
                 console.error('Error getting SendPulse Access Token:', tokenError);  // error getting new token
             }
