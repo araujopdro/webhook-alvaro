@@ -169,7 +169,7 @@ function SendPulseFlowRun(_contact_id, _flow){
 //
 async function MachineGetPosicaoCondutor(_bot_id, _corrida_id) {
     try {
-        console.log('MachineGetPosicaoCondutor', _corrida_id)
+        console.log('MachineGetPosicaoCondutor', _bot_id, _corrida_id)
         const response = await axios.get(`${taxi_base_url}/posicaoCondutor?id_mch=${_corrida_id}`, {
             headers: {
                 'api-key': `${bot_headers[_bot_id].api_key}`,
