@@ -9,9 +9,16 @@ const PORT = 3000;
 
 const taxi_base_url = "https://api.taximachine.com.br/api/integracao";
 const sendpulse_base_url = "https://api.sendpulse.com";
-const corridas = [];
+const corridas_to_process = [];
 
 let sendpulse_tkn;
+
+const bot_headers = {
+    '671c1c15e2674ddd100159df': {
+      api_key: process.env.API_KEY_VALUE_POPCAR,
+      auth: process.env.BASIC_AUTHORIZATION_VALUE_POPCAR,
+    }
+  };
 
 //
 app.use(bodyParser.json());
@@ -29,16 +36,6 @@ app.post('/corrida_setup', (req, res) => {
 
 
 //
-app.post('/get_sendpulse_token', (req, res) => {
-    const data = req.body;
-    console.log(data);
-    //let sendpulse_response = GetSendPulseToken()
-    
-    res.status(200).send({ status: 'success', body: {...sendpulse_response} });
-});
-
-
-//
 app.post('/webhook_listener', (req, res) => {
     const event = req.body;  
     
@@ -48,69 +45,19 @@ app.post('/webhook_listener', (req, res) => {
     res.status(200).send('Event received');
 });
 
-//
-app.post('/webhook_listener_posicao', (req, res) => {
-    const event = req.body;  
-    
-    console.log('Received Posicao event:', event);
-    //HandleMachineStatus(event)
-    
-    res.status(200).send('Event received');
-});
 
 //
-app.get('/are_you_there', (req, res) => {
-    console.log('Yes');
-    
+app.get('/runflow', (req, res) => {
+    SendPulseFlowToken('671c1c15e2674ddd100159df', '0000000000')
+
     res.status(200).send('Event received');
 });
-
-
-// 
-// Arredores local (A): Condutor próximo ao local de embarque.
-// Cheguei ao local (C): Condutor chegou ao local de embarque.
-// Entrada do passageiro (E): Passageiro entrou no veículo.
-// Partida prolongada (O): Passageiro demorou para embarcar.
-// Alteração de trajeto (T): Passageiro alterou o trajeto.
-
-// {
-//     "success": true,
-//     "response": {
-//         "lat_taxi": "-30.847289096",
-//         "lng_taxi": "-51.802969872",
-//         "lat_condutor": "-30.847289096",
-//         "lng_condutor": "-51.802969872",
-//         "condutor_id": "1081033"
-//     }
-// }
-
-// {
-//     "success": true,
-//     "response": {
-//         "lat_taxi": "-30.848417046",
-//         "lng_taxi": "-51.799381077",
-//         "lat_condutor": "-30.848417046",
-//         "lng_condutor": "-51.799381077",
-//         "condutor_id": "1081033"
-//     }
-// }
-
-// {
-//     "success": true,
-//     "response": {
-//         "lat_taxi": "-30.848414512",
-//         "lng_taxi": "-51.799343526",
-//         "lat_condutor": "-30.848414512",
-//         "lng_condutor": "-51.799343526",
-//         "condutor_id": "1081033"
-//     }
-// }
 
 //
 function HandleMachineStatus(e){
     const event_corrida_idx = corridas.findIndex((c) => c.id_corrida === e.id_mch)
     const event_corrida = event_corrida_idx >= 0 ? corridas[event_corrida_idx] : null
-    console.log(e)
+    //console.log(e)
     if(event_corrida == null) return
     switch(e.status_solicitacao){
         case 'D':
@@ -123,10 +70,10 @@ function HandleMachineStatus(e){
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (P): Solicitação não aceita, aguardando aceitação.`)
             break;
         case 'N':
-            console.log('\x1b[41m%s\x1b[0m', `${e.id_mch} (N): Nenhum condutor aceitou a solicitação.`)
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (N): Nenhum condutor aceitou a solicitação.`)
             break;
         case 'A':
-            console.log('\x1b[41m%s\x1b[0m', `${e.id_mch} (A): Solicitação aceita por um condutor.`)
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (A): Solicitação aceita por um condutor.`)
             if(e.motorista) console.log(`${e.motorista.nome}`)
             break;
         case 'S':
@@ -142,13 +89,13 @@ function HandleMachineStatus(e){
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (S): Solicitação finalizada pelo condutor.`)
             break;
         case 'F':
-            console.log('\x1b[42m%s\x1b[0m', `${e.id_mch} (F): Corrida concluída.`)
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (F): Corrida concluída.`)
             break;
         case 'C':
-            console.log('\x1b[41m%s\x1b[0m', `${e.id_mch} (C): Solicitação cancelada.`)
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (C): Solicitação cancelada.`)
             break;
         case 'R':
-            console.log('\x1b[41m%s\x1b[0m', `${e.id_mch} (R): Pagamento pendente de confirmação.`)
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (R): Pagamento pendente de confirmação.`)
             break;
         default:
             console.log('\x1b[31m%s\x1b[0m', `${e.id_mch} (${e.status_solicitacao}): event not handled ;-;`)
@@ -159,13 +106,8 @@ function HandleMachineStatus(e){
 }
 
 
-app.get('/runflow', (req, res) => {
-    SendPulseFlowToken('671c1c15e2674ddd100159df', '0000000000')
-
-    res.status(200).send('Event received');
-});
-
 //https://api.sendpulse.com/whatsapp/flows?bot_id=671c1c15e2674ddd100159df
+//Tries to get the flow list from the BOT_ID, it's a success, run the status related FLOW, to the CONTACT ID
 async function SendPulseFlowToken(_bot_id, _contact_id){
     try {
         const response = await axios.get(`${sendpulse_base_url}/whatsapp/flows?bot_id=${_bot_id}`, {
@@ -174,14 +116,16 @@ async function SendPulseFlowToken(_bot_id, _contact_id){
                 'Authorization': `Bearer ${sendpulse_tkn}`
             }
         })
-        console.log(response.data.data)
+        //console.log(response.data.data)
         const flow_selected_on_status = response.data.data.find((f) => f.name === 'fluxo-teste')
-        console.log(flow_selected_on_status)
+        //console.log(flow_selected_on_status)
 
+        //get list of flows successful, RUN flow
         SendPulseFlowRun(_contact_id, flow_selected_on_status)
-        //return response.data; // return if successful
     } catch (error) {
+        //get list of flows NOT successful
         if (error.status === 401) {
+            //status 401 not auth, which means that the current SENDPULSE TOKEN it's invalid and tries to get a new one
             try {
                 const response = await axios.post(`${sendpulse_base_url}/oauth/access_token`, {
                     'grant_type': 'client_credentials',
@@ -202,10 +146,11 @@ async function SendPulseFlowToken(_bot_id, _contact_id){
     }
 }
 
+//using the contact id and the flow id and runs it
 function SendPulseFlowRun(_contact_id, _flow){
     try {
-        console.log('contact_id: ',_contact_id)
-        console.log('_flow_id: ',_flow.id)
+        console.log('SendPulseFlowRun contact_id: ',_contact_id)
+        console.log('SendPulseFlowRun _flow_id: ',_flow.id)
         console.log('SendPulse Flow: Run!');  // 
         //await axios.post(`https://api.sendpulse.com/whatsapp/flows/run`, {
         //     'contact_id': `${_contact_id}`,
@@ -221,284 +166,51 @@ function SendPulseFlowRun(_contact_id, _flow){
 }
 
 
+//
+async function MachineGetPosicaoCondutor(id) {
+    try {
+        console.log('MachineGetPosicaoCondutor', id)
+        const response = await axios.get(`${taxi_base_url}/posicaoCondutor?id_mch=${id}`, {
+            headers: {
+                'api-key': `${bot_headers[_bot_id].api_key}`,
+                'Authorization': `${bot_headers[_bot_id].auth}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        // if (error.response && error.response.status === 404) {
+        //   console.log(`Item ${id} not found, removing from processing list.`);
+        //   corridas_to_process.delete(id)
+        //   return { id, error: `Item not found` };
+        // }
+        console.error(`Error fetching item ${id}:`, error.message);
+        return { id, error: error.message };
+    }
+}
 
+async function ProcessCorridas() {
+    if (corridas_to_process.length === 0){
+        console.log('0 corridas esperando processamento.')
+        return; //nothing to process
+    }
 
-// {
-//     "contact_id": "string",
-//     "flow_id": "string",
-//     "external_data": {
-//       "tracking_number": "1234-0987-5678-9012"
-//     }
-//   }
+    const promises = Array.from(corridas_to_process).map(corrida => MachineGetPosicaoCondutor(corrida.id));
+    try {
+        const results = await Promise.allSettled(promises);
+        const successful_results = results.filter(result => result.status === 'fulfilled').map(result => result.value);
+        //const rejected_results = results.filter(result => result.status === 'rejected').map((result, index) => ({ id: Array.from(corridas_to_process)[index], error: result.reason }));
 
-//eived webhook event: {
+        if (successful_results.length > 0) {
+          console.log("Successful requests: ", successful_results)
+        }
+        // if (rejected_results.length > 0) {
+        //   console.error("Rejected requests: ", rejected_results)
+        // }
 
-// {
-//    id_mch: '00000000',
-//    status_solicitacao: 'D',
-//    data_hora_solicitacao: '2024-12-18T18:34:54+00:00',
-//    chave_trajeto: '4d004765899aeeaf7c7ba406ed777a4a2e87897ca42d432621f0e2cab22184fd',
-//    com_retorno: false,
-//    motorista: {
-//      id: '1080570',
-//      nome: 'Cléuton Dione Neumann Da Silva',
-//      vtr: '',
-//      telefone: '(051) 99770-9270',
-//      cpf: '001.686.680-09',
-//      categoria: 'pop promo',
-//      modelo: 'Hb20 ',
-//      placa: 'RTM0G40'
-//    }
-//  }
+    } catch (error) {
+        console.error('Error processing IDs:', error);
+    }
+}
 
-
-// Received webhook event: {
-//   id_mch: '474443408',
-//   id_externo: '122927',
-//   status_solicitacao: 'G',
-//   data_hora_solicitacao: '2024-12-17T19:14:00+00:00',
-//   chave_trajeto: '8341edd7e82a4989a9ac5a64b1e4b12bba2f760bbb07b41cc52960e4ec50fc9e',
-//   com_retorno: false,
-//   motorista: {
-//     id: '1080631',
-//     nome: 'Carlos Evanir Vieira Toledo',
-//     vtr: '',
-//     telefone: '(051) 99777-1264',
-//     cpf: '927.517.410-53',
-//     categoria: 'pop promo',
-//     modelo: 'Ford ka se',
-//     placa: 'IWQ-3847'
-//   },
-//   condutor: {
-//     id: '1080631',
-//     nome: 'Carlos Evanir Vieira Toledo',
-//     vtr: '',
-//     telefone: '(051) 99777-1264',
-//     cpf: '927.517.410-53',
-//     categoria: 'pop promo',
-//     modelo: 'Ford ka se',
-//     placa: 'IWQ-3847'
-//   },
-//   andamento: {
-//     data_hora_aceite: '2024-12-17T19:14:09+00:00',
-//     lat_aceite: '-30.853821072',
-//     lng_aceite: '-51.807996332',
-//     estimativa_aceite_seg: '68',
-//     estimativa_aceite_km: '0.322',
-//     estimativa_corrida_km: '0.530',
-//     estimativa_corrida_min: '3',
-//     estimativa_corrida_valor: '10.46',
-//     data_hora_arredores_local: '2024-12-17T19:14:10+00:00'
-//   }
-// }
-// Event Handled
-// Received webhook event: {
-//   id_mch: '474443408',
-//   id_externo: '122927',
-//   status_solicitacao: 'A',
-//   data_hora_solicitacao: '2024-12-17T19:14:00+00:00',
-//   chave_trajeto: '8341edd7e82a4989a9ac5a64b1e4b12bba2f760bbb07b41cc52960e4ec50fc9e',
-//   com_retorno: false,
-//   motorista: {
-//     id: '1080631',
-//     nome: 'Carlos Evanir Vieira Toledo',
-//     vtr: '',
-//     telefone: '(051) 99777-1264',
-//     cpf: '927.517.410-53',
-//     categoria: 'pop promo',
-//     modelo: 'Ford ka se',
-//     placa: 'IWQ-3847'
-//   },
-//   condutor: {
-//     id: '1080631',
-//     nome: 'Carlos Evanir Vieira Toledo',
-//     vtr: '',
-//     telefone: '(051) 99777-1264',
-//     cpf: '927.517.410-53',
-//     categoria: 'pop promo',
-//     modelo: 'Ford ka se',
-//     placa: 'IWQ-3847'
-//   },
-//   andamento: {
-//     data_hora_aceite: '2024-12-17T19:14:09+00:00',
-//     lat_aceite: '-30.853821072',
-//     lng_aceite: '-51.807996332',
-//     estimativa_aceite_seg: '68',
-//     estimativa_aceite_km: '0.322',
-//     estimativa_corrida_km: '0.530',
-//     estimativa_corrida_min: '3',
-//     estimativa_corrida_valor: '10.46',
-//     data_hora_arredores_local: '2024-12-17T19:14:10+00:00'
-//   }
-// }
-// Event Handled
-// Received webhook event: {
-//   id_mch: '474443408',
-//   id_externo: '122927',
-//   status_solicitacao: 'C',
-//   data_hora_solicitacao: '2024-12-17T19:14:00+00:00',
-//   chave_trajeto: '8341edd7e82a4989a9ac5a64b1e4b12bba2f760bbb07b41cc52960e4ec50fc9e',
-//   com_retorno: false,
-//   motorista: {
-//     id: '1080631',
-//     nome: 'Carlos Evanir Vieira Toledo',
-//     vtr: '',
-//     telefone: '(051) 99777-1264',
-//     cpf: '927.517.410-53',
-//     categoria: 'pop promo',
-//     modelo: 'Ford ka se',
-//     placa: 'IWQ-3847'
-//   },
-//   condutor: {
-//     id: '1080631',
-//     nome: 'Carlos Evanir Vieira Toledo',
-//     vtr: '',
-//     telefone: '(051) 99777-1264',
-//     cpf: '927.517.410-53',
-//     categoria: 'pop promo',
-//     modelo: 'Ford ka se',
-//     placa: 'IWQ-3847'
-//   },
-//   andamento: {
-//     data_hora_aceite: '2024-12-17T19:14:09+00:00',
-//     lat_aceite: '-30.853821072',
-//     lng_aceite: '-51.807996332',
-//     estimativa_aceite_seg: '68',
-//     estimativa_aceite_km: '0.322',
-//     estimativa_corrida_km: '0.530',
-//     estimativa_corrida_min: '3',
-//     estimativa_corrida_valor: '10.46',
-//     data_hora_arredores_local: '2024-12-17T19:14:10+00:00'
-//   },
-//   cancelamento: {
-//     cancelada_por: 'C',
-//     motivo_cancelamento: 'Outros casos',
-//     data_hora: '2024-12-17T19:16:35+00:00'
-//   }
-// }
-// Event Handled
-// Received webhook event: {
-//   id_mch: '474444645',
-//   id_externo: '44132',
-//   status_solicitacao: 'G',
-//   data_hora_solicitacao: '2024-12-17T19:16:44+00:00',
-//   chave_trajeto: 'a7a7fd3e9cdbfc7f1cdb6ab715d6fa66bb46d711eb812bee87597e831924c1df',
-//   com_retorno: false,
-//   motorista: {
-//     id: '1080631',
-//     nome: 'Carlos Evanir Vieira Toledo',
-//     vtr: '',
-//     telefone: '(051) 99777-1264',
-//     cpf: '927.517.410-53',
-//     categoria: 'pop promo',
-//     modelo: 'Ford ka se',
-//     placa: 'IWQ-3847'
-//   },
-//   condutor: {
-//     id: '1080631',
-//     nome: 'Carlos Evanir Vieira Toledo',
-//     vtr: '',
-//     telefone: '(051) 99777-1264',
-//     cpf: '927.517.410-53',
-//     categoria: 'pop promo',
-//     modelo: 'Ford ka se',
-//     placa: 'IWQ-3847'
-//   },
-//   andamento: {
-//     data_hora_aceite: '2024-12-17T19:16:54+00:00',
-//     lat_aceite: '-30.855060551',
-//     lng_aceite: '-51.810093820',
-//     estimativa_aceite_seg: '120',
-//     estimativa_aceite_km: '0.016',
-//     estimativa_corrida_km: '0.530',
-//     estimativa_corrida_min: '3',
-//     estimativa_corrida_valor: '10.46',
-//     data_hora_arredores_local: '2024-12-17T19:16:56+00:00'
-//   }
-// }
-// Event Handled
-// Received webhook event: {
-//   id_mch: '474444645',
-//   id_externo: '44132',
-//   status_solicitacao: 'A',
-//   data_hora_solicitacao: '2024-12-17T19:16:44+00:00',
-//   chave_trajeto: 'a7a7fd3e9cdbfc7f1cdb6ab715d6fa66bb46d711eb812bee87597e831924c1df',
-//   com_retorno: false,
-//   motorista: {
-//     id: '1080631',
-//     nome: 'Carlos Evanir Vieira Toledo',
-//     vtr: '',
-//     telefone: '(051) 99777-1264',
-//     cpf: '927.517.410-53',
-//     categoria: 'pop promo',
-//     modelo: 'Ford ka se',
-//     placa: 'IWQ-3847'
-//   },
-//   condutor: {
-//     id: '1080631',
-//     nome: 'Carlos Evanir Vieira Toledo',
-//     vtr: '',
-//     telefone: '(051) 99777-1264',
-//     cpf: '927.517.410-53',
-//     categoria: 'pop promo',
-//     modelo: 'Ford ka se',
-//     placa: 'IWQ-3847'
-//   },
-//   andamento: {
-//     data_hora_aceite: '2024-12-17T19:16:54+00:00',
-//     lat_aceite: '-30.855060551',
-//     lng_aceite: '-51.810093820',
-//     estimativa_aceite_seg: '120',
-//     estimativa_aceite_km: '0.016',
-//     estimativa_corrida_km: '0.530',
-//     estimativa_corrida_min: '3',
-//     estimativa_corrida_valor: '10.46',
-//     data_hora_arredores_local: '2024-12-17T19:16:56+00:00'
-//   }
-// }
-// Event Handled
-// Received webhook event: {
-//   id_mch: '474444645',
-//   id_externo: '44132',
-//   status_solicitacao: 'C',
-//   data_hora_solicitacao: '2024-12-17T19:16:44+00:00',
-//   chave_trajeto: 'a7a7fd3e9cdbfc7f1cdb6ab715d6fa66bb46d711eb812bee87597e831924c1df',
-//   com_retorno: false,
-//   motorista: {
-//     id: '1080631',
-//     nome: 'Carlos Evanir Vieira Toledo',
-//     vtr: '',
-//     telefone: '(051) 99777-1264',
-//     cpf: '927.517.410-53',
-//     categoria: 'pop promo',
-//     modelo: 'Ford ka se',
-//     placa: 'IWQ-3847'
-//   },
-//   condutor: {
-//     id: '1080631',
-//     nome: 'Carlos Evanir Vieira Toledo',
-//     vtr: '',
-//     telefone: '(051) 99777-1264',
-//     cpf: '927.517.410-53',
-//     categoria: 'pop promo',
-//     modelo: 'Ford ka se',
-//     placa: 'IWQ-3847'
-//   },
-//   andamento: {
-//     data_hora_aceite: '2024-12-17T19:16:54+00:00',
-//     lat_aceite: '-30.855060551',
-//     lng_aceite: '-51.810093820',
-//     estimativa_aceite_seg: '120',
-//     estimativa_aceite_km: '0.016',
-//     estimativa_corrida_km: '0.530',
-//     estimativa_corrida_min: '3',
-//     estimativa_corrida_valor: '10.46',
-//     data_hora_arredores_local: '2024-12-17T19:16:56+00:00'
-//   },
-//   cancelamento: {
-//     cancelada_por: 'C',
-//     motivo_cancelamento: 'Outros casos',
-//     data_hora: '2024-12-17T19:18:06+00:00'
-//   }
-// }
-    
+// Set up the recurring process
+setInterval(ProcessCorridas, process.env.CHECK_INTERVAL);
