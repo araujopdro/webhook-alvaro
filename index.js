@@ -58,54 +58,67 @@ function HandleMachineStatus(e){
     const event_corrida_idx = corridas_to_process.findIndex((c) => c.corrida_id === e.id_mch)
     const event_corrida = event_corrida_idx >= 0 ? corridas_to_process[event_corrida_idx] : null
     console.log('\x1b[41m%s\x1b[0m', `${e.id_mch} (${e.status_solicitacao})`)
+    let fluxo_name
     if(event_corrida == null) return
     switch(e.status_solicitacao){
         case 'D':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (D): Solicitação aberta e ainda não atribuída a um condutor.`)
+            fluxo_name = 'notifica-busca-passageiro'
             break;
         case 'G':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (G): Esperando um condutor aceitar a solicitação.`)
+            fluxo_name = 'notifica-corrida-pendente'
             break;
         case 'P':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (P): Solicitação não aceita, aguardando aceitação.`)
+            fluxo_name = 'notifica-solicitacao-espera'
             break;
         case 'N':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (N): Nenhum condutor aceitou a solicitação.`)
+            fluxo_name = 'notifica-corrida-nao-atendida'
             break;
         case 'A':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (A): Solicitação aceita por um condutor.`)
             if(e.motorista) console.log(`${e.motorista.nome}`)
+            fluxo_name = 'notifica-corrida-aceita'
             break;
         case 'S':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (S): Solicitação em espera até a conclusão de uma anterior.`)
+            fluxo_name = 'notifica-motorista-em-liberacao'
             break;
         case 'E':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (E): Corrida iniciada.`)
+            fluxo_name = 'notifica-corrida-iniciada'
             break;
         case 'R':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (R): Parada concluída.`)
+            ///fluxo-name = xxx
             break;
         case 'S':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (S): Solicitação finalizada pelo condutor.`)
             RemoveCorrida(e.id_mch)
+            fluxo_name = 'notifica-motorista-em-liberacao'
             break;
         case 'F':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (F): Corrida concluída.`)
             RemoveCorrida(e.id_mch)
+            fluxo_name = 'notifica-corrida-finalizada'
             break;
         case 'C':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (C): Solicitação cancelada.`)
+            fluxo_name = 'notifica-corrida-cancelada'
             RemoveCorrida(e.id_mch)
             break;
         case 'R':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (R): Pagamento pendente de confirmação.`)
+            ///fluxo-name = xxx
             break;
         default:
             console.log('\x1b[31m%s\x1b[0m', `${e.id_mch} (${e.status_solicitacao}): event not handled ;-;`)
             break;
     }
 
-    if(event_corrida != null) SendPulseFlowToken(event_corrida.bot_id, event_corrida.contact_id)
+    if(event_corrida != null && fluxo_name != null) SendPulseFlowToken(event_corrida.bot_id, event_corrida.contact_id, fluxo_name)
 }
 
 
