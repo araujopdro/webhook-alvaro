@@ -118,9 +118,10 @@ async function SendPulseFlowToken(_bot_id, _contact_id){
         })
         //console.log(response.data.data)
         const flow_selected_on_status = response.data.data.find((f) => f.name === 'fluxo-teste')
-        //console.log(flow_selected_on_status)
+        console.log(flow_selected_on_status)
 
         //get list of flows successful, RUN flow
+        console.log('SendPulseFlowRun - Token Ok')
         SendPulseFlowRun(_contact_id, flow_selected_on_status)
     } catch (error) {
         //get list of flows NOT successful
@@ -206,7 +207,6 @@ async function ProcessCorridas() {
         // if (rejected_results.length > 0) {
         //   console.error("Rejected requests: ", rejected_results)
         // }
-
     } catch (error) {
         console.error('Error processing IDs:', error);
     }
