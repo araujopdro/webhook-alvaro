@@ -29,8 +29,8 @@ app.listen(PORT, () => {
 //
 app.post('/corrida_setup', (req, res) => {
     const data = req.body;
-    console.log(`corrida cadastrada pelo bot: ${data.id_corrida}`)
-    corridas.push({...data})
+    console.log(`corrida cadastrada pelo bot: ${data}`)
+    corridas_to_process.push({...data})
     res.status(200).send({ status: 'success', body: {...req.body} });
 });
 
