@@ -29,7 +29,7 @@ app.listen(PORT, () => {
 //
 app.post('/corrida_setup', (req, res) => {
     const data = req.body;
-    console.log(`corrida cadastrada pelo bot: ${data}`)
+    console.log(`corrida cadastrada pelo bot: ${data.bot_id} | ${data.corrida_id}`)
     corridas_to_process.push({...data})
     res.status(200).send({ status: 'success', body: {...req.body} });
 });
@@ -55,8 +55,8 @@ app.get('/runflow', (req, res) => {
 
 //
 function HandleMachineStatus(e){
-    const event_corrida_idx = corridas.findIndex((c) => c.id_corrida === e.id_mch)
-    const event_corrida = event_corrida_idx >= 0 ? corridas[event_corrida_idx] : null
+    const event_corrida_idx = corridas_to_process.findIndex((c) => c.corrida_id === e.id_mch)
+    const event_corrida = event_corrida_idx >= 0 ? corridas_to_process[event_corrida_idx] : null
     //console.log(e)
     if(event_corrida == null) return
     switch(e.status_solicitacao){
@@ -194,7 +194,7 @@ async function ProcessCorridas() {
         return; //nothing to process
     }
 
-    const promises = Array.from(corridas_to_process).map(corrida => MachineGetPosicaoCondutor(corrida.bot_id, corrida.id_corrida));
+    const promises = Array.from(corridas_to_process).map(corrida => MachineGetPosicaoCondutor(corrida.bot_id, corrida.corrida_id));
     try {
         const results = await Promise.allSettled(promises);
         const successful_results = results.filter(result => result.status === 'fulfilled').map(result => result.value);
