@@ -111,6 +111,7 @@ function HandleMachineStatus(e){
     const event_corrida_idx = corridas.findIndex((c) => c.id_corrida === e.id_mch)
     const event_corrida = event_corrida_idx >= 0 ? corridas[event_corrida_idx] : null
     console.log(e)
+    if(event_corrida == null) return
     switch(e.status_solicitacao){
         case 'D':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (D): Solicitação aberta e ainda não atribuída a um condutor.`)
@@ -173,7 +174,7 @@ async function SendPulseFlowToken(_bot_id, _contact_id){
                 'Authorization': `Bearer ${sendpulse_tkn}`
             }
         })
-        console.log(response.data.flow.data)
+        console.log(response.data)
         const flow_selected_on_status = response.data.flow.data.find((f) => f.name === 'fluxo-teste')
         console.log(flow_selected_on_status)
 
