@@ -110,10 +110,7 @@ app.get('/are_you_there', (req, res) => {
 function HandleMachineStatus(e){
     const event_corrida_idx = corridas.findIndex((c) => c.id_corrida === e.id_mch)
     const event_corrida = event_corrida_idx >= 0 ? corridas[event_corrida_idx] : null
-    if(event_corrida == null) return;
-    
-    let flow = 'fluxo-teste';
-
+    console.log(e)
     switch(e.status_solicitacao){
         case 'D':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (D): Solicitação aberta e ainda não atribuída a um condutor.`)
@@ -157,12 +154,12 @@ function HandleMachineStatus(e){
             break;
     }
 
-    SendPulseFlowToken(event_corrida.bot_id, event_corrida.contact_id)
+    if(event_corrida != null) SendPulseFlowToken(event_corrida.bot_id, event_corrida.contact_id)
 }
 
 
 app.get('/runflow', (req, res) => {
-    SendPulseFlowToken('671c1c15e2674ddd100159df', '')
+    SendPulseFlowToken('671c1c15e2674ddd100159df', '0000000000')
 
     res.status(200).send('Event received');
 });
@@ -176,10 +173,12 @@ async function SendPulseFlowToken(_bot_id, _contact_id){
                 'Authorization': `Bearer ${sendpulse_tkn}`
             }
         })
+        console.log(response.data.flow.data)
+        const flow_selected_on_status = response.data.flow.data.find((f) => f.name === 'fluxo-teste')
+        console.log(flow_selected_on_status)
 
-        SendPulseFlowRun(_bot_id, _contact_id, response.data.id)
-
-        return response.data; // return if successful
+        SendPulseFlowRun(_bot_id, _contact_id, flow_selected_on_status)
+        //return response.data; // return if successful
     } catch (error) {
         if (error.status === 401) {
             try {
@@ -192,7 +191,7 @@ async function SendPulseFlowToken(_bot_id, _contact_id){
                 })
                 
                 sendpulse_tkn = response.data.access_token
-                return SendPulseFlowRun(_bot_id, _contact_id);  // try again with new token
+                return SendPulseFlowToken(_bot_id, _contact_id);  // try again with new token
             } catch (tokenError) {
                 console.error('Error getting SendPulse Access Token:', tokenError);  // error getting new token
             }
@@ -202,16 +201,19 @@ async function SendPulseFlowToken(_bot_id, _contact_id){
     }
 }
 
-function SendPulseFlowRun(_contact_id, _flow_id){
+function SendPulseFlowRun(_contact_id, _flow){
+
     try {
+        console.log('contact_id: ',_contact_id)
+        console.log('_flow_id: ',_flow_id)
+        console.log('SendPulse Flow: Run!');  // 
         axios.post(`https://api.sendpulse.com/whatsapp/flows/run`, {
             'contact_id': `${_contact_id}`,
-            'flow_id': `${_flow_id}`,
+            'flow_id': `${_flow.id}`,
         }, {
             'Content-Type': 'application/json',
         })
-        console.error('SendPulse Flow: Run!');  // 
-        
+        console.log('SendPulse Flow: Success!');  // 
     } catch (error) {
         console.error('Error runing SendPulse Flow:', error);  // 
     }
