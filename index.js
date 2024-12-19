@@ -112,7 +112,7 @@ function HandleMachineStatus(e){
     const event_corrida = event_corrida_idx >= 0 ? corridas[event_corrida_idx] : null
     if(event_corrida == null) return;
     
-    let flow
+    let flow = 'fluxo-teste';
 
     switch(e.status_solicitacao){
         case 'D':
@@ -156,25 +156,29 @@ function HandleMachineStatus(e){
             console.log('\x1b[31m%s\x1b[0m', `${e.id_mch} (${e.status_solicitacao}): event not handled ;-;`)
             break;
     }
+
+    SendPulseFlowToken(event_corrida.bot_id, event_corrida.contact_id)
 }
+
+
 app.get('/runflow', (req, res) => {
-    SendPulseFlowRun('671c1c15e2674ddd100159df')
+    SendPulseFlowToken('671c1c15e2674ddd100159df', '')
 
     res.status(200).send('Event received');
 });
 
 //https://api.sendpulse.com/whatsapp/flows?bot_id=671c1c15e2674ddd100159df
-async function SendPulseFlowRun(bot_id){
+async function SendPulseFlowToken(_bot_id, _contact_id){
     try {
-        console.log(`sendpulse tkn: `,sendpulse_tkn)
-        const response = await axios.get(`https://api.sendpulse.com/whatsapp/flows?bot_id=671c1c15e2674ddd100159df`, {
+        const response = await axios.get(`${sendpulse_base_url}/whatsapp/flows?bot_id=671c1c15e2674ddd100159df`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${sendpulse_tkn}`
             }
         })
 
-        console.log(`flow: `,response.data)
+        SendPulseFlowRun(_bot_id, _contact_id, response.data.id)
+
         return response.data; // return if successful
     } catch (error) {
         if (error.status === 401) {
@@ -197,6 +201,24 @@ async function SendPulseFlowRun(bot_id){
         }
     }
 }
+
+function SendPulseFlowRun(_contact_id, _flow_id){
+    try {
+        axios.post(`https://api.sendpulse.com/whatsapp/flows/run`, {
+            'contact_id': `${_contact_id}`,
+            'flow_id': `${_flow_id}`,
+        }, {
+            'Content-Type': 'application/json',
+        })
+        console.error('SendPulse Flow: Run!');  // 
+        
+    } catch (error) {
+        console.error('Error runing SendPulse Flow:', error);  // 
+    }
+}
+
+
+
 
 // {
 //     "contact_id": "string",
