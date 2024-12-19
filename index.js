@@ -168,7 +168,7 @@ app.get('/runflow', (req, res) => {
 //https://api.sendpulse.com/whatsapp/flows?bot_id=671c1c15e2674ddd100159df
 async function SendPulseFlowToken(_bot_id, _contact_id){
     try {
-        const response = await axios.get(`${sendpulse_base_url}/whatsapp/flows?bot_id=671c1c15e2674ddd100159df`, {
+        const response = await axios.get(`${sendpulse_base_url}/whatsapp/flows?bot_id=${_bot_id}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${sendpulse_tkn}`
@@ -178,7 +178,7 @@ async function SendPulseFlowToken(_bot_id, _contact_id){
         const flow_selected_on_status = response.data.data.find((f) => f.name === 'fluxo-teste')
         console.log(flow_selected_on_status)
 
-        SendPulseFlowRun(_bot_id, _contact_id, flow_selected_on_status)
+        SendPulseFlowRun(_contact_id, flow_selected_on_status)
         //return response.data; // return if successful
     } catch (error) {
         if (error.status === 401) {
@@ -203,17 +203,16 @@ async function SendPulseFlowToken(_bot_id, _contact_id){
 }
 
 function SendPulseFlowRun(_contact_id, _flow){
-
     try {
         console.log('contact_id: ',_contact_id)
-        console.log('_flow_id: ',_flow_id)
+        console.log('_flow_id: ',_flow.id)
         console.log('SendPulse Flow: Run!');  // 
-        axios.post(`https://api.sendpulse.com/whatsapp/flows/run`, {
-            'contact_id': `${_contact_id}`,
-            'flow_id': `${_flow.id}`,
-        }, {
-            'Content-Type': 'application/json',
-        })
+        //await axios.post(`https://api.sendpulse.com/whatsapp/flows/run`, {
+        //     'contact_id': `${_contact_id}`,
+        //     'flow_id': `${_flow.id}`,
+        // }, {
+        //     'Content-Type': 'application/json',
+        // })
         console.log('SendPulse Flow: Success!');  // 
     } catch (error) {
         console.error('Error runing SendPulse Flow:', error);  // 
