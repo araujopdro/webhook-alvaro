@@ -203,7 +203,7 @@ async function ProcessCorridas() {
         const results = await Promise.allSettled(promises);
         const successful_results = results.filter(result => result.status === 'fulfilled').map(result => result.value);
         //const rejected_results = results.filter(result => result.status === 'rejected').map((result, index) => ({ id: Array.from(corridas_to_process)[index], error: result.reason }));
-        
+
         if (successful_results.length > 0) {
             console.log("Successful requests: ", successful_results)
         }
@@ -216,7 +216,8 @@ async function ProcessCorridas() {
 }
 
 function RemoveCorrida(remove_id){
-    corridas_to_process = corridas_to_process.filter(c => c.corrida_id !== remove_id);
+    console.log('remove corrida', remove_id)
+    corridas_to_process.splice(corridas_to_process.findIndex((c) => c.corrida_id === remove_id), 1); 
 }
 
 
