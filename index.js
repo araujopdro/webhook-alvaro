@@ -212,6 +212,7 @@ function SendPulseFlowRun(_contact_id, _flow){
         //     'flow_id': `${_flow.id}`,
         // }, {
         //     'Content-Type': 'application/json',
+        //        'Authorization': `Bearer ${sendpulse_tkn}`
         // })
         console.log('SendPulse Flow: Success!');  // 
     } catch (error) {
