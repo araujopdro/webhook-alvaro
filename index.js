@@ -207,7 +207,7 @@ async function MachineGetPosicaoCondutor(_bot_id, _corrida_id) {
 
 async function ProcessCorridas() {
     if (corridas_to_process.length === 0){
-        console.log('0 corridas esperando processamento.')
+        //console.log('0 corridas esperando processamento.')
         return; //nothing to process
     }
 
