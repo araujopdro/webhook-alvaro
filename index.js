@@ -57,7 +57,7 @@ app.get('/runflow', (req, res) => {
 function HandleMachineStatus(e){
     const event_corrida_idx = corridas_to_process.findIndex((c) => c.corrida_id === e.id_mch)
     const event_corrida = event_corrida_idx >= 0 ? corridas_to_process[event_corrida_idx] : null
-    //console.log(e)
+    console.log('\x1b[41m%s\x1b[0m', `${e.id_mch} (${e.status_solicitacao})`)
     if(event_corrida == null) return
     switch(e.status_solicitacao){
         case 'D':
@@ -87,12 +87,15 @@ function HandleMachineStatus(e){
             break;
         case 'S':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (S): Solicitação finalizada pelo condutor.`)
+            RemoveCorrida(e.id_mch)
             break;
         case 'F':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (F): Corrida concluída.`)
+            RemoveCorrida(e.id_mch)
             break;
         case 'C':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (C): Solicitação cancelada.`)
+            RemoveCorrida(e.id_mch)
             break;
         case 'R':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (R): Pagamento pendente de confirmação.`)
@@ -170,7 +173,7 @@ function SendPulseFlowRun(_contact_id, _flow){
 //
 async function MachineGetPosicaoCondutor(_bot_id, _corrida_id) {
     try {
-        console.log('MachineGetPosicaoCondutor', _bot_id, _corrida_id)
+        //console.log('MachineGetPosicaoCondutor', _bot_id, _corrida_id)
         const response = await axios.get(`${taxi_base_url}/posicaoCondutor?id_mch=${_corrida_id}`, {
             headers: {
                 'api-key': `${bot_headers[_bot_id].api_key}`,
@@ -200,9 +203,9 @@ async function ProcessCorridas() {
         const results = await Promise.allSettled(promises);
         const successful_results = results.filter(result => result.status === 'fulfilled').map(result => result.value);
         //const rejected_results = results.filter(result => result.status === 'rejected').map((result, index) => ({ id: Array.from(corridas_to_process)[index], error: result.reason }));
-
+        
         if (successful_results.length > 0) {
-          console.log("Successful requests: ", successful_results)
+            console.log("Successful requests: ", successful_results)
         }
         // if (rejected_results.length > 0) {
         //   console.error("Rejected requests: ", rejected_results)
@@ -211,6 +214,11 @@ async function ProcessCorridas() {
         console.error('Error processing IDs:', error);
     }
 }
+
+function RemoveCorrida(remove_id){
+    corridas_to_process = corridas_to_process.filter(c => c.corrida_id !== remove_id);
+}
+
 
 // Set up the recurring process
 setInterval(ProcessCorridas, process.env.CHECK_INTERVAL);
