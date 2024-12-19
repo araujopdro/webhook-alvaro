@@ -167,10 +167,10 @@ function SendPulseFlowRun(_contact_id, _flow){
 
 
 //
-async function MachineGetPosicaoCondutor(id) {
+async function MachineGetPosicaoCondutor(_bot_id, _corrida_id) {
     try {
-        console.log('MachineGetPosicaoCondutor', id)
-        const response = await axios.get(`${taxi_base_url}/posicaoCondutor?id_mch=${id}`, {
+        console.log('MachineGetPosicaoCondutor', _corrida_id)
+        const response = await axios.get(`${taxi_base_url}/posicaoCondutor?id_mch=${_corrida_id}`, {
             headers: {
                 'api-key': `${bot_headers[_bot_id].api_key}`,
                 'Authorization': `${bot_headers[_bot_id].auth}`
@@ -194,7 +194,7 @@ async function ProcessCorridas() {
         return; //nothing to process
     }
 
-    const promises = Array.from(corridas_to_process).map(corrida => MachineGetPosicaoCondutor(corrida.id));
+    const promises = Array.from(corridas_to_process).map(corrida => MachineGetPosicaoCondutor(corrida.bot_id, corrida.id));
     try {
         const results = await Promise.allSettled(promises);
         const successful_results = results.filter(result => result.status === 'fulfilled').map(result => result.value);
