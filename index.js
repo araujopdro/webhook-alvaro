@@ -164,19 +164,19 @@ async function SendPulseFlowToken(_bot_id, _contact_id){
 }
 
 //using the contact id and the flow id and runs it
-function SendPulseFlowRun(_contact_id, _flow){
+async function SendPulseFlowRun(_contact_id, _flow){
     try {
         console.log('SendPulseFlowRun contact_id: ',_contact_id)
         console.log('SendPulseFlowRun _flow_id: ',_flow.id)
         console.log('SendPulse Flow: Run!');  // 
-        //await axios.post(`https://api.sendpulse.com/whatsapp/flows/run`, {
-        //     'contact_id': `${_contact_id}`,
-        //     'flow_id': `${_flow.id}`,
-        // }, {
-        //     'Content-Type': 'application/json',
-        //        'Authorization': `Bearer ${sendpulse_tkn}`
-        // })
-        console.log('SendPulse Flow: Success!');  // 
+        const response = await axios.post(`https://api.sendpulse.com/whatsapp/flows/run`, {
+            'contact_id': `${_contact_id}`,
+            'flow_id': `${_flow.id}`,
+        }, {
+            'Content-Type': 'application/json',
+               'Authorization': `Bearer ${sendpulse_tkn}`
+        })
+        console.log('SendPulse Flow: Success!', response.data);  // 
     } catch (error) {
         console.error('Error runing SendPulse Flow:', error);  // 
     }
