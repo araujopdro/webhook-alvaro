@@ -57,7 +57,7 @@ app.post('/corrida_setup', (req, res) => {
 //
 app.post('/webhook_un_humaita', (req, res) => {
     const event = req.body;  
-    console.log('\x1b[44m%s\x1b[0m', `UN - Humaitá`)
+    //console.log('\x1b[44m%s\x1b[0m', `UN - Humaitá`)
     HandleMachineStatus(event)
     res.status(200).send('Event received');
 });
