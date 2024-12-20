@@ -220,12 +220,13 @@ async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
             'lng_condutor': response.data.response.lng_condutor 
         };
     } catch (error) {
+        const error_status = error.response.status
         // if (error.response && error.response.status === 404) {
         //   console.log(`Item ${id} not found, removing from processing list.`);
         //   corridas_to_process.delete(id)
         //   return { id, error: `Item not found` };
         // }
-        return { error: error.message };
+        return { error_status, error: error.message };
     }
 }
 
