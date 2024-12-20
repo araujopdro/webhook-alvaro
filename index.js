@@ -30,7 +30,7 @@ app.listen(PORT, () => {
 //
 app.post('/corrida_setup', (req, res) => {
     const data = req.body;
-    console.log(`corrida cadastrada pelo bot: ${data.bot_id} | ${data.corrida_id}`)
+    console.log(`corrida cadastrada pelo bot: ${data.bot_id} | ${data.id_corrida}`)
     corridas_to_process.push({...data})
     res.status(200).send({ status: 'success', body: {...req.body} });
 });
@@ -71,7 +71,7 @@ app.get('/posicaoCondutor', (req, res) => {
 
 //
 function HandleMachineStatus(e){
-    const event_corrida_idx = corridas_to_process.findIndex((c) => c.corrida_id === e.id_mch)
+    const event_corrida_idx = corridas_to_process.findIndex((c) => c.id_corrida === e.id_mch)
     const event_corrida = event_corrida_idx >= 0 ? corridas_to_process[event_corrida_idx] : null
     console.log('\x1b[41m%s\x1b[0m', `${e.id_mch} (${e.status_solicitacao})`)
     let fluxo_name
@@ -198,17 +198,17 @@ async function SendPulseFlowRun(_contact_id, _flow){
 
 
 //
-async function MachineGetPosicaoCondutor(_bot_id, _corrida_id) {
+async function MachineGetPosicaoCondutor(_corrida) {
     try {
         //console.log('MachineGetPosicaoCondutor', _bot_id, _corrida_id)
         //const response = await axios.get(`${taxi_base_url}/posicaoCondutor?id_mch=${_corrida_id}`, {
         const response = await axios.get(`http://193.203.182.20:3000/posicaoCondutor`, {
             headers: {
-                'api-key': `${bot_headers[_bot_id].api_key}`,
-                'Authorization': `${bot_headers[_bot_id].auth}`
+                'api-key': `${bot_headers[_corrida.bot_id].api_key}`,
+                'Authorization': `${bot_headers[_corrida.bot_id].auth}`
             }
         });
-        return response.data;
+        return { 'lat_partida': _corrida.lat_partida, 'lng_partida': _corrida.lng_partida, 'lat_condutor': response.data.lat_condutor, 'lng_condutor': response.data.lng_condutor };
     } catch (error) {
         // if (error.response && error.response.status === 404) {
         //   console.log(`Item ${id} not found, removing from processing list.`);
@@ -226,7 +226,7 @@ async function ProcessCorridas() {
         return; //nothing to process
     }
 
-    const promises = Array.from(corridas_to_process).map(corrida => MachineGetPosicaoCondutor(corrida.bot_id, corrida.corrida_id));
+    const promises = Array.from(corridas_to_process).map(corrida => MachineGetPosicaoCondutor(corrida));
     try {
         const results = await Promise.allSettled(promises);
         const successful_results = results.filter(result => result.status === 'fulfilled').map(result => result.value);
@@ -234,7 +234,7 @@ async function ProcessCorridas() {
 
         if (successful_results.length > 0) {
             console.log("Successful requests: ", successful_results)
-            successful_results.map(pos => CalculateDistance(pos.response, corrida));
+            successful_results.map(pos => CalculateDistance(pos));
         }
         // if (rejected_results.length > 0) {
         //   console.error("Rejected requests: ", rejected_results)
@@ -246,13 +246,13 @@ async function ProcessCorridas() {
 
 function RemoveCorrida(remove_id){
     console.log('remove corrida', remove_id)
-    corridas_to_process.splice(corridas_to_process.findIndex((c) => c.corrida_id === remove_id), 1); 
+    corridas_to_process.splice(corridas_to_process.findIndex((c) => c.id_corrida === remove_id), 1); 
 }
 
-function CalculateDistance(condutor_pos, corrida){
+function CalculateDistance(_pos){
     console.log(getDistance(
-        { latitude: condutor_pos.lat_condutor, longitude: condutor_pos.lng_condutor },
-        { latitude: corrida.lat_partida, longitude: corrida.lng_partida }
+        { latitude: _pos.lat_condutor, longitude: _pos.lng_condutor },
+        { latitude: _pos.lat_partida, longitude: _pos.lng_partida }
     ))
 }
 
