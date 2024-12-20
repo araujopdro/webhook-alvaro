@@ -208,6 +208,8 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name){
 async function SendPulseFlowRun(_contact_id, _flow){
     try {
         //console.log('SendPulse Flow: Run!');  // 
+        if(_contact_id == '') throw "Contact ID is invalid"
+
         const response = await axios.post(`https://api.sendpulse.com/whatsapp/flows/run`, {
             'contact_id': `${_contact_id}`,
             'flow_id': `${_flow.id}`,
