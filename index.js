@@ -200,8 +200,9 @@ async function SendPulseFlowRun(_contact_id, _flow){
 
 //
 async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
-    if(!_corrida.get_position) return { _corrida_idx, error: "Can't get position. get_position=false" };
     try {
+        if(_corrida.get_position == false) throw "Can't get position;"
+
         console.log('MachineGetPosicaoCondutor',  _corrida)
         //const response = await axios.get(`${taxi_base_url}/posicaoCondutor?id_mch=${_corrida.id_corrida}`, {
         const response = await axios.get(`http://193.203.182.20:3000/posicaoCondutor`, {
