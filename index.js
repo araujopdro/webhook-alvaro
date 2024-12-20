@@ -137,7 +137,7 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name){
         console.log(flow_selected_on_status)
 
         //get list of flows successful, RUN flow
-        console.log('SendPulseFlowRun - Token Ok')
+        //console.log('SendPulseFlowRun - Token Ok')
         SendPulseFlowRun(_contact_id, flow_selected_on_status)
     } catch (error) {
         //get list of flows NOT successful
@@ -156,7 +156,7 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name){
                 })
                 
                 sendpulse_tkn = response.data.access_token
-                return SendPulseFlowToken(_bot_id, _contact_id);  // try again with new token
+                return SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name);  // try again with new token
             } catch (tokenError) {
                 console.error('Error getting SendPulse Access Token:', tokenError);  // error getting new token
             }
