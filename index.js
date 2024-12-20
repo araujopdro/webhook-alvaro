@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
+const geolib = require('geolib');
 
 const app = express();
 const PORT = 3000;
@@ -54,6 +55,21 @@ app.get('/runflow', (req, res) => {
 });
 
 //
+app.get('/posicaoCondutor', (req, res) => {
+    res.status(200).send({
+        "success": true,
+        "response": {
+            "lat_taxi": "-30.835360698",
+            "lng_taxi": "-51.819862425",
+            "lat_condutor": "-30.835360698",
+            "lng_condutor": "-51.819862425",
+            "condutor_id": "1080525"
+        }
+    });
+});
+
+
+//
 function HandleMachineStatus(e){
     const event_corrida_idx = corridas_to_process.findIndex((c) => c.corrida_id === e.id_mch)
     const event_corrida = event_corrida_idx >= 0 ? corridas_to_process[event_corrida_idx] : null
@@ -90,10 +106,6 @@ function HandleMachineStatus(e){
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (E): Corrida iniciada.`)
             fluxo_name = 'notifica-corrida-iniciada'
             break;
-        case 'R':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (R): Parada concluída.`)
-            ///fluxo-name = xxx
-            break;
         case 'S':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (S): Solicitação finalizada pelo condutor.`)
             RemoveCorrida(e.id_mch)
@@ -109,15 +121,11 @@ function HandleMachineStatus(e){
             fluxo_name = 'notifica-corrida-cancelada'
             RemoveCorrida(e.id_mch)
             break;
-        case 'R':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (R): Pagamento pendente de confirmação.`)
-            ///fluxo-name = xxx
-            break;
         default:
             console.log('\x1b[31m%s\x1b[0m', `${e.id_mch} (${e.status_solicitacao}): event not handled ;-;`)
             break;
     }
-    console.log('SendPulseFlowToken, fluxo-name:',fluxo_name)
+    
     if(event_corrida != null && fluxo_name != null) SendPulseFlowToken(event_corrida.bot_id, event_corrida.contact_id, fluxo_name)
 }
 
@@ -137,7 +145,6 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name){
         console.log(flow_selected_on_status)
 
         //get list of flows successful, RUN flow
-        //console.log('SendPulseFlowRun - Token Ok')
         SendPulseFlowRun(_contact_id, flow_selected_on_status)
     } catch (error) {
         //get list of flows NOT successful
@@ -168,10 +175,7 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name){
 
 //using the contact id and the flow id and runs it
 async function SendPulseFlowRun(_contact_id, _flow){
-    console.log('\x1b[46m%s\x1b[0m', `${sendpulse_tkn}`)
     try {
-        console.log('SendPulseFlowRun contact_id: ',_contact_id)
-        console.log('SendPulseFlowRun _flow_id: ',_flow.id)
         console.log('SendPulse Flow: Run!');  // 
         const response = await axios.post(`https://api.sendpulse.com/whatsapp/flows/run`, {
             'contact_id': `${_contact_id}`,
@@ -197,7 +201,8 @@ async function SendPulseFlowRun(_contact_id, _flow){
 async function MachineGetPosicaoCondutor(_bot_id, _corrida_id) {
     try {
         //console.log('MachineGetPosicaoCondutor', _bot_id, _corrida_id)
-        const response = await axios.get(`${taxi_base_url}/posicaoCondutor?id_mch=${_corrida_id}`, {
+        //const response = await axios.get(`${taxi_base_url}/posicaoCondutor?id_mch=${_corrida_id}`, {
+        const response = await axios.get(`http://193.203.182.20:3000/posicaoCondutor`, {
             headers: {
                 'api-key': `${bot_headers[_bot_id].api_key}`,
                 'Authorization': `${bot_headers[_bot_id].auth}`
@@ -229,6 +234,7 @@ async function ProcessCorridas() {
 
         if (successful_results.length > 0) {
             console.log("Successful requests: ", successful_results)
+            successful_results.map(pos => CalculateDistance(pos.response, corrida));
         }
         // if (rejected_results.length > 0) {
         //   console.error("Rejected requests: ", rejected_results)
@@ -243,6 +249,37 @@ function RemoveCorrida(remove_id){
     corridas_to_process.splice(corridas_to_process.findIndex((c) => c.corrida_id === remove_id), 1); 
 }
 
+function CalculateDistance(condutor_pos, corrida){
+    console.log(getDistance(
+        { latitude: condutor_pos.lat_condutor, longitude: condutor_pos.lng_condutor },
+        { latitude: corrida.lat_partida, longitude: corrida.lng_partida }
+    ))
+}
+
 
 // Set up the recurring process
 setInterval(ProcessCorridas, process.env.CHECK_INTERVAL);
+
+
+// {
+//     "success": true,
+//     "response": {
+//         "lat_taxi": "-30.835360698",
+//         "lng_taxi": "-51.819862425",
+//         "lat_condutor": "-30.835360698",
+//         "lng_condutor": "-51.819862425",
+//         "condutor_id": "1080525"
+//     }
+// }
+
+
+// {
+//     "success": true,
+//     "response": {
+//         "lat_taxi": "-30.835426601",
+//         "lng_taxi": "-51.819862425",
+//         "lat_condutor": "-30.835426601",
+//         "lng_condutor": "-51.819862425",
+//         "condutor_id": "1080525"
+//     }
+// }
