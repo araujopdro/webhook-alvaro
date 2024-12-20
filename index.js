@@ -124,7 +124,7 @@ function HandleMachineStatus(e){
 
 //https://api.sendpulse.com/whatsapp/flows?bot_id=671c1c15e2674ddd100159df
 //Tries to get the flow list from the BOT_ID, it's a success, run the status related FLOW, to the CONTACT ID
-async function SendPulseFlowToken(_bot_id, _contact_id){
+async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name){
     try {
         const response = await axios.get(`${sendpulse_base_url}/whatsapp/flows?bot_id=${_bot_id}`, {
             headers: {
@@ -133,7 +133,7 @@ async function SendPulseFlowToken(_bot_id, _contact_id){
             }
         })
         //console.log(response.data.data)
-        const flow_selected_on_status = response.data.data.find((f) => f.name === 'fluxo-teste')
+        const flow_selected_on_status = response.data.data.find((f) => f.name === _fluxo_name)
         console.log(flow_selected_on_status)
 
         //get list of flows successful, RUN flow
@@ -144,6 +144,7 @@ async function SendPulseFlowToken(_bot_id, _contact_id){
         if (error.status === 401) {
             //status 401 not auth, which means that the current SENDPULSE TOKEN it's invalid and tries to get a new one
             try {
+                console.log('401 - post get token')
                 const response = await axios.post(`${sendpulse_base_url}/oauth/access_token`, {
                     'grant_type': 'client_credentials',
                     'client_id': process.env.CLIENT_ID,
