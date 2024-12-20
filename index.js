@@ -210,6 +210,10 @@ async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
                 'Authorization': `${bot_headers[_corrida.bot_id].auth}`
             }
         });
+
+        console.log('\x1b[42m%s\x1b[0m', 'POSICAO CONDUTOR')
+        console.log(response.data)
+
         return {
             'corrida_index': _corrida_idx,
             'id_corrida': _corrida.id_corrida,
@@ -268,6 +272,7 @@ function RemoveCorrida(remove_id){
 }
 
 function IsInRange(_pos){
+    console.log(_pos.lat_condutor, _pos.lng_condutor, _pos.lat_partida, _pos.lng_partida)
     const distance = geolib.getDistance(
         { latitude: _pos.lat_condutor, longitude: _pos.lng_condutor },
         { latitude: _pos.lat_partida, longitude: _pos.lng_partida }
