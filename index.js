@@ -243,7 +243,9 @@ async function ProcessCorridas() {
             console.log("Successful requests: ", successful_results)
             successful_results.map(pos => {
                 const is_in_range = IsInRange(pos);
-                if (is_in_range) SendPulseFlowToken(pos.bot_id, pos.contact_id, 'notifica-motorista-chegou')
+                if (is_in_range) {
+                    SendPulseFlowToken(pos.bot_id, pos.contact_id, 'notifica-motorista-chegou')
+                }
             });
         }
         // if (rejected_results.length > 0) {
