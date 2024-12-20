@@ -16,9 +16,28 @@ let sendpulse_tkn;
 
 const bot_headers = {
     '671c1c15e2674ddd100159df': {
-      api_key: process.env.API_KEY_VALUE_POPCAR,
-      auth: process.env.BASIC_AUTHORIZATION_VALUE_POPCAR,
-    }
+        bot_name: 'POP CAR',
+        api_key: process.env.API_KEY_VALUE_POPCAR,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_POPCAR,
+    },
+
+    '675b7c3042fbd8c07f06d518': {
+        bot_name: 'UN - Humaitá',
+        api_key: process.env.API_KEY_VALUE_UN_HUMAITA,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_UN_HUMAITA,
+    },
+
+    '676476192e9602bd8b059754': {
+        bot_name: 'UN - Boituva',
+        api_key: process.env.API_KEY_VALUE_UN_BOITUVA,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_UN_BOITUVA,
+    },
+
+    '6762eb5267e2dea0140d1057': {
+        bot_name: 'UN - Ariquemes',
+        api_key: process.env.API_KEY_VALUE_UN_ARIQUEMES,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_UN_ARIQUEMES,
+    },
   };
 
 //
@@ -30,7 +49,7 @@ app.listen(PORT, () => {
 //
 app.post('/corrida_setup', (req, res) => {
     const data = req.body;
-    console.log(`corrida cadastrada pelo bot: ${data.bot_id} | ${data.id_corrida}`)
+    console.log('\x1b[49m%s\x1b[0m', `Corrida cadastrada pelo bot: ${bot_headers[data.bot_id].bot_name} | ${data.id_corrida}`)
     corridas_to_process.push({...data, get_position: false})
     res.status(200).send({ status: 'success', body: {...req.body} });
 });
@@ -73,8 +92,9 @@ app.get('/posicaoCondutor', (req, res) => {
 function HandleMachineStatus(e){
     const event_corrida_idx = corridas_to_process.findIndex((c) => c.id_corrida === e.id_mch)
     const event_corrida = event_corrida_idx >= 0 ? corridas_to_process[event_corrida_idx] : null
-    console.log('\x1b[41m%s\x1b[0m', `${e.id_mch} (${e.status_solicitacao})`)
+    console.log('\x1b[41m%s\x1b[0m', `${bot_headers[e.id_mch].bot_name} (${e.status_solicitacao})`)
     let fluxo_name
+    
     if(event_corrida == null) return
     switch(e.status_solicitacao){
         case 'L':
@@ -128,6 +148,13 @@ function HandleMachineStatus(e){
             break;
     }
     
+    if(e.status_solicitacao == event_corrida.status_solicitacao) {
+        console.log('\x1b[41m%s\x1b[0m', `${event_corrida.bot_id} - Status Repetido`)
+        return
+    }
+
+    event_corrida.status_solicitacao = e.status_solicitacao
+
     if(event_corrida != null && fluxo_name != null) SendPulseFlowToken(event_corrida.bot_id, event_corrida.contact_id, fluxo_name)
 }
 
