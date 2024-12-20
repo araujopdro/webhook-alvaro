@@ -92,8 +92,9 @@ app.get('/posicaoCondutor', (req, res) => {
 function HandleMachineStatus(e){
     const event_corrida_idx = corridas_to_process.findIndex((c) => c.id_corrida === e.id_mch)
     const event_corrida = event_corrida_idx >= 0 ? corridas_to_process[event_corrida_idx] : null
-    console.log(e)
+
     console.log('\x1b[37m%s\x1b[0m', `Corrida: ${e.id_mch} (${e.status_solicitacao})`)
+
     let fluxo_name
     
     if(event_corrida == null) return
