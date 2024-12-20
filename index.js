@@ -133,7 +133,8 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name){
             }
         })
         console.log(response.data.data)
-        const flow_selected_on_status = response.data.data.find((f) => f.name === _fluxo_name)
+        console.log(_fluxo_name)
+        const flow_selected_on_status = response.data.data.find((f) => f.name == _fluxo_name)
 
         console.log(flow_selected_on_status)
 
