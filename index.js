@@ -31,7 +31,7 @@ app.listen(PORT, () => {
 app.post('/corrida_setup', (req, res) => {
     const data = req.body;
     console.log(`corrida cadastrada pelo bot: ${data.bot_id} | ${data.id_corrida}`)
-    corridas_to_process.push({...data})
+    corridas_to_process.push({...data, get_position: false})
     res.status(200).send({ status: 'success', body: {...req.body} });
 });
 
@@ -96,6 +96,7 @@ function HandleMachineStatus(e){
         case 'A':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (A): Solicitação aceita por um condutor.`)
             if(e.motorista) console.log(`${e.motorista.nome}`)
+            event_corrida.get_position = true;
             fluxo_name = 'notifica-corrida-aceita'
             break;
         case 'S':
@@ -198,10 +199,11 @@ async function SendPulseFlowRun(_contact_id, _flow){
 
 
 //
-async function MachineGetPosicaoCondutor(_corrida) {
+async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
+    if(!_corrida.get_position) return { _corrida_idx, error: "Can't get position. get_position=false" };
     try {
         console.log('MachineGetPosicaoCondutor',  _corrida)
-        //const response = await axios.get(`${taxi_base_url}/posicaoCondutor?id_mch=${_corrida_id}`, {
+        //const response = await axios.get(`${taxi_base_url}/posicaoCondutor?id_mch=${_corrida.id_corrida}`, {
         const response = await axios.get(`http://193.203.182.20:3000/posicaoCondutor`, {
             headers: {
                 'api-key': `${bot_headers[_corrida.bot_id].api_key}`,
@@ -209,6 +211,7 @@ async function MachineGetPosicaoCondutor(_corrida) {
             }
         });
         return {
+            'corrida_index': _corrida_idx,
             'bot_id': _corrida.bot_id,
             'contact_id': _corrida.contact_id,
             'lat_partida': _corrida.lat_partida, 
@@ -222,8 +225,7 @@ async function MachineGetPosicaoCondutor(_corrida) {
         //   corridas_to_process.delete(id)
         //   return { id, error: `Item not found` };
         // }
-        console.error(`Error fetching item ${id}:`, error.message);
-        return { id, error: error.message };
+        return { error: error.message };
     }
 }
 
@@ -233,18 +235,19 @@ async function ProcessCorridas() {
         return; //nothing to process
     }
 
-    const promises = Array.from(corridas_to_process).map(corrida => MachineGetPosicaoCondutor(corrida));
+    const promises = Array.from(corridas_to_process).map(corrida, idx => MachineGetPosicaoCondutor(corrida, idx));
     try {
         const results = await Promise.allSettled(promises);
         const successful_results = results.filter(result => result.status === 'fulfilled').map(result => result.value);
         //const rejected_results = results.filter(result => result.status === 'rejected').map((result, index) => ({ id: Array.from(corridas_to_process)[index], error: result.reason }));
 
         if (successful_results.length > 0) {
-            console.log("Successful requests: ", successful_results)
+            //console.log("Successful requests: ", successful_results)
             successful_results.map(pos => {
                 const is_in_range = IsInRange(pos);
                 if (is_in_range) {
                     SendPulseFlowToken(pos.bot_id, pos.contact_id, 'notifica-motorista-chegou')
+                    corridas_to_process[pos.corrida_index].get_position = false;
                 }
             });
         }
@@ -271,7 +274,6 @@ function IsInRange(_pos){
     else return false;
     
 }
-
 
 // Set up the recurring process
 setInterval(ProcessCorridas, process.env.CHECK_INTERVAL);
