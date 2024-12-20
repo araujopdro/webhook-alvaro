@@ -165,6 +165,7 @@ async function SendPulseFlowToken(_bot_id, _contact_id){
 
 //using the contact id and the flow id and runs it
 async function SendPulseFlowRun(_contact_id, _flow){
+    console.log('\x1b[46m%s\x1b[0m', `${sendpulse_tkn}`)
     try {
         console.log('SendPulseFlowRun contact_id: ',_contact_id)
         console.log('SendPulseFlowRun _flow_id: ',_flow.id)
