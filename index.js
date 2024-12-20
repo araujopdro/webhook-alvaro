@@ -173,6 +173,9 @@ async function SendPulseFlowRun(_contact_id, _flow){
         const response = await axios.post(`https://api.sendpulse.com/whatsapp/flows/run`, {
             'contact_id': `${_contact_id}`,
             'flow_id': `${_flow.id}`,
+            'external_data': {
+                'tracking_number': '1234-0987-5678-9012'
+            }
         }, {
             'accept': 'application/json',
             'Content-Type': 'application/json',
