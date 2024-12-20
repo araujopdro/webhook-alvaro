@@ -132,8 +132,9 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name){
                 'Authorization': `Bearer ${sendpulse_tkn}`
             }
         })
-        //console.log(response.data.data)
+        console.log(response.data.data)
         const flow_selected_on_status = response.data.data.find((f) => f.name === _fluxo_name)
+
         console.log(flow_selected_on_status)
 
         //get list of flows successful, RUN flow
