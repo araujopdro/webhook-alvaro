@@ -77,13 +77,14 @@ function HandleMachineStatus(e){
     let fluxo_name
     if(event_corrida == null) return
     switch(e.status_solicitacao){
-        case 'D':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (D): Solicitação aberta e ainda não atribuída a um condutor.`)
-            fluxo_name = 'notifica-busca-passageiro'
+        case 'L':
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (L)`)
+            //fluxo_name = 'notifica-corrida-pendente'
             break;
         case 'G':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (G): Esperando um condutor aceitar a solicitação.`)
-            fluxo_name = 'notifica-corrida-pendente'
+            fluxo_name = 'notifica-busca-passageiro'
+            //fluxo_name = 'notifica-corrida-pendente'
             break;
         case 'P':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (P): Solicitação não aceita, aguardando aceitação.`)
