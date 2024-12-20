@@ -262,7 +262,7 @@ async function SendPulseFlowRun(_contact_id, _flow){
 async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
     try {
         if(_corrida.get_position == false) throw "Can't get position;"
-        console.log('MachineGetPosicaoCondutor',  _corrida)
+        //console.log('MachineGetPosicaoCondutor',  _corrida)
         const response = await axios.get(`${taxi_base_url}/posicaoCondutor?id_mch=${_corrida.id_corrida}`, {
         //const response = await axios.get(`http://193.203.182.20:3000/posicaoCondutor`, {
             headers: {
@@ -271,8 +271,8 @@ async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
             }
         });
 
-        console.log('\x1b[42m%s\x1b[0m', 'POSICAO CONDUTOR')
-        console.log(response.data)
+        //console.log('\x1b[42m%s\x1b[0m', 'POSICAO CONDUTOR')
+        //console.log(response.data)
 
         return {
             'corrida_index': _corrida_idx,
