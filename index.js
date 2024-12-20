@@ -117,7 +117,7 @@ function HandleMachineStatus(e){
             console.log('\x1b[31m%s\x1b[0m', `${e.id_mch} (${e.status_solicitacao}): event not handled ;-;`)
             break;
     }
-
+    console.log('SendPulseFlowToken, fluxo-name:',fluxo_name)
     if(event_corrida != null && fluxo_name != null) SendPulseFlowToken(event_corrida.bot_id, event_corrida.contact_id, fluxo_name)
 }
 
@@ -132,10 +132,8 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name){
                 'Authorization': `Bearer ${sendpulse_tkn}`
             }
         })
-        console.log(response.data.data)
-        console.log(_fluxo_name)
+        
         const flow_selected_on_status = response.data.data.find((f) => f.name == _fluxo_name)
-
         console.log(flow_selected_on_status)
 
         //get list of flows successful, RUN flow
