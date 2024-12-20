@@ -149,7 +149,9 @@ async function SendPulseFlowToken(_bot_id, _contact_id){
                     'client_id': process.env.CLIENT_ID,
                     'client_secret': process.env.CLIENT_SECRET
                 }, {
-                    'Content-Type': 'application/json',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
                 })
                 
                 sendpulse_tkn = response.data.access_token
@@ -177,9 +179,11 @@ async function SendPulseFlowRun(_contact_id, _flow){
                 'tracking_number': '1234-0987-5678-9012'
             }
         }, {
-            'accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${sendpulse_tkn}`
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${sendpulse_tkn}`
+            }
         })
         console.log('SendPulse Flow: Success!', response.data);  // 
     } catch (error) {
