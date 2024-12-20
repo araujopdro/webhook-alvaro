@@ -93,7 +93,7 @@ function HandleMachineStatus(e){
     const event_corrida_idx = corridas_to_process.findIndex((c) => c.id_corrida === e.id_mch)
     const event_corrida = event_corrida_idx >= 0 ? corridas_to_process[event_corrida_idx] : null
 
-    console.log('\x1b[46m%s\x1b[0m', `Corrida: ${e.id_mch} (${e.status_solicitacao})`)
+    console.log('\x1b[46m%s\x1b[0m', `${event_corrida ? bot_headers[event_corrida.bot_id].bot_name+' | ' : ''}Corrida: ${e.id_mch} (${e.status_solicitacao})`)
 
     let fluxo_name
     
