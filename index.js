@@ -174,8 +174,9 @@ async function SendPulseFlowRun(_contact_id, _flow){
             'contact_id': `${_contact_id}`,
             'flow_id': `${_flow.id}`,
         }, {
+            'accept': 'application/json',
             'Content-Type': 'application/json',
-               'Authorization': `Bearer ${sendpulse_tkn}`
+            'Authorization': `Bearer ${sendpulse_tkn}`
         })
         console.log('SendPulse Flow: Success!', response.data);  // 
     } catch (error) {
