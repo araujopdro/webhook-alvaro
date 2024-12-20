@@ -61,8 +61,8 @@ app.get('/posicaoCondutor', (req, res) => {
         "response": {
             "lat_taxi": "-30.835360698",
             "lng_taxi": "-51.819862425",
-            "lat_condutor": "-30.835360698",
-            "lng_condutor": "-51.819862425",
+            "lat_condutor": "-23.535684",
+            "lng_condutor": "-46.700752",
             "condutor_id": "1080525"
         }
     });
