@@ -208,7 +208,7 @@ async function MachineGetPosicaoCondutor(_corrida) {
                 'Authorization': `${bot_headers[_corrida.bot_id].auth}`
             }
         });
-        return { 'lat_partida': _corrida.lat_partida, 'lng_partida': _corrida.lng_partida, 'lat_condutor': response.data.lat_condutor, 'lng_condutor': response.data.lng_condutor };
+        return { 'lat_partida': _corrida.lat_partida, 'lng_partida': _corrida.lng_partida, 'lat_condutor': response.data.response.lat_condutor, 'lng_condutor': response.data.response.lng_condutor };
     } catch (error) {
         // if (error.response && error.response.status === 404) {
         //   console.log(`Item ${id} not found, removing from processing list.`);
@@ -250,7 +250,7 @@ function RemoveCorrida(remove_id){
 }
 
 function CalculateDistance(_pos){
-    console.log(getDistance(
+    console.log(geolib.getDistance(
         { latitude: _pos.lat_condutor, longitude: _pos.lng_condutor },
         { latitude: _pos.lat_partida, longitude: _pos.lng_partida }
     ))
