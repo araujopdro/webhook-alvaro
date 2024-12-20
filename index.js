@@ -236,7 +236,7 @@ async function ProcessCorridas() {
         return; //nothing to process
     }
 
-    const promises = Array.from(corridas_to_process).map(corrida, idx => MachineGetPosicaoCondutor(corrida, idx));
+    const promises = Array.from(corridas_to_process).map( (corrida, idx) => MachineGetPosicaoCondutor(corrida, idx));
     try {
         const results = await Promise.allSettled(promises);
         const successful_results = results.filter(result => result.status === 'fulfilled').map(result => result.value);
