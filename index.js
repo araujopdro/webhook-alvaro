@@ -200,7 +200,7 @@ async function SendPulseFlowRun(_contact_id, _flow){
 //
 async function MachineGetPosicaoCondutor(_corrida) {
     try {
-        //console.log('MachineGetPosicaoCondutor', _bot_id, _corrida_id)
+        console.log('MachineGetPosicaoCondutor',  _corrida)
         //const response = await axios.get(`${taxi_base_url}/posicaoCondutor?id_mch=${_corrida_id}`, {
         const response = await axios.get(`http://193.203.182.20:3000/posicaoCondutor`, {
             headers: {
@@ -208,7 +208,14 @@ async function MachineGetPosicaoCondutor(_corrida) {
                 'Authorization': `${bot_headers[_corrida.bot_id].auth}`
             }
         });
-        return { 'lat_partida': _corrida.lat_partida, 'lng_partida': _corrida.lng_partida, 'lat_condutor': response.data.response.lat_condutor, 'lng_condutor': response.data.response.lng_condutor };
+        return {
+            'bot_id': _corrida.bot_id,
+            'contact_id': _corrida.contact_id,
+            'lat_partida': _corrida.lat_partida, 
+            'lng_partida': _corrida.lng_partida, 
+            'lat_condutor': response.data.response.lat_condutor, 
+            'lng_condutor': response.data.response.lng_condutor 
+        };
     } catch (error) {
         // if (error.response && error.response.status === 404) {
         //   console.log(`Item ${id} not found, removing from processing list.`);
@@ -234,7 +241,10 @@ async function ProcessCorridas() {
 
         if (successful_results.length > 0) {
             console.log("Successful requests: ", successful_results)
-            successful_results.map(pos => CalculateDistance(pos));
+            successful_results.map(pos => {
+                const is_in_range = IsInRange(pos);
+                if (is_in_range) SendPulseFlowToken(pos.bot_id, pos.contact_id, 'notifica-motorista-chegou')
+            });
         }
         // if (rejected_results.length > 0) {
         //   console.error("Rejected requests: ", rejected_results)
@@ -249,11 +259,15 @@ function RemoveCorrida(remove_id){
     corridas_to_process.splice(corridas_to_process.findIndex((c) => c.id_corrida === remove_id), 1); 
 }
 
-function CalculateDistance(_pos){
-    console.log(geolib.getDistance(
+function IsInRange(_pos){
+    const distance = geolib.getDistance(
         { latitude: _pos.lat_condutor, longitude: _pos.lng_condutor },
         { latitude: _pos.lat_partida, longitude: _pos.lng_partida }
-    ))
+    )
+    console.log(distance)
+    if (distance <= process.env.DEFAULT_MIN_DISTANCE) return true;
+    else return false;
+    
 }
 
 
