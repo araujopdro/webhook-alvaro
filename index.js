@@ -143,7 +143,7 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name){
         })
         
         const flow_selected_on_status = response.data.data.find((f) => f.name == _fluxo_name)
-        console.log(flow_selected_on_status)
+        //console.log(flow_selected_on_status)
 
         //get list of flows successful, RUN flow
         SendPulseFlowRun(_contact_id, flow_selected_on_status)
@@ -152,7 +152,7 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name){
         if (error.status === 401) {
             //status 401 not auth, which means that the current SENDPULSE TOKEN it's invalid and tries to get a new one
             try {
-                console.log('401 - post get token')
+                //console.log('401 - post get token')
                 const response = await axios.post(`${sendpulse_base_url}/oauth/access_token`, {
                     'grant_type': 'client_credentials',
                     'client_id': process.env.CLIENT_ID,
@@ -177,7 +177,7 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name){
 //using the contact id and the flow id and runs it
 async function SendPulseFlowRun(_contact_id, _flow){
     try {
-        console.log('SendPulse Flow: Run!');  // 
+        //console.log('SendPulse Flow: Run!');  // 
         const response = await axios.post(`https://api.sendpulse.com/whatsapp/flows/run`, {
             'contact_id': `${_contact_id}`,
             'flow_id': `${_flow.id}`,
@@ -202,10 +202,9 @@ async function SendPulseFlowRun(_contact_id, _flow){
 async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
     try {
         if(_corrida.get_position == false) throw "Can't get position;"
-
         console.log('MachineGetPosicaoCondutor',  _corrida)
-        //const response = await axios.get(`${taxi_base_url}/posicaoCondutor?id_mch=${_corrida.id_corrida}`, {
-        const response = await axios.get(`http://193.203.182.20:3000/posicaoCondutor`, {
+        const response = await axios.get(`${taxi_base_url}/posicaoCondutor?id_mch=${_corrida.id_corrida}`, {
+        //const response = await axios.get(`http://193.203.182.20:3000/posicaoCondutor`, {
             headers: {
                 'api-key': `${bot_headers[_corrida.bot_id].api_key}`,
                 'Authorization': `${bot_headers[_corrida.bot_id].auth}`
@@ -213,6 +212,7 @@ async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
         });
         return {
             'corrida_index': _corrida_idx,
+            'corrida_id': _corrida.id_corrida,
             'bot_id': _corrida.bot_id,
             'contact_id': _corrida.contact_id,
             'lat_partida': _corrida.lat_partida, 
@@ -231,6 +231,7 @@ async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
     }
 }
 
+//
 async function ProcessCorridas() {
     if (corridas_to_process.length === 0){
         //console.log('0 corridas esperando processamento.')
@@ -271,7 +272,7 @@ function IsInRange(_pos){
         { latitude: _pos.lat_condutor, longitude: _pos.lng_condutor },
         { latitude: _pos.lat_partida, longitude: _pos.lng_partida }
     )
-    console.log(distance)
+    console.log('\x1b[40m%s\x1b[0m', `${_pos.id_corrida} - Distancia do motorista: ${distance}`)
     if (distance <= process.env.DEFAULT_MIN_DISTANCE) return true;
     else return false;
     
