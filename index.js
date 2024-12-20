@@ -212,7 +212,7 @@ async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
         });
         return {
             'corrida_index': _corrida_idx,
-            'corrida_id': _corrida.id_corrida,
+            'id_corrida': _corrida.id_corrida,
             'bot_id': _corrida.bot_id,
             'contact_id': _corrida.contact_id,
             'lat_partida': _corrida.lat_partida, 
@@ -245,7 +245,7 @@ async function ProcessCorridas() {
         //const rejected_results = results.filter(result => result.status === 'rejected').map((result, index) => ({ id: Array.from(corridas_to_process)[index], error: result.reason }));
 
         if (successful_results.length > 0) {
-            //console.log("Successful requests: ", successful_results)
+            console.log("Successful requests: ", successful_results)
             successful_results.map(pos => {
                 const is_in_range = IsInRange(pos);
                 if (is_in_range) {
@@ -272,7 +272,7 @@ function IsInRange(_pos){
         { latitude: _pos.lat_condutor, longitude: _pos.lng_condutor },
         { latitude: _pos.lat_partida, longitude: _pos.lng_partida }
     )
-    console.log('\x1b[40m%s\x1b[0m', `${_pos.id_corrida} - Distancia do motorista: ${distance}`)
+    console.log('\x1b[44m%s\x1b[0m', `${_pos.id_corrida} - Distancia do motorista: ${distance}`)
     if (distance <= process.env.DEFAULT_MIN_DISTANCE) return true;
     else return false;
     
