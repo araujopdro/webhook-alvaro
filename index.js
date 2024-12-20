@@ -54,14 +54,41 @@ app.post('/corrida_setup', (req, res) => {
     res.status(200).send({ status: 'success', body: {...req.body} });
 });
 
+//
+app.post('/webhook_un_humaita', (req, res) => {
+    const event = req.body;  
+    console.log('\x1b[44m%s\x1b[0m', `UN - Humaitá`)
+    HandleMachineStatus(event)
+    res.status(200).send('Event received');
+});
+//
+app.post('/wh_ariquemes', (req, res) => {
+    const event = req.body;  
+    console.log('\x1b[44m%s\x1b[0m', `UN - Ariquemes`)
+    HandleMachineStatus(event)
+    res.status(200).send('Event received');
+});
+//
+app.post('/wh_boituva', (req, res) => {
+    const event = req.body;  
+    console.log('\x1b[44m%s\x1b[0m', `UN - Boituva`)
+    HandleMachineStatus(event)
+    res.status(200).send('Event received');
+});
+//
+app.post('/wh_popcar', (req, res) => {
+    const event = req.body;  
+    console.log('\x1b[44m%s\x1b[0m', `POP CAR`)
+    HandleMachineStatus(event)
+    res.status(200).send('Event received');
+});
+
 
 //
 app.post('/webhook_listener', (req, res) => {
     const event = req.body;  
-    
     //console.log(event);
     HandleMachineStatus(event)
-    
     res.status(200).send('Event received');
 });
 
