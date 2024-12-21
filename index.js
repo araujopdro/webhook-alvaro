@@ -46,6 +46,31 @@ app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
+[
+    {
+        "bot_id": "{{$bot_id}}",
+        "id_corrida": "{{id_corrida}}",
+        "contact_id": "{{contact_id}}",
+        "lat_partida": "{{lat_partida}}",
+        "lng_partida": "{{lng_partida}}"
+      },
+      {
+        "bot_id": "{{$bot_id}}",
+        "id_corrida": "{{id_corrida}}",
+        "contact_id": "{{contact_id}}",
+        "lat_partida": "{{lat_partida}}",
+        "lng_partida": "{{lng_partida}}"
+      },
+      {
+        "bot_id": "{{$bot_id}}",
+        "id_corrida": "{{id_corrida}}",
+        "contact_id": "{{contact_id}}",
+        "lat_partida": "{{lat_partida}}",
+        "lng_partida": "{{lng_partida}}"
+      }
+
+
+]
 //
 app.post('/corrida_setup', (req, res) => {
     const data = req.body;
@@ -53,6 +78,12 @@ app.post('/corrida_setup', (req, res) => {
     corridas_to_process.push({...data, get_position: false})
     res.status(200).send({ status: 'success', body: {...req.body} });
 });
+
+
+
+
+
+
 
 //
 app.post('/webhook_un_humaita', (req, res) => {
@@ -82,7 +113,6 @@ app.post('/wh_popcar', (req, res) => {
     HandleMachineStatus(event)
     res.status(200).send('Event received');
 });
-
 
 //
 app.post('/webhook_listener', (req, res) => {
@@ -119,7 +149,6 @@ app.get('/posicaoCondutor', (req, res) => {
 function HandleMachineStatus(e){
     const event_corrida_idx = corridas_to_process.findIndex((c) => c.id_corrida === e.id_mch)
     const event_corrida = event_corrida_idx >= 0 ? corridas_to_process[event_corrida_idx] : null;
-    console.log(e)
     if(event_corrida == null) {
         console.log('\x1b[41m%s\x1b[0m', `Corrida: ${e.id_mch} (${e.status_solicitacao})`)
         return
