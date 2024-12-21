@@ -46,31 +46,6 @@ app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
-[
-    {
-        "bot_id": "{{$bot_id}}",
-        "id_corrida": "{{id_corrida}}",
-        "contact_id": "{{contact_id}}",
-        "lat_partida": "{{lat_partida}}",
-        "lng_partida": "{{lng_partida}}"
-      },
-      {
-        "bot_id": "{{$bot_id}}",
-        "id_corrida": "{{id_corrida}}",
-        "contact_id": "{{contact_id}}",
-        "lat_partida": "{{lat_partida}}",
-        "lng_partida": "{{lng_partida}}"
-      },
-      {
-        "bot_id": "{{$bot_id}}",
-        "id_corrida": "{{id_corrida}}",
-        "contact_id": "{{contact_id}}",
-        "lat_partida": "{{lat_partida}}",
-        "lng_partida": "{{lng_partida}}"
-      }
-
-
-]
 //
 app.post('/corrida_setup', (req, res) => {
     const data = req.body;
@@ -79,16 +54,10 @@ app.post('/corrida_setup', (req, res) => {
     res.status(200).send({ status: 'success', body: {...req.body} });
 });
 
-
-
-
-
-
-
 //
 app.post('/webhook_un_humaita', (req, res) => {
     const event = req.body;  
-    //console.log('\x1b[44m%s\x1b[0m', `UN - Humaitá`)
+    console.log('\x1b[44m%s\x1b[0m', `UN - Humaitá`)
     HandleMachineStatus(event)
     res.status(200).send('Event received');
 });
@@ -149,8 +118,9 @@ app.get('/posicaoCondutor', (req, res) => {
 function HandleMachineStatus(e){
     const event_corrida_idx = corridas_to_process.findIndex((c) => c.id_corrida === e.id_mch)
     const event_corrida = event_corrida_idx >= 0 ? corridas_to_process[event_corrida_idx] : null;
+    console.log(e)
     if(event_corrida == null) {
-        //console.log('\x1b[41m%s\x1b[0m', `Corrida: ${e.id_mch} (${e.status_solicitacao})`)
+        console.log('\x1b[41m%s\x1b[0m', `Corrida: ${e.id_mch} (${e.status_solicitacao})`)
         return
     } else {
         console.log('\x1b[46m%s\x1b[0m', `${event_corrida && bot_headers[event_corrida.bot_id] ? bot_headers[event_corrida.bot_id].bot_name+' | ' : ''}Corrida: ${e.id_mch} (${e.status_solicitacao})`)
@@ -280,7 +250,7 @@ async function SendPulseFlowRun(_contact_id, _flow){
                 'Authorization': `Bearer ${sendpulse_tkn}`
             }
         })
-        console.log('SendPulse Flow: Success!', response.data);  // 
+        console.log(`SendPulse Flow: ${_flow.name} Success!`);  // 
     } catch (error) {
         console.error('Error runing SendPulse Flow:', error);  // 
     }
@@ -338,7 +308,7 @@ async function ProcessCorridas() {
         //const rejected_results = results.filter(result => result.status === 'rejected').map((result, index) => ({ id: Array.from(corridas_to_process)[index], error: result.reason }));
 
         if (successful_results.length > 0) {
-            console.log("Successful requests: ", successful_results)
+            //console.log("Successful requests: ", successful_results)
             successful_results.map(pos => {
                 const is_in_range = IsInRange(pos);
                 if (is_in_range) {
