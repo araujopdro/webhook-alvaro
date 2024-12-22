@@ -57,28 +57,28 @@ app.post('/corrida_setup', (req, res) => {
 //
 app.post('/webhook_un_humaita', (req, res) => {
     const event = req.body;  
-    console.log('\x1b[44m%s\x1b[0m', `UN - Humaitá`)
+    //console.log('\x1b[44m%s\x1b[0m', `UN - Humaitá`)
     HandleMachineStatus(event)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_un_ariquemes', (req, res) => {
     const event = req.body;  
-    console.log('\x1b[44m%s\x1b[0m', `UN - Ariquemes`)
+    //console.log('\x1b[44m%s\x1b[0m', `UN - Ariquemes`)
     HandleMachineStatus(event)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_un_boituva', (req, res) => {
     const event = req.body;  
-    console.log('\x1b[44m%s\x1b[0m', `UN - Boituva`)
+   // console.log('\x1b[44m%s\x1b[0m', `UN - Boituva`)
     HandleMachineStatus(event)
     res.status(200).send('Event received');
 });
 //
-app.post('/wh_popcar', (req, res) => {
+app.post('/webhook_popcar', (req, res) => {
     const event = req.body;  
-    console.log('\x1b[44m%s\x1b[0m', `POP CAR`)
+  //  console.log('\x1b[44m%s\x1b[0m', `POP CAR`)
     HandleMachineStatus(event)
     res.status(200).send('Event received');
 });
@@ -120,7 +120,7 @@ function HandleMachineStatus(e){
     const event_corrida = event_corrida_idx >= 0 ? corridas_to_process[event_corrida_idx] : null;
     //console.log(e)
     if(event_corrida == null) {
-        console.log('\x1b[41m%s\x1b[0m', `Corrida: ${e.id_mch} (${e.status_solicitacao})`)
+    //    console.log('\x1b[41m%s\x1b[0m', `Corrida: ${e.id_mch} (${e.status_solicitacao})`)
         return
     } else {
         console.log('\x1b[46m%s\x1b[0m', `${event_corrida && bot_headers[event_corrida.bot_id] ? bot_headers[event_corrida.bot_id].bot_name+' | ' : ''}Corrida: ${e.id_mch} (${e.status_solicitacao})`)
@@ -331,7 +331,7 @@ function RemoveCorrida(remove_id){
 }
 
 function IsInRange(_pos){
-    console.log(_pos.lat_condutor, _pos.lng_condutor, _pos.lat_partida, _pos.lng_partida)
+    //console.log(_pos.lat_condutor, _pos.lng_condutor, _pos.lat_partida, _pos.lng_partida)
     const distance = geolib.getDistance(
         { latitude: _pos.lat_condutor, longitude: _pos.lng_condutor },
         { latitude: _pos.lat_partida, longitude: _pos.lng_partida }
