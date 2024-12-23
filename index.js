@@ -38,6 +38,12 @@ const bot_headers = {
         api_key: process.env.API_KEY_VALUE_UN_ARIQUEMES,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_UN_ARIQUEMES,
     },
+
+    '66f45a98afc0da5096066211': {
+        bot_name: 'Epitacio Leva',
+        api_key: process.env.API_KEY_VALUE_UN_ARIQUEMES,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_UN_ARIQUEMES,
+    },
   };
 
 //
