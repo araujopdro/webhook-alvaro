@@ -19,30 +19,40 @@ const bot_headers = {
         bot_name: 'POP CAR',
         api_key: process.env.API_KEY_VALUE_POPCAR,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_POPCAR,
+        client_id: process.env.CLIENT_ID_FIXCHAT,
+        client_secret: process.env.CLIENT_SECRET_FIXCHAT
     },
 
     '675b7c3042fbd8c07f06d518': {
         bot_name: 'UN - Humaitá',
         api_key: process.env.API_KEY_VALUE_UN_HUMAITA,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_UN_HUMAITA,
+        client_id: process.env.CLIENT_ID_FIXCHAT,
+        client_secret: process.env.CLIENT_SECRET_FIXCHAT
     },
 
     '676476192e9602bd8b059754': {
         bot_name: 'UN - Boituva',
         api_key: process.env.API_KEY_VALUE_UN_BOITUVA,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_UN_BOITUVA,
+        client_id: process.env.CLIENT_ID_FIXCHAT,
+        client_secret: process.env.CLIENT_SECRET_FIXCHAT
     },
 
     '6762eb5267e2dea0140d1057': {
         bot_name: 'UN - Ariquemes',
         api_key: process.env.API_KEY_VALUE_UN_ARIQUEMES,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_UN_ARIQUEMES,
+        client_id: process.env.CLIENT_ID_FIXCHAT,
+        client_secret: process.env.CLIENT_SECRET_FIXCHAT
     },
 
     '66f45a98afc0da5096066211': {
         bot_name: 'Epitacio Leva',
-        api_key: process.env.API_KEY_VALUE_UN_ARIQUEMES,
-        auth: process.env.BASIC_AUTHORIZATION_VALUE_UN_ARIQUEMES,
+        api_key: process.env.API_KEY_VALUE_EPITACIO_LEVA,
+        auth: process.env.BASIC_AUTHORIZATION_EPITACIO_LEVA,
+        client_id: process.env.CLIENT_ID_EPITACIO,
+        client_secret: process.env.CLIENT_SECRET_EPITACIO
     },
   };
 
@@ -55,8 +65,7 @@ app.listen(PORT, () => {
 //
 app.post('/corrida_setup', (req, res) => {
     const data = req.body;
-    console.log(data.bot_id)
-    console.log('\x1b[49m%s\x1b[0m', `Corrida cadastrada pelo bot: ${bot_headers[data.bot_id].bot_name} | ${data.id_corrida}`)
+    console.log('\x1b[49m%s\x1b[0m', `Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${data.id_corrida}`)
     corridas_to_process.push({...data, get_position: false})
     res.status(200).send({ status: 'success', body: {...req.body} });
 });
@@ -221,8 +230,8 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name){
                 //console.log('401 - post get token')
                 const response = await axios.post(`${sendpulse_base_url}/oauth/access_token`, {
                     'grant_type': 'client_credentials',
-                    'client_id': process.env.CLIENT_ID,
-                    'client_secret': process.env.CLIENT_SECRET
+                    'client_id': `${bot_headers[_bot_id].client_id}`,
+                    'client_secret': `${bot_headers[_bot_id].client_secret}`
                 }, {
                     headers: {
                         'Content-Type': 'application/json'
