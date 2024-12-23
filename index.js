@@ -101,7 +101,6 @@ app.post('/webhook_un_humaita', (req, res) => {
     HandleMachineStatus(event, `UN - Humaitá`)
     res.status(200).send('Event received');
 });
-
 //
 app.post('/webhook_epitacio_leva', (req, res) => {
     const event = req.body;
