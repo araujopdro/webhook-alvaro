@@ -54,43 +54,50 @@ app.post('/corrida_setup', (req, res) => {
     res.status(200).send({ status: 'success', body: {...req.body} });
 });
 
-//
+////////Webhook Endpoints
+// Each client should point to a different webhook 
 app.post('/webhook_un_humaita', (req, res) => {
     const event = req.body;  
-    //console.log('\x1b[44m%s\x1b[0m', `UN - Humaitá`)
+    console.log('\x1b[44m%s\x1b[0m', `UN - Humaitá`)
     HandleMachineStatus(event)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_un_ariquemes', (req, res) => {
     const event = req.body;  
-    //console.log('\x1b[44m%s\x1b[0m', `UN - Ariquemes`)
+    console.log('\x1b[44m%s\x1b[0m', `UN - Ariquemes`)
     HandleMachineStatus(event)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_un_boituva', (req, res) => {
     const event = req.body;  
-   // console.log('\x1b[44m%s\x1b[0m', `UN - Boituva`)
+   console.log('\x1b[44m%s\x1b[0m', `UN - Boituva`)
     HandleMachineStatus(event)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_popcar', (req, res) => {
     const event = req.body;  
-  //  console.log('\x1b[44m%s\x1b[0m', `POP CAR`)
+    console.log('\x1b[44m%s\x1b[0m', `POP CAR`)
+    HandleMachineStatus(event)
+    res.status(200).send('Event received');
+});
+//
+app.post('/webhook_un_humaita', (req, res) => {
+    const event = req.body;  
+    console.log('\x1b[44m%s\x1b[0m', `UN - Humaitá`)
     HandleMachineStatus(event)
     res.status(200).send('Event received');
 });
 
 //
-app.post('/webhook_listener', (req, res) => {
+app.post('/webhook_epitacio_leva', (req, res) => {
     const event = req.body;  
-    //console.log(event);
+    console.log('\x1b[44m%s\x1b[0m', `Epitácio Leva`)
     HandleMachineStatus(event)
     res.status(200).send('Event received');
 });
-
 
 //
 app.get('/runflow', (req, res) => {
@@ -98,6 +105,7 @@ app.get('/runflow', (req, res) => {
 
     res.status(200).send('Event received');
 });
+
 
 //
 app.get('/posicaoCondutor', (req, res) => {
@@ -127,12 +135,8 @@ function HandleMachineStatus(e){
     }
     let fluxo_name
     
-    //G - C
-    //A - E, C
-    //E - F
-    
     if(e.status_solicitacao == event_corrida.current_solicitacao_status) {
-        console.log('\x1b[41m%s\x1b[0m', `${event_corrida.bot_id} - Status Repetido`)
+        console.log('\x1b[41m%s\x1b[0m', `${e.id_mch} (${e.status_solicitacao}): Status Repetido`)
         return
     }
     
@@ -144,7 +148,6 @@ function HandleMachineStatus(e){
         case 'G':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (G): Esperando um condutor aceitar a solicitação.`)
             fluxo_name = 'notifica-busca-passageiro'
-            //fluxo_name = 'notifica-corrida-pendente'
             break;
         case 'P':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (P): Solicitação não aceita, aguardando aceitação.`)
