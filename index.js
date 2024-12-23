@@ -58,44 +58,38 @@ app.post('/corrida_setup', (req, res) => {
 // Each client should point to a different webhook 
 app.post('/webhook_un_humaita', (req, res) => {
     const event = req.body;  
-    console.log('\x1b[44m%s\x1b[0m', `UN - Humaitá`)
-    HandleMachineStatus(event)
+    HandleMachineStatus(event, `UN - Humaitá`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_un_ariquemes', (req, res) => {
     const event = req.body;  
-    console.log('\x1b[44m%s\x1b[0m', `UN - Ariquemes`)
-    HandleMachineStatus(event)
+    HandleMachineStatus(event, `UN - Ariquemes`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_un_boituva', (req, res) => {
     const event = req.body;  
-   console.log('\x1b[44m%s\x1b[0m', `UN - Boituva`)
-    HandleMachineStatus(event)
+    HandleMachineStatus(event, `UN - Boituva`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_popcar', (req, res) => {
-    const event = req.body;  
-    console.log('\x1b[44m%s\x1b[0m', `POP CAR`)
-    HandleMachineStatus(event)
+    const event = req.body; 
+    HandleMachineStatus(event, `POP CAR`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_un_humaita', (req, res) => {
     const event = req.body;  
-    console.log('\x1b[44m%s\x1b[0m', `UN - Humaitá`)
-    HandleMachineStatus(event)
+    HandleMachineStatus(event, `UN - Humaitá`)
     res.status(200).send('Event received');
 });
 
 //
 app.post('/webhook_epitacio_leva', (req, res) => {
-    const event = req.body;  
-    console.log('\x1b[44m%s\x1b[0m', `Epitácio Leva`)
-    HandleMachineStatus(event)
+    const event = req.body;
+    HandleMachineStatus(event, `Epitácio Leva`)
     res.status(200).send('Event received');
 });
 
@@ -123,7 +117,7 @@ app.get('/posicaoCondutor', (req, res) => {
 
 
 //
-function HandleMachineStatus(e){
+function HandleMachineStatus(e, origin){
     const event_corrida_idx = corridas_to_process.findIndex((c) => c.id_corrida === e.id_mch)
     const event_corrida = event_corrida_idx >= 0 ? corridas_to_process[event_corrida_idx] : null;
     //console.log(e)
@@ -136,58 +130,58 @@ function HandleMachineStatus(e){
     let fluxo_name
     
     if(e.status_solicitacao == event_corrida.current_solicitacao_status) {
-        console.log('\x1b[41m%s\x1b[0m', `${e.id_mch} (${e.status_solicitacao}): Status Repetido`)
+        console.log('\x1b[41m%s\x1b[0m', `${origin} | ${e.id_mch} (${e.status_solicitacao}): Status Repetido`)
         return
     }
     
     switch(e.status_solicitacao){
         case 'L':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (L)`)
+            console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (L)`)
             //fluxo_name = 'notifica-corrida-pendente'
             break;
         case 'G':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (G): Esperando um condutor aceitar a solicitação.`)
+            console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (G): Esperando um condutor aceitar a solicitação.`)
             fluxo_name = 'notifica-busca-passageiro'
             break;
         case 'P':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (P): Solicitação não aceita, aguardando aceitação.`)
+            console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (P): Solicitação não aceita, aguardando aceitação.`)
             fluxo_name = 'notifica-solicitacao-espera'
             break;
         case 'N':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (N): Nenhum condutor aceitou a solicitação.`)
+            console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (N): Nenhum condutor aceitou a solicitação.`)
             fluxo_name = 'notifica-corrida-nao-atendida'
             break;
         case 'A':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (A): Solicitação aceita por um condutor. ${e.motorista ? e.motorista.nome : ''}`)
+            console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (A): Solicitação aceita por um condutor. ${e.motorista ? e.motorista.nome : ''}`)
             event_corrida.get_position = true;
             fluxo_name = 'notifica-corrida-aceita'
             break;
         case 'S':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (S): Solicitação em espera até a conclusão de uma anterior.`)
+            console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (S): Solicitação em espera até a conclusão de uma anterior.`)
             fluxo_name = 'notifica-motorista-em-liberacao'
             break;
         case 'E':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (E): Corrida iniciada.`)
+            console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (E): Corrida iniciada.`)
             event_corrida.get_position = false;
             fluxo_name = 'notifica-corrida-iniciada'
             break;
         case 'S':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (S): Solicitação finalizada pelo condutor.`)
+            console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (S): Solicitação finalizada pelo condutor.`)
             RemoveCorrida(e.id_mch)
             fluxo_name = 'notifica-motorista-em-liberacao'
             break;
         case 'F':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (F): Corrida concluída.`)
+            console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (F): Corrida concluída.`)
             RemoveCorrida(e.id_mch)
             fluxo_name = 'notifica-corrida-finalizada'
             break;
         case 'C':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (C): Solicitação cancelada.`)
+            console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (C): Solicitação cancelada.`)
             fluxo_name = 'notifica-corrida-cancelada'
             RemoveCorrida(e.id_mch)
             break;
         default:
-            console.log('\x1b[31m%s\x1b[0m', `${e.id_mch} (${e.status_solicitacao}): event not handled ;-;`)
+            console.log('\x1b[31m%s\x1b[0m', `${origin} | ${e.id_mch} (${e.status_solicitacao}): event not handled ;-;`)
             break;
     }
 
