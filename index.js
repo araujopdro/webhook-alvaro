@@ -227,6 +227,8 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name){
             //status 401 not auth, which means that the current SENDPULSE TOKEN it's invalid and tries to get a new one
             try {
                 //console.log('401 - post get token')
+                console.log(_bot_id)
+                console.log(bot_headers[_bot_id])
                 const response = await axios.post(`${sendpulse_base_url}/oauth/access_token`, {
                     'grant_type': 'client_credentials',
                     'client_id': `${bot_headers[_bot_id].client_id}`,
