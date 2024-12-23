@@ -123,9 +123,19 @@ function HandleMachineStatus(e){
     //    console.log('\x1b[41m%s\x1b[0m', `Corrida: ${e.id_mch} (${e.status_solicitacao})`)
         return
     } else {
-        console.log('\x1b[46m%s\x1b[0m', `${event_corrida && bot_headers[event_corrida.bot_id] ? bot_headers[event_corrida.bot_id].bot_name+' | ' : ''}Corrida: ${e.id_mch} (${e.status_solicitacao})`)
+        //console.log('\x1b[46m%s\x1b[0m', `${event_corrida && bot_headers[event_corrida.bot_id] ? bot_headers[event_corrida.bot_id].bot_name+' | ' : ''}Corrida: ${e.id_mch} (${e.status_solicitacao})`)
     }
     let fluxo_name
+    
+    //G - C
+    //A - E, C
+    //E - F
+    
+    if(e.status_solicitacao == event_corrida.current_solicitacao_status) {
+        console.log('\x1b[41m%s\x1b[0m', `${event_corrida.bot_id} - Status Repetido`)
+        return
+    }
+    
     switch(e.status_solicitacao){
         case 'L':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (L)`)
@@ -145,8 +155,7 @@ function HandleMachineStatus(e){
             fluxo_name = 'notifica-corrida-nao-atendida'
             break;
         case 'A':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (A): Solicitação aceita por um condutor.`)
-            if(e.motorista) console.log(`${e.motorista.nome}`)
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (A): Solicitação aceita por um condutor. ${e.motorista ? e.motorista.nome : ''}`)
             event_corrida.get_position = true;
             fluxo_name = 'notifica-corrida-aceita'
             break;
@@ -156,6 +165,7 @@ function HandleMachineStatus(e){
             break;
         case 'E':
             console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} (E): Corrida iniciada.`)
+            event_corrida.get_position = false;
             fluxo_name = 'notifica-corrida-iniciada'
             break;
         case 'S':
@@ -177,13 +187,8 @@ function HandleMachineStatus(e){
             console.log('\x1b[31m%s\x1b[0m', `${e.id_mch} (${e.status_solicitacao}): event not handled ;-;`)
             break;
     }
-    
-    if(e.status_solicitacao == event_corrida.status_solicitacao) {
-        console.log('\x1b[41m%s\x1b[0m', `${event_corrida.bot_id} - Status Repetido`)
-        return
-    }
-    event_corrida.status_solicitacao = e.status_solicitacao
 
+    event_corrida.current_solicitacao_status = e.status_solicitacao
     if(event_corrida != null && fluxo_name != null) SendPulseFlowToken(event_corrida.bot_id, event_corrida.contact_id, fluxo_name)
 }
 
@@ -326,7 +331,7 @@ async function ProcessCorridas() {
 }
 
 function RemoveCorrida(remove_id){
-    console.log('remove corrida', remove_id)
+    console.log('Corrida removida', remove_id)
     corridas_to_process.splice(corridas_to_process.findIndex((c) => c.id_corrida === remove_id), 1); 
 }
 
