@@ -71,7 +71,7 @@ app.post('/corrida_setup', (req, res) => {
     console.log('\x1b[49m%s\x1b[0m', `Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${data.id_corrida}`)
     corridas_to_process.push({...data, get_position: false})
 
-    if(isValidNumericalString(data.id_corrida)){
+    if(!isValidNumericalString(data.id_corrida)){
         res.status(400).json({
             error: 'Missing required fields: id_corrida',
         })
