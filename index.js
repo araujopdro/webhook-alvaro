@@ -12,15 +12,14 @@ const taxi_base_url = "https://api.taximachine.com.br/api/integracao";
 const sendpulse_base_url = "https://api.sendpulse.com";
 const corridas_to_process = [];
 
-let sendpulse_tkn;
-
 const bot_headers = {
     '671c1c15e2674ddd100159df': {
         bot_name: 'POP CAR',
         api_key: process.env.API_KEY_VALUE_POPCAR,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_POPCAR,
         client_id: process.env.CLIENT_ID_FIXCHAT,
-        client_secret: process.env.CLIENT_SECRET_FIXCHAT
+        client_secret: process.env.CLIENT_SECRET_FIXCHAT,
+        sendpulse_tkn: null,
     },
 
     '675b7c3042fbd8c07f06d518': {
@@ -28,7 +27,8 @@ const bot_headers = {
         api_key: process.env.API_KEY_VALUE_UN_HUMAITA,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_UN_HUMAITA,
         client_id: process.env.CLIENT_ID_FIXCHAT,
-        client_secret: process.env.CLIENT_SECRET_FIXCHAT
+        client_secret: process.env.CLIENT_SECRET_FIXCHAT,
+        sendpulse_tkn: null,
     },
 
     '676476192e9602bd8b059754': {
@@ -36,7 +36,8 @@ const bot_headers = {
         api_key: process.env.API_KEY_VALUE_UN_BOITUVA,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_UN_BOITUVA,
         client_id: process.env.CLIENT_ID_FIXCHAT,
-        client_secret: process.env.CLIENT_SECRET_FIXCHAT
+        client_secret: process.env.CLIENT_SECRET_FIXCHAT,
+        sendpulse_tkn: null,
     },
 
     '6762eb5267e2dea0140d1057': {
@@ -44,7 +45,8 @@ const bot_headers = {
         api_key: process.env.API_KEY_VALUE_UN_ARIQUEMES,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_UN_ARIQUEMES,
         client_id: process.env.CLIENT_ID_FIXCHAT,
-        client_secret: process.env.CLIENT_SECRET_FIXCHAT
+        client_secret: process.env.CLIENT_SECRET_FIXCHAT,
+        sendpulse_tkn: null,
     },
 
     '66f45a98afc0da5096066211': {
@@ -52,7 +54,8 @@ const bot_headers = {
         api_key: process.env.API_KEY_VALUE_EPITACIO_LEVA,
         auth: process.env.BASIC_AUTHORIZATION_EPITACIO_LEVA,
         client_id: process.env.CLIENT_ID_EPITACIO,
-        client_secret: process.env.CLIENT_SECRET_EPITACIO
+        client_secret: process.env.CLIENT_SECRET_EPITACIO,
+        sendpulse_tkn: null,
     },
   };
 
@@ -180,11 +183,6 @@ function HandleMachineStatus(e, origin){
             event_corrida.get_position = false;
             fluxo_name = 'notifica-corrida-iniciada'
             break;
-        case 'S':
-            console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (S): Solicitação finalizada pelo condutor.`)
-            RemoveCorrida(e.id_mch)
-            fluxo_name = 'notifica-motorista-em-liberacao'
-            break;
         case 'F':
             console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (F): Corrida concluída.`)
             RemoveCorrida(e.id_mch)
@@ -212,7 +210,7 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name){
         const response = await axios.get(`${sendpulse_base_url}/whatsapp/flows?bot_id=${_bot_id}`, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${sendpulse_tkn}`
+                'Authorization': `Bearer ${bot_headers[_bot_id].sendpulse_tkn}`
             }
         })
         
@@ -220,7 +218,7 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name){
         //console.log(flow_selected_on_status)
 
         //get list of flows successful, RUN flow
-        SendPulseFlowRun(_contact_id, flow_selected_on_status)
+        SendPulseFlowRun(_bot_id, _contact_id, flow_selected_on_status)
     } catch (error) {
         //get list of flows NOT successful
         if (error.status === 401) {
@@ -239,7 +237,7 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name){
                     }
                 })
                 
-                sendpulse_tkn = response.data.access_token
+                bot_headers[_bot_id].sendpulse_tkn = response.data.access_token
                 return SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name);  // try again with new token
             } catch (tokenError) {
                 console.error('Error getting SendPulse Access Token:', tokenError);  // error getting new token
@@ -251,7 +249,7 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name){
 }
 
 //using the contact id and the flow id and runs it
-async function SendPulseFlowRun(_contact_id, _flow){
+async function SendPulseFlowRun(_bot_id, _contact_id, _flow){
     try {
         //console.log('SendPulse Flow: Run!');  // 
         if(_contact_id == '') throw "Contact ID is invalid"
@@ -266,7 +264,7 @@ async function SendPulseFlowRun(_contact_id, _flow){
             headers: {
                 'accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${sendpulse_tkn}`
+                'Authorization': `Bearer ${bot_headers[_bot_id].sendpulse_tkn}`
             }
         })
         console.log(`SendPulse Flow: ${_flow.name} Success!`);  // 
