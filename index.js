@@ -117,6 +117,12 @@ app.post('/webhook_epitacio_leva', (req, res) => {
     HandleMachineStatus(event, `Epitácio Leva`)
     res.status(200).send('Event received');
 });
+//
+app.post('/webhook_listener', (req, res) => {
+    const event = req.body;
+    HandleMachineStatus(event, `Webhook Listener`)
+    res.status(200).send('Event received');
+});
 
 //
 app.get('/runflow', (req, res) => {
