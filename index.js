@@ -83,7 +83,7 @@ app.post('/corrida_setup', (req, res) => {
 ////////Webhook Endpoints
 // Each client should point to a different webhook 
 app.post('/webhook_un_humaita', (req, res) => {
-    console.log('\x1b[44m%s\x1b[0m', `UN - Humaitá`)
+    console.log('\x1b[44m%s\x1b[0m', `UN - Humaitá | ${new Date().toLocaleDateString('pt-BR')}`)
 
     const event = req.body;  
     HandleMachineStatus(event, `UN - Humaitá`)
@@ -91,28 +91,28 @@ app.post('/webhook_un_humaita', (req, res) => {
 });
 //
 app.post('/webhook_un_ariquemes', (req, res) => {
-    console.log('\x1b[44m%s\x1b[0m', `UN - Ariquemes`)
+    console.log('\x1b[44m%s\x1b[0m', `UN - Ariquemes | ${new Date().toLocaleDateString('pt-BR')}`)
     const event = req.body;  
     HandleMachineStatus(event, `UN - Ariquemes`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_un_boituva', (req, res) => {
-    console.log('\x1b[44m%s\x1b[0m', `UN - Boituva`)
+    console.log('\x1b[44m%s\x1b[0m', `UN - Boituva | ${new Date().toLocaleDateString('pt-BR')}`)
     const event = req.body;  
     HandleMachineStatus(event, `UN - Boituva`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_popcar', (req, res) => {
-    console.log('\x1b[44m%s\x1b[0m', `POP CAR`)
+    console.log('\x1b[44m%s\x1b[0m', `POP CAR | ${new Date().toLocaleDateString('pt-BR')}`)
     const event = req.body; 
     HandleMachineStatus(event, `POP CAR`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_epitacio_leva', (req, res) => {
-    console.log('\x1b[44m%s\x1b[0m', `Epitacio Leva`)
+    console.log('\x1b[44m%s\x1b[0m', `Epitacio Leva | ${new Date().toLocaleDateString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `Epitácio Leva`)
     res.status(200).send('Event received');
