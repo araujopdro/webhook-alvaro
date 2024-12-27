@@ -66,6 +66,15 @@ const bot_headers = {
         client_secret: process.env.CLIENT_SECRET_FIXCHAT,
         sendpulse_tkn: null,
     },
+
+    '67335b8b8fab39a04001666c': {
+        bot_name: 'Rocar',
+        api_key: process.env.API_KEY_VALUE_ROCAR,
+        auth: process.env.BASIC_AUTHORIZATION_ROCAR,
+        client_id: process.env.CLIENT_ID_FIXCHAT,
+        client_secret: process.env.CLIENT_SECRET_FIXCHAT,
+        sendpulse_tkn: null,
+    },
   };
 
 //
@@ -130,6 +139,13 @@ app.post('/webhook_bora_la_go', (req, res) => {
     console.log('\x1b[43m%s\x1b[0m', `Bora Lá Go | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `Bora Lá Go`)
+    res.status(200).send('Event received');
+});
+//
+app.post('/webhook_rocar', (req, res) => {
+    console.log('\x1b[43m%s\x1b[0m', `Rocar | ${new Date().toLocaleString('pt-BR')}`)
+    const event = req.body;
+    HandleMachineStatus(event, `Rocar`)
     res.status(200).send('Event received');
 });
 
