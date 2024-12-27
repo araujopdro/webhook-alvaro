@@ -327,7 +327,10 @@ async function SendPulseFlowRun(_bot_id, _contact_id, _flow){
 async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
     try {
         if(_corrida.get_position == false) throw "Can't get position;"
-        //console.log('MachineGetPosicaoCondutor',  _corrida)
+        console.log('MachineGetPosicaoCondutor',  _corrida)
+        console.log(bot_headers[_corrida.bot_id].api_key)
+        console.log(bot_headers[_corrida.bot_id].auth)
+
         const response = await axios.get(`${taxi_base_url}/posicaoCondutor?id_mch=${_corrida.id_corrida}`, {
         //const response = await axios.get(`http://193.203.182.20:3000/posicaoCondutor`, {
             headers: {
@@ -363,10 +366,11 @@ async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
 //
 async function ProcessCorridas() {
     if (corridas_to_process.length === 0){
-        //console.log('0 corridas esperando processamento.')
+        console.log('0 corridas esperando processamento.')
         return; //nothing to process
     }
 
+    console.log(corridas_to_process)
     const promises = Array.from(corridas_to_process).map( (corrida, idx) => MachineGetPosicaoCondutor(corrida, idx));
     try {
         const results = await Promise.allSettled(promises);
