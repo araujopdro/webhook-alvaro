@@ -52,7 +52,7 @@ const bot_headers = {
     '66f45a98afc0da5096066211': {
         bot_name: 'Epitacio Leva',
         api_key: process.env.API_KEY_VALUE_EPITACIO_LEVA,
-        auth: process.env.BASIC_AUTHORIZATION_EPITACIO_LEVA,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_EPITACIO_LEVA,
         client_id: process.env.CLIENT_ID_EPITACIO,
         client_secret: process.env.CLIENT_SECRET_EPITACIO,
         sendpulse_tkn: null,
@@ -61,7 +61,7 @@ const bot_headers = {
     '669567b7a416eeff8d0863a1': {
         bot_name: 'Bora Lá Go',
         api_key: process.env.API_KEY_VALUE_BORA_LA_GO,
-        auth: process.env.BASIC_AUTHORIZATION_BORA_LA_GO,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_BORA_LA_GO,
         client_id: process.env.CLIENT_ID_FIXCHAT,
         client_secret: process.env.CLIENT_SECRET_FIXCHAT,
         sendpulse_tkn: null,
@@ -70,7 +70,7 @@ const bot_headers = {
     '67335b8b8fab39a04001666c': {
         bot_name: 'Rocar',
         api_key: process.env.API_KEY_VALUE_ROCAR,
-        auth: process.env.BASIC_AUTHORIZATION_ROCAR,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_ROCAR,
         client_id: process.env.CLIENT_ID_FIXCHAT,
         client_secret: process.env.CLIENT_SECRET_FIXCHAT,
         sendpulse_tkn: null,
@@ -327,9 +327,9 @@ async function SendPulseFlowRun(_bot_id, _contact_id, _flow){
 async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
     try {
         if(_corrida.get_position == false) throw "Can't get position;"
-        console.log('MachineGetPosicaoCondutor',  _corrida)
-        console.log(bot_headers[_corrida.bot_id].api_key)
-        console.log(bot_headers[_corrida.bot_id].auth)
+        // console.log('MachineGetPosicaoCondutor',  _corrida)
+        // console.log(bot_headers[_corrida.bot_id].api_key)
+        // console.log(bot_headers[_corrida.bot_id].auth)
 
         const response = await axios.get(`${taxi_base_url}/posicaoCondutor?id_mch=${_corrida.id_corrida}`, {
         //const response = await axios.get(`http://193.203.182.20:3000/posicaoCondutor`, {
@@ -339,8 +339,8 @@ async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
             }
         });
 
-        console.log('\x1b[42m%s\x1b[0m', 'POSICAO CONDUTOR')
-        console.log(response.data)
+        // console.log('\x1b[42m%s\x1b[0m', 'POSICAO CONDUTOR')
+        // console.log(response.data)
 
         return {
             'corrida_index': _corrida_idx,
@@ -366,11 +366,11 @@ async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
 //
 async function ProcessCorridas() {
     if (corridas_to_process.length === 0){
-        console.log('0 corridas esperando processamento.')
+      //  console.log('0 corridas esperando processamento.')
         return; //nothing to process
     }
 
-    console.log(corridas_to_process)
+   // console.log(corridas_to_process)
     const promises = Array.from(corridas_to_process).map( (corrida, idx) => MachineGetPosicaoCondutor(corrida, idx));
     try {
         const results = await Promise.allSettled(promises);
@@ -380,7 +380,7 @@ async function ProcessCorridas() {
         if (successful_results.length > 0) {
             //console.log("Successful requests: ", successful_results)
             successful_results.map(pos => {
-                console.log(pos)
+             //   console.log(pos)
                 const is_in_range = IsInRange(pos);
                 if (is_in_range) {
                     SendPulseFlowToken(pos.bot_id, pos.contact_id, 'notifica-motorista-chegou')
@@ -402,7 +402,7 @@ function RemoveCorrida(remove_id){
 }
 
 function IsInRange(_pos){
-    console.log(_pos.lat_condutor, _pos.lng_condutor, _pos.lat_partida, _pos.lng_partida)
+    //console.log(_pos.lat_condutor, _pos.lng_condutor, _pos.lat_partida, _pos.lng_partida)
     const distance = geolib.getDistance(
         { latitude: _pos.lat_condutor, longitude: _pos.lng_condutor },
         { latitude: _pos.lat_partida, longitude: _pos.lng_partida }
