@@ -14,7 +14,7 @@ const corridas_to_process = [];
 
 const bot_headers = {
     '671c1c15e2674ddd100159df': {
-        bot_name: 'POP CAR',
+        bot_name: 'Pop Car',
         api_key: process.env.API_KEY_VALUE_POPCAR,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_POPCAR,
         client_id: process.env.CLIENT_ID_FIXCHAT,
@@ -84,6 +84,24 @@ const bot_headers = {
         client_secret: process.env.CLIENT_SECRET_FIXCHAT,
         sendpulse_tkn: null,
     },
+
+    '669ec0a4ccb10809510194fb': {
+        bot_name: 'Win Cars',
+        api_key: process.env.API_KEY_VALUE_WIN_CARS,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_WIN_CARS,
+        client_id: process.env.CLIENT_ID_WIN_CARS,
+        client_secret: process.env.CLIENT_SECRET_WIN_CARS,
+        sendpulse_tkn: null,
+    },
+
+    '676e9a9f0a89c4d3b608b9e8': {
+        bot_name: 'UN - Novo Progresso',
+        api_key: process.env.API_KEY_VALUE_UN_NOVO_PROGRESSO,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_UN_NOVO_PROGRESSO,
+        client_id: process.env.CLIENT_ID_FIXCHAT,
+        client_secret: process.env.CLIENT_SECRET_FIXCHAT,
+        sendpulse_tkn: null,
+    },
   };
 
 //
@@ -142,9 +160,9 @@ app.post('/webhook_un_boituva', (req, res) => {
 });
 //
 app.post('/webhook_popcar', (req, res) => {
-    //console.log('\x1b[43m%s\x1b[0m', `POP CAR | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[43m%s\x1b[0m', `Pop Car | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body; 
-    HandleMachineStatus(event, `POP CAR`)
+    HandleMachineStatus(event, `Pop Car`)
     res.status(200).send('Event received');
 });
 //
@@ -173,6 +191,20 @@ app.post('/webhook_vai_e_volta', (req, res) => {
     console.log('\x1b[43m%s\x1b[0m', `Vai e Volta - Corridas | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `Vai e Volta - Corridas`)
+    res.status(200).send('Event received');
+});
+//
+app.post('/webhook_win_cars', (req, res) => {
+    console.log('\x1b[43m%s\x1b[0m', `Win Cars | ${new Date().toLocaleString('pt-BR')}`)
+    const event = req.body;
+    HandleMachineStatus(event, `Win Cars`)
+    res.status(200).send('Event received');
+});
+//
+app.post('/webhook_un_novo_progresso', (req, res) => {
+    console.log('\x1b[43m%s\x1b[0m', `UN - Novo Progresso | ${new Date().toLocaleString('pt-BR')}`)
+    const event = req.body;
+    HandleMachineStatus(event, `UN - Novo Progresso`)
     res.status(200).send('Event received');
 });
 
