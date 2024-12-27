@@ -59,7 +59,7 @@ const bot_headers = {
     },
 
     '669567b7a416eeff8d0863a1': {
-        bot_name: 'Bora Lá Go',
+        bot_name: 'Bora Lá GO',
         api_key: process.env.API_KEY_VALUE_BORA_LA_GO,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_BORA_LA_GO,
         client_id: process.env.CLIENT_ID_FIXCHAT,
@@ -71,6 +71,15 @@ const bot_headers = {
         bot_name: 'Rocar',
         api_key: process.env.API_KEY_VALUE_ROCAR,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_ROCAR,
+        client_id: process.env.CLIENT_ID_FIXCHAT,
+        client_secret: process.env.CLIENT_SECRET_FIXCHAT,
+        sendpulse_tkn: null,
+    },
+
+    '669ec0a4ccb10809510194fb': {
+        bot_name: 'Vai e Volta - Corridas',
+        api_key: process.env.API_KEY_VALUE_VAI_E_VOLTA,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_VAI_E_VOLTA,
         client_id: process.env.CLIENT_ID_FIXCHAT,
         client_secret: process.env.CLIENT_SECRET_FIXCHAT,
         sendpulse_tkn: null,
@@ -99,57 +108,71 @@ app.post('/corrida_setup', (req, res) => {
 });
 
 //console.log color 
+// 40 BLACK
 // 41 RED
+// 42 GREEN
 // 43 YELLOW
+// 44 BLUE
+// 45 MAGENTA
+// 46 CYAN
+// 47 WHITE
+// 100 GRAY
 
 ////////Webhook Endpoints
 // Each client should point to a different webhook 
 app.post('/webhook_un_humaita', (req, res) => {
-    console.log('\x1b[43m%s\x1b[0m', `UN - Humaitá | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[43m%s\x1b[0m', `UN - Humaitá | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;  
     HandleMachineStatus(event, `UN - Humaitá`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_un_ariquemes', (req, res) => {
-    console.log('\x1b[43m%s\x1b[0m', `UN - Ariquemes | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[43m%s\x1b[0m', `UN - Ariquemes | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;  
     HandleMachineStatus(event, `UN - Ariquemes`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_un_boituva', (req, res) => {
-    console.log('\x1b[43m%s\x1b[0m', `UN - Boituva | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[43m%s\x1b[0m', `UN - Boituva | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;  
     HandleMachineStatus(event, `UN - Boituva`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_popcar', (req, res) => {
-    console.log('\x1b[43m%s\x1b[0m', `POP CAR | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[43m%s\x1b[0m', `POP CAR | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body; 
     HandleMachineStatus(event, `POP CAR`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_epitacio_leva', (req, res) => {
-    console.log('\x1b[43m%s\x1b[0m', `Epitacio Leva | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[43m%s\x1b[0m', `Epitacio Leva | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `Epitácio Leva`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_bora_la_go', (req, res) => {
-    console.log('\x1b[43m%s\x1b[0m', `Bora Lá Go | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[43m%s\x1b[0m', `Bora Lá GO | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
-    HandleMachineStatus(event, `Bora Lá Go`)
+    HandleMachineStatus(event, `Bora Lá GO`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_rocar', (req, res) => {
-    console.log('\x1b[43m%s\x1b[0m', `Rocar | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[43m%s\x1b[0m', `Rocar | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `Rocar`)
+    res.status(200).send('Event received');
+});
+//
+app.post('/webhook_vai_e_volta', (req, res) => {
+    //console.log('\x1b[43m%s\x1b[0m', `Vai e Volta - Corridas | ${new Date().toLocaleString('pt-BR')}`)
+    const event = req.body;
+    HandleMachineStatus(event, `Vai e Volta - Corridas`)
     res.status(200).send('Event received');
 });
 
