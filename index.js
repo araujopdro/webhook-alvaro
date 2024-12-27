@@ -336,8 +336,8 @@ async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
             }
         });
 
-        //console.log('\x1b[42m%s\x1b[0m', 'POSICAO CONDUTOR')
-        //console.log(response.data)
+        console.log('\x1b[42m%s\x1b[0m', 'POSICAO CONDUTOR')
+        console.log(response.data)
 
         return {
             'corrida_index': _corrida_idx,
