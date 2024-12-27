@@ -98,6 +98,10 @@ app.post('/corrida_setup', (req, res) => {
     }        
 });
 
+//console.log color 
+// 41 RED
+// 43 YELLOW
+
 ////////Webhook Endpoints
 // Each client should point to a different webhook 
 app.post('/webhook_un_humaita', (req, res) => {
@@ -372,6 +376,7 @@ async function ProcessCorridas() {
         if (successful_results.length > 0) {
             //console.log("Successful requests: ", successful_results)
             successful_results.map(pos => {
+                console.log(pos)
                 const is_in_range = IsInRange(pos);
                 if (is_in_range) {
                     SendPulseFlowToken(pos.bot_id, pos.contact_id, 'notifica-motorista-chegou')
