@@ -58,7 +58,7 @@ const bot_headers = {
         sendpulse_tkn: null,
     },
 
-    '66d9f5ff39d09b7b3d0b4b2e': {
+    '669567b7a416eeff8d0863a1': {
         bot_name: 'Bora Lá Go',
         api_key: process.env.API_KEY_VALUE_BORA_LA_GO,
         auth: process.env.BASIC_AUTHORIZATION_BORA_LA_GO,
