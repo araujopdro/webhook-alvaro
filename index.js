@@ -57,6 +57,15 @@ const bot_headers = {
         client_secret: process.env.CLIENT_SECRET_EPITACIO,
         sendpulse_tkn: null,
     },
+
+    '66d9f5ff39d09b7b3d0b4b2e': {
+        bot_name: 'Bora Lá Go',
+        api_key: process.env.API_KEY_VALUE_BORA_LA_GO,
+        auth: process.env.BASIC_AUTHORIZATION_BORA_LA_GO,
+        client_id: process.env.CLIENT_ID_FIXCHAT,
+        client_secret: process.env.CLIENT_SECRET_FIXCHAT,
+        sendpulse_tkn: null,
+    },
   };
 
 //
@@ -68,7 +77,7 @@ app.listen(PORT, () => {
 //
 app.post('/corrida_setup', (req, res) => {
     const data = req.body;
-    console.log('\x1b[49m%s\x1b[0m', `Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${data.id_corrida}`)
+    console.log('\x1b[49m%s\x1b[0m', `Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${data.id_corrida}  ${new Date().toLocaleString('pt-BR')}`)
     corridas_to_process.push({...data, get_position: false})
 
     if(!isValidNumericalString(data.id_corrida)){
@@ -83,40 +92,47 @@ app.post('/corrida_setup', (req, res) => {
 ////////Webhook Endpoints
 // Each client should point to a different webhook 
 app.post('/webhook_un_humaita', (req, res) => {
-    console.log('\x1b[44m%s\x1b[0m', `UN - Humaitá | ${new Date().toLocaleString('pt-BR')}`)
-
+    console.log('\x1b[43m%s\x1b[0m', `UN - Humaitá | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;  
     HandleMachineStatus(event, `UN - Humaitá`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_un_ariquemes', (req, res) => {
-    console.log('\x1b[44m%s\x1b[0m', `UN - Ariquemes | ${new Date().toLocaleString('pt-BR')}`)
+    console.log('\x1b[43m%s\x1b[0m', `UN - Ariquemes | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;  
     HandleMachineStatus(event, `UN - Ariquemes`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_un_boituva', (req, res) => {
-    console.log('\x1b[44m%s\x1b[0m', `UN - Boituva | ${new Date().toLocaleString('pt-BR')}`)
+    console.log('\x1b[43m%s\x1b[0m', `UN - Boituva | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;  
     HandleMachineStatus(event, `UN - Boituva`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_popcar', (req, res) => {
-    console.log('\x1b[44m%s\x1b[0m', `POP CAR | ${new Date().toLocaleString('pt-BR')}`)
+    console.log('\x1b[43m%s\x1b[0m', `POP CAR | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body; 
     HandleMachineStatus(event, `POP CAR`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_epitacio_leva', (req, res) => {
-    console.log('\x1b[44m%s\x1b[0m', `Epitacio Leva | ${new Date().toLocaleString('pt-BR')}`)
+    console.log('\x1b[43m%s\x1b[0m', `Epitacio Leva | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `Epitácio Leva`)
     res.status(200).send('Event received');
 });
+//
+app.post('/webhook_bora_la_go', (req, res) => {
+    console.log('\x1b[43m%s\x1b[0m', `Bora Lá Go | ${new Date().toLocaleString('pt-BR')}`)
+    const event = req.body;
+    HandleMachineStatus(event, `Bora Lá Go`)
+    res.status(200).send('Event received');
+});
+
 //
 app.post('/webhook_listener', (req, res) => {
     const event = req.body;
