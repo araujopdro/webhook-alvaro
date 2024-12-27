@@ -170,7 +170,7 @@ app.post('/webhook_rocar', (req, res) => {
 });
 //
 app.post('/webhook_vai_e_volta', (req, res) => {
-    //console.log('\x1b[43m%s\x1b[0m', `Vai e Volta - Corridas | ${new Date().toLocaleString('pt-BR')}`)
+    console.log('\x1b[43m%s\x1b[0m', `Vai e Volta - Corridas | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `Vai e Volta - Corridas`)
     res.status(200).send('Event received');
