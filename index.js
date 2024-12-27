@@ -85,7 +85,7 @@ const bot_headers = {
         sendpulse_tkn: null,
     },
 
-    '669ec0a4ccb10809510194fb': {
+    '6704679a3a85573fe70d0904': {
         bot_name: 'Win Cars',
         api_key: process.env.API_KEY_VALUE_WIN_CARS,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_WIN_CARS,
