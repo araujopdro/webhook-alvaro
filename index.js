@@ -148,6 +148,69 @@ const bot_headers = {
         client_secret: process.env.CLIENT_SECRET_FIXCHAT,
         sendpulse_tkn: null,
     },
+
+    '668c621f51561bd4b90a4e98': {
+        bot_name: 'GO - Central',
+        api_key: process.env.API_KEY_VALUE_GO,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_GO,
+        client_id: process.env.CLIENT_ID_FIXCHAT,
+        client_secret: process.env.CLIENT_SECRET_FIXCHAT,
+        sendpulse_tkn: null,
+    },
+
+    '666ccb27a4d31aff500d25f1': {
+        bot_name: 'GO - Transporte Urbano Privado',
+        api_key: process.env.API_KEY_VALUE_GO,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_GO,
+        client_id: process.env.CLIENT_ID_FIXCHAT,
+        client_secret: process.env.CLIENT_SECRET_FIXCHAT,
+        sendpulse_tkn: null,
+    },
+
+    '66a419c047d5de7ac1034c7f': {
+        bot_name: 'iupe!- Itumbiara',
+        api_key: process.env.API_KEY_VALUE_IUPE,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_IUPE,
+        client_id: process.env.CLIENT_ID_IUPE,
+        client_secret: process.env.CLIENT_SECRET_IUPE,
+        sendpulse_tkn: null,
+    },
+
+    '66b568c86cbcd2d5fb09649e': {
+        bot_name: 'iupe!- Águas Lindas de Goias',
+        api_key: process.env.API_KEY_VALUE_IUPE,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_IUPE,
+        client_id: process.env.CLIENT_ID_IUPE,
+        client_secret: process.env.CLIENT_SECRET_IUPE,
+        sendpulse_tkn: null,
+    },
+
+    '66ae30ccce20be5a7e0b884e': {
+        bot_name: 'iupe!- Rondonópolis',
+        api_key: process.env.API_KEY_VALUE_IUPE,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_IUPE,
+        client_id: process.env.CLIENT_ID_IUPE,
+        client_secret: process.env.CLIENT_SECRET_IUPE,
+        sendpulse_tkn: null,
+    },
+
+    '66a836cf7674f45eaa0e6b3e': {
+        bot_name: 'iupe!- Planaltina',
+        api_key: process.env.API_KEY_VALUE_IUPE,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_IUPE,
+        client_id: process.env.CLIENT_ID_IUPE,
+        client_secret: process.env.CLIENT_SECRET_IUPE,
+        sendpulse_tkn: null,
+    },
+
+    '668c621f51561bd4b90a4e98': {
+        bot_name: 'Chama - Aracruz',
+        api_key: process.env.API_KEY_VALUE_CHAMA_ARACRUZ,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_CHAMA_ARACRUZ,
+        client_id: process.env.CLIENT_ID_FIXCHAT,
+        client_secret: process.env.CLIENT_SECRET_FIXCHAT,
+        sendpulse_tkn: null,
+    },
   };
 
 //
@@ -255,14 +318,14 @@ app.post('/webhook_un_novo_progresso', (req, res) => {
 });
 //
 app.post('/webhook_rota_pop', (req, res) => {
-    console.log('\x1b[43m%s\x1b[0m', `Rota Pop | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[43m%s\x1b[0m', `Rota Pop | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `Rota Pop`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_center_taxi', (req, res) => {
-    console.log('\x1b[43m%s\x1b[0m', `Center Taxi | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[43m%s\x1b[0m', `Center Taxi | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `Center Taxi`)
     res.status(200).send('Event received');
@@ -288,6 +351,29 @@ app.post('/webhook_igo_mobilidade', (req, res) => {
     HandleMachineStatus(event, `iGO Mobilidade`)
     res.status(200).send('Event received');
 });
+//
+app.post('/webhook_go', (req, res) => {
+    console.log('\x1b[43m%s\x1b[0m', `GO | ${new Date().toLocaleString('pt-BR')}`)
+    const event = req.body;
+    HandleMachineStatus(event, `GO`)
+    res.status(200).send('Event received');
+});
+//
+app.post('/webhook_iupe', (req, res) => {
+    console.log('\x1b[43m%s\x1b[0m', `iupe! | ${new Date().toLocaleString('pt-BR')}`)
+    const event = req.body;
+    HandleMachineStatus(event, `iupe!`)
+    res.status(200).send('Event received');
+});
+//
+app.post('/webhook_chama_aracruz', (req, res) => {
+    console.log('\x1b[43m%s\x1b[0m', `Chama | ${new Date().toLocaleString('pt-BR')}`)
+    const event = req.body;
+    HandleMachineStatus(event, `Chama`)
+    res.status(200).send('Event received');
+});
+
+
 
 
 
