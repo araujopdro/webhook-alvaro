@@ -121,6 +121,15 @@ const bot_headers = {
         client_secret: process.env.CLIENT_SECRET_CENTER_TAXI,
         sendpulse_tkn: null,
     },
+
+    '667f19778224563050069962': {
+        bot_name: 'To Indo',
+        api_key: process.env.API_KEY_VALUE_TO_INDO,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_TO_INDO,
+        client_id: process.env.CLIENT_ID_FIXCHAT,
+        client_secret: process.env.CLIENT_SECRET_FIXCHAT,
+        sendpulse_tkn: null,
+    },
   };
 
 //
@@ -240,6 +249,14 @@ app.post('/webhook_center_taxi', (req, res) => {
     HandleMachineStatus(event, `Center Taxi`)
     res.status(200).send('Event received');
 });
+//
+app.post('/webhook_to_indo', (req, res) => {
+    console.log('\x1b[43m%s\x1b[0m', `To Indo | ${new Date().toLocaleString('pt-BR')}`)
+    const event = req.body;
+    HandleMachineStatus(event, `To Indo`)
+    res.status(200).send('Event received');
+});
+
 
 
 
