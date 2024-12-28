@@ -1,16 +1,24 @@
 require('dotenv').config();
 
 const express = require('express');
-const bodyParser = require('body-parser');
+const config = require('./config');
+//const bodyParser = require('body-parser');
 const axios = require('axios');
-const geolib = require('geolib');
+//const geolib = require('geolib');
 
 const app = express();
-const PORT = 3000;
+app.use(express.json());
+app.listen(config.PORT, () => {
+    console.log(`Server is running on port ${config.PORT}`);
+});
+//const PORT = 3000;
 
-const taxi_base_url = "https://api.taximachine.com.br/api/integracao";
-const sendpulse_base_url = "https://api.sendpulse.com";
+// const taxi_base_url = "https://api.taximachine.com.br/api/integracao";
+// const sendpulse_base_url = "https://api.sendpulse.com";
 const corridas_to_process = [];
+
+const { isInRange, isValidNumericalString } = require('../utils/utils');
+
 
 const bot_headers = {
     '671c1c15e2674ddd100159df': {
@@ -211,13 +219,8 @@ const bot_headers = {
         client_secret: process.env.CLIENT_SECRET_FIXCHAT,
         sendpulse_tkn: null,
     },
-  };
+};
 
-//
-app.use(bodyParser.json());
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
 
 //
 app.post('/corrida_setup', (req, res) => {
@@ -332,7 +335,7 @@ app.post('/webhook_center_taxi', (req, res) => {
 });
 //
 app.post('/webhook_to_indo', (req, res) => {
-    console.log('\x1b[43m%s\x1b[0m', `To Indo | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[43m%s\x1b[0m', `To Indo | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `To Indo`)
     res.status(200).send('Event received');
@@ -346,14 +349,14 @@ app.post('/webhook_vrdrive', (req, res) => {
 });
 //
 app.post('/webhook_igo_mobilidade', (req, res) => {
-    console.log('\x1b[43m%s\x1b[0m', `iGO Mobilidade | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[43m%s\x1b[0m', `iGO Mobilidade | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `iGO Mobilidade`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_go', (req, res) => {
-    console.log('\x1b[43m%s\x1b[0m', `GO | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[43m%s\x1b[0m', `GO | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `GO`)
     res.status(200).send('Event received');
@@ -367,7 +370,7 @@ app.post('/webhook_iupe', (req, res) => {
 });
 //
 app.post('/webhook_chama_aracruz', (req, res) => {
-    console.log('\x1b[43m%s\x1b[0m', `Chama | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[43m%s\x1b[0m', `Chama | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `Chama`)
     res.status(200).send('Event received');
@@ -601,7 +604,7 @@ async function ProcessCorridas() {
             //console.log("Successful requests: ", successful_results)
             successful_results.map(pos => {
              //   console.log(pos)
-                const is_in_range = IsInRange(pos);
+                const is_in_range = isInRange(pos);
                 if (is_in_range) {
                     SendPulseFlowToken(pos.bot_id, pos.contact_id, 'notifica-motorista-chegou')
                     corridas_to_process[pos.corrida_index].get_position = false;
@@ -621,21 +624,21 @@ function RemoveCorrida(remove_id){
     corridas_to_process.splice(corridas_to_process.findIndex((c) => c.id_corrida === remove_id), 1); 
 }
 
-function IsInRange(_pos){
-    //console.log(_pos.lat_condutor, _pos.lng_condutor, _pos.lat_partida, _pos.lng_partida)
-    const distance = geolib.getDistance(
-        { latitude: _pos.lat_condutor, longitude: _pos.lng_condutor },
-        { latitude: _pos.lat_partida, longitude: _pos.lng_partida }
-    )
-    console.log('\x1b[44m%s\x1b[0m', `${_pos.id_corrida} - Distancia do motorista: ${distance}`)
-    if (distance <= process.env.DEFAULT_MIN_DISTANCE) return true;
-    else return false;
+// function isInRange(_pos){
+//     //console.log(_pos.lat_condutor, _pos.lng_condutor, _pos.lat_partida, _pos.lng_partida)
+//     const distance = geolib.getDistance(
+//         { latitude: _pos.lat_condutor, longitude: _pos.lng_condutor },
+//         { latitude: _pos.lat_partida, longitude: _pos.lng_partida }
+//     )
+//     console.log('\x1b[44m%s\x1b[0m', `${_pos.id_corrida} - Distancia do motorista: ${distance}`)
+//     if (distance <= process.env.DEFAULT_MIN_DISTANCE) return true;
+//     else return false;
     
-}
+// }
 
-function isValidNumericalString(str) {
-    return /^\d+$/.test(str);
-}
+// function isValidNumericalString(str) {
+//     return /^\d+$/.test(str);
+// }
 
 // Set up the recurring process
 setInterval(ProcessCorridas, process.env.CHECK_INTERVAL);
