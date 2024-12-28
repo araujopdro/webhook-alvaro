@@ -130,6 +130,24 @@ const bot_headers = {
         client_secret: process.env.CLIENT_SECRET_FIXCHAT,
         sendpulse_tkn: null,
     },
+
+    '6696e7f7a1919dd90000ecbc': {
+        bot_name: 'VRDRIVE',
+        api_key: process.env.API_KEY_VALUE_VRDRIVE,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_VRDRIVE,
+        client_id: process.env.CLIENT_ID_VRDRIVE,
+        client_secret: process.env.CLIENT_SECRET_VRDRIVE,
+        sendpulse_tkn: null,
+    },
+
+    '66994baba6462b05e40dd271': {
+        bot_name: 'iGO Mobilidade',
+        api_key: process.env.API_KEY_VALUE_IGO_MOBILIDADE,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_IGO_MOBILIDADE,
+        client_id: process.env.CLIENT_ID_FIXCHAT,
+        client_secret: process.env.CLIENT_SECRET_FIXCHAT,
+        sendpulse_tkn: null,
+    },
   };
 
 //
@@ -256,6 +274,21 @@ app.post('/webhook_to_indo', (req, res) => {
     HandleMachineStatus(event, `To Indo`)
     res.status(200).send('Event received');
 });
+//
+app.post('/webhook_vrdrive', (req, res) => {
+    console.log('\x1b[43m%s\x1b[0m', `VRDRIVE | ${new Date().toLocaleString('pt-BR')}`)
+    const event = req.body;
+    HandleMachineStatus(event, `VRDRIVE`)
+    res.status(200).send('Event received');
+});
+//
+app.post('/webhook_igo_mobilidade', (req, res) => {
+    console.log('\x1b[43m%s\x1b[0m', `iGO Mobilidade | ${new Date().toLocaleString('pt-BR')}`)
+    const event = req.body;
+    HandleMachineStatus(event, `iGO Mobilidade`)
+    res.status(200).send('Event received');
+});
+
 
 
 
