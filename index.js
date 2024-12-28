@@ -233,7 +233,6 @@ app.post('/webhook_rota_pop', (req, res) => {
     HandleMachineStatus(event, `Rota Pop`)
     res.status(200).send('Event received');
 });
-
 //
 app.post('/webhook_center_taxi', (req, res) => {
     console.log('\x1b[43m%s\x1b[0m', `Center Taxi | ${new Date().toLocaleString('pt-BR')}`)
