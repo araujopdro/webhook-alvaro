@@ -521,6 +521,7 @@ async function SendPulseFlowRun(_bot_id, _contact_id, _flow){
     try {
         //console.log('SendPulse Flow: Run!');  // 
         if(_contact_id == '') throw "Contact ID is invalid"
+        if(_flow == undefined) throw "Couldn't find Flow. Flow undefined."
 
         const response = await axios.post(`https://api.sendpulse.com/whatsapp/flows/run`, {
             'contact_id': `${_contact_id}`,
