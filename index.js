@@ -22,15 +22,6 @@ const bot_headers = {
         sendpulse_tkn: null,
     },
 
-    '675b7c3042fbd8c07f06d518': {
-        bot_name: 'UN - Humaitá',
-        api_key: process.env.API_KEY_VALUE_UN_HUMAITA,
-        auth: process.env.BASIC_AUTHORIZATION_VALUE_UN_HUMAITA,
-        client_id: process.env.CLIENT_ID_FIXCHAT,
-        client_secret: process.env.CLIENT_SECRET_FIXCHAT,
-        sendpulse_tkn: null,
-    },
-
     '676476192e9602bd8b059754': {
         bot_name: 'UN - Boituva',
         api_key: process.env.API_KEY_VALUE_UN_BOITUVA,
@@ -40,10 +31,28 @@ const bot_headers = {
         sendpulse_tkn: null,
     },
 
+    '675b7c3042fbd8c07f06d518': {
+        bot_name: 'UN - Humaitá',
+        api_key: process.env.API_KEY_VALUE_UN_HUMAITA,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_UN_HUMAITA,
+        client_id: process.env.CLIENT_ID_FIXCHAT,
+        client_secret: process.env.CLIENT_SECRET_FIXCHAT,
+        sendpulse_tkn: null,
+    },
+
     '6762eb5267e2dea0140d1057': {
         bot_name: 'UN - Ariquemes',
         api_key: process.env.API_KEY_VALUE_UN_ARIQUEMES,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_UN_ARIQUEMES,
+        client_id: process.env.CLIENT_ID_FIXCHAT,
+        client_secret: process.env.CLIENT_SECRET_FIXCHAT,
+        sendpulse_tkn: null,
+    },
+
+    '676e9a9f0a89c4d3b608b9e8': {
+        bot_name: 'UN - Novo Progresso',
+        api_key: process.env.API_KEY_VALUE_UN_NOVO_PROGRESSO,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_UN_NOVO_PROGRESSO,
         client_id: process.env.CLIENT_ID_FIXCHAT,
         client_secret: process.env.CLIENT_SECRET_FIXCHAT,
         sendpulse_tkn: null,
@@ -94,12 +103,22 @@ const bot_headers = {
         sendpulse_tkn: null,
     },
 
-    '676e9a9f0a89c4d3b608b9e8': {
-        bot_name: 'UN - Novo Progresso',
-        api_key: process.env.API_KEY_VALUE_UN_NOVO_PROGRESSO,
-        auth: process.env.BASIC_AUTHORIZATION_VALUE_UN_NOVO_PROGRESSO,
-        client_id: process.env.CLIENT_ID_FIXCHAT,
-        client_secret: process.env.CLIENT_SECRET_FIXCHAT,
+    '66c4d7e830862626a708624b': {
+        bot_name: 'Rota Pop',
+        api_key: process.env.API_KEY_VALUE_ROTA_POP,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_ROTA_POP,
+        client_id: process.env.CLIENT_ID_ROTA_POP,
+        client_secret: process.env.CLIENT_SECRET_ROTA_POP,
+        sendpulse_tkn: null,
+    },
+
+
+    '66ce0ae2c37b7ad87c030b35': {
+        bot_name: 'Center Táxi',
+        api_key: process.env.API_KEY_VALUE_CENTER_TAXI,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_CENTER_TAXI,
+        client_id: process.env.CLIENT_ID_CENTER_TAXI,
+        client_secret: process.env.CLIENT_SECRET_CENTER_TAXI,
         sendpulse_tkn: null,
     },
   };
@@ -207,13 +226,23 @@ app.post('/webhook_un_novo_progresso', (req, res) => {
     HandleMachineStatus(event, `UN - Novo Progresso`)
     res.status(200).send('Event received');
 });
-
 //
-app.post('/webhook_listener', (req, res) => {
+app.post('/webhook_rota_pop', (req, res) => {
+    console.log('\x1b[43m%s\x1b[0m', `Rota Pop | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
-    HandleMachineStatus(event, `Webhook Listener`)
+    HandleMachineStatus(event, `Rota Pop`)
     res.status(200).send('Event received');
 });
+
+//
+app.post('/webhook_center_taxi', (req, res) => {
+    console.log('\x1b[43m%s\x1b[0m', `Center Taxi | ${new Date().toLocaleString('pt-BR')}`)
+    const event = req.body;
+    HandleMachineStatus(event, `Center Taxi`)
+    res.status(200).send('Event received');
+});
+
+
 
 //
 app.get('/runflow', (req, res) => {
