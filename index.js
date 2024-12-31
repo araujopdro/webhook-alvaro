@@ -203,7 +203,7 @@ const bot_headers = {
         sendpulse_tkn: null,
     },
 
-    '668c621f51561bd4b90a4e98': {
+    '66c8fecf2e9c0f9d5e0614f7': {
         bot_name: 'Chama - Aracruz',
         api_key: process.env.API_KEY_VALUE_CHAMA_ARACRUZ,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_CHAMA_ARACRUZ,
