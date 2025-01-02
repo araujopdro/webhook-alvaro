@@ -600,7 +600,7 @@ async function ProcessCorridas() {
         if (successful_results.length > 0) {
             //console.log("Successful requests: ", successful_results)
             successful_results.map(pos => {
-             //   console.log(pos)
+                console.log(pos)
                 const is_in_range = IsInRange(pos);
                 if (is_in_range) {
                     SendPulseFlowToken(pos.bot_id, pos.contact_id, 'notifica-motorista-chegou')
@@ -622,7 +622,7 @@ function RemoveCorrida(remove_id){
 }
 
 function IsInRange(_pos){
-    //console.log(_pos.lat_condutor, _pos.lng_condutor, _pos.lat_partida, _pos.lng_partida)
+    console.log(`${_pos.bot_id}: `, _pos.lat_condutor, _pos.lng_condutor, _pos.lat_partida, _pos.lng_partida)
     const distance = geolib.getDistance(
         { latitude: _pos.lat_condutor, longitude: _pos.lng_condutor },
         { latitude: _pos.lat_partida, longitude: _pos.lng_partida }
