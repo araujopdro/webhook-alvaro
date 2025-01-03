@@ -403,11 +403,7 @@ app.post('/webhook_dub', (req, res) => {
        const event = req.body;
        HandleMachineStatus(event, `Dub - Corridas`)
        res.status(200).send('Event received');
-   });
-
-
-
-
+});
 
 
 //
