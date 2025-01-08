@@ -230,7 +230,7 @@ const bot_headers = {
         sendpulse_tkn: null,
     },
 
-    '67740fcabdd0cb1c9b0c3458': {
+    '677eec3905109fcd18004d00': {
         bot_name: 'Du Norte - Espigão do Oeste',
         api_key: process.env.API_KEY_VALUE_DU_NORTE_ESPIGAO_OESTE,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_DU_NORTE_ESPIGAO_OESTE,
