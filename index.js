@@ -417,14 +417,14 @@ app.post('/webhook_du_norte_rolim', (req, res) => {
 });
 //
 app.post('/webhook_du_norte_espigao_do_oeste', (req, res) => {
-    console.log('\x1b[43m%s\x1b[0m', `Du Norte - Espigão do Oeste | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[43m%s\x1b[0m', `Du Norte - Espigão do Oeste | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `Du Norte - Espigão do Oeste`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_du_norte_cacoal', (req, res) => {
-    console.log('\x1b[43m%s\x1b[0m', `Du Norte - Cacoal | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[43m%s\x1b[0m', `Du Norte - Cacoal | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `Du Norte - Cacoal`)
     res.status(200).send('Event received');
