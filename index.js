@@ -238,6 +238,15 @@ const bot_headers = {
         client_secret: process.env.CLIENT_SECRET_DU_NORTE,
         sendpulse_tkn: null,
     },
+
+    '67519a8e6416f72e240854df': {
+        bot_name: 'Du Norte - Cacoal',
+        api_key: process.env.API_KEY_VALUE_DU_NORTE_CACOAL,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_DU_NORTE_CACOAL,
+        client_id: process.env.CLIENT_ID_DU_NORTE,
+        client_secret: process.env.CLIENT_SECRET_DU_NORTE,
+        sendpulse_tkn: null,
+    },
   };
 
 //
@@ -411,6 +420,13 @@ app.post('/webhook_du_norte_espigao_do_oeste', (req, res) => {
     console.log('\x1b[43m%s\x1b[0m', `Du Norte - Espigão do Oeste | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `Du Norte - Espigão do Oeste`)
+    res.status(200).send('Event received');
+});
+//
+app.post('/webhook_du_norte_cacoal', (req, res) => {
+    console.log('\x1b[43m%s\x1b[0m', `Du Norte - Cacoal | ${new Date().toLocaleString('pt-BR')}`)
+    const event = req.body;
+    HandleMachineStatus(event, `Du Norte - Cacoal`)
     res.status(200).send('Event received');
 });
 //
