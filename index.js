@@ -29,7 +29,7 @@ const ReadData = () => {
 const WriteData = (data) => {
     try {
       fs.writeFileSync(db_file_path, JSON.stringify(data, null, 2));
-      console.log("Data saved!");
+      //console.log("Data saved!");
     } catch (error) {
       console.error("Error writing data:", error);
     }
@@ -417,14 +417,14 @@ app.post('/webhook_igo_mobilidade', (req, res) => {
 });
 //
 app.post('/webhook_go', (req, res) => {
-    console.log('\x1b[43m%s\x1b[0m', `GO | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[43m%s\x1b[0m', `GO | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `GO`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_go_lavras', (req, res) => {
-    console.log('\x1b[43m%s\x1b[0m', `GO | ${new Date().toLocaleString('pt-BR')}`)
+    console.log('\x1b[43m%s\x1b[0m', `GO Lavras | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `GO`)
     res.status(200).send('Event received');
@@ -653,8 +653,8 @@ async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
             }
         });
 
-        // console.log('\x1b[42m%s\x1b[0m', 'POSICAO CONDUTOR')
-        // console.log(response.data)
+        console.log('\x1b[42m%s\x1b[0m', 'POSICAO CONDUTOR')
+        console.log(response.data)
 
         return {
             'corrida_index': _corrida_idx,
@@ -694,7 +694,7 @@ async function ProcessCorridas() {
         if (successful_results.length > 0) {
             //console.log("Successful requests: ", successful_results)
             successful_results.map(pos => {
-                console.log(pos)
+                //console.log(pos)
                 const is_in_range = IsInRange(pos);
                 if (is_in_range) {
                     SendPulseFlowToken(pos.bot_id, pos.contact_id, 'notifica-motorista-chegou')
@@ -716,7 +716,14 @@ function RemoveCorrida(remove_id){
 }
 
 function IsInRange(_pos){
-    console.log(`${_pos.bot_id}: `, _pos.lat_condutor, _pos.lng_condutor, _pos.lat_partida, _pos.lng_partida)
+    //console.log(`${_pos.bot_id}: `, _pos.lat_condutor, _pos.lng_condutor, _pos.lat_partida, _pos.lng_partida)
+
+    if(_pos.lat_condutor == undefined || _pos.lng_condutor == undefined) {
+
+        console.log('\x1b[41m%s\x1b[0m', `${_pos.id_corrida}: Posição motorista undefined`)
+        return false
+    }
+
     const distance = geolib.getDistance(
         { latitude: _pos.lat_condutor, longitude: _pos.lng_condutor },
         { latitude: _pos.lat_partida, longitude: _pos.lng_partida }
