@@ -4,14 +4,39 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 const geolib = require('geolib');
+const fs = require("fs");
+const db_file_path = "./corridas.json";
 
 const app = express();
 const PORT = 3000;
 
 const taxi_base_url = "https://api.taximachine.com.br/api/integracao";
 const sendpulse_base_url = "https://api.sendpulse.com";
-const corridas_to_process = [];
 
+// Function to read data from the JSON file
+const ReadData = () => {
+    try {
+      const data = fs.readFileSync(db_file_path, "utf8");
+      return JSON.parse(data);
+    } catch (error) {
+      console.error("Error reading data:", error);
+      return {}; // Return an empty object if the file doesn't exist
+    }
+};
+
+
+// Function to write data to the JSON file
+const WriteData = (data) => {
+    try {
+      fs.writeFileSync(db_file_path, JSON.stringify(data, null, 2));
+      console.log("Data saved!");
+    } catch (error) {
+      console.error("Error writing data:", error);
+    }
+};
+
+
+const corridas_to_process = ReadData();
 const bot_headers = {
     '671c1c15e2674ddd100159df': {
         bot_name: 'Pop Car',
@@ -150,7 +175,7 @@ const bot_headers = {
     },
 
     '668c621f51561bd4b90a4e98': {
-        bot_name: 'GO - Central',
+        bot_name: 'GO - Lavras',
         api_key: process.env.API_KEY_VALUE_GO,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_GO,
         client_id: process.env.CLIENT_ID_FIXCHAT,
@@ -159,7 +184,7 @@ const bot_headers = {
     },
 
     '666ccb27a4d31aff500d25f1': {
-        bot_name: 'GO - Transporte Urbano Privado',
+        bot_name: 'GO - Três Corações',
         api_key: process.env.API_KEY_VALUE_GO,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_GO,
         client_id: process.env.CLIENT_ID_FIXCHAT,
@@ -260,6 +285,7 @@ app.post('/corrida_setup', (req, res) => {
     const data = req.body;
     console.log('\x1b[48m%s\x1b[0m', `Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${data.id_corrida}  ${new Date().toLocaleString('pt-BR')}`)
     corridas_to_process.push({...data, get_position: false})
+    WriteData(corridas_to_process);
 
     if(!isValidNumericalString(data.id_corrida)){
         res.status(400).json({
@@ -389,7 +415,14 @@ app.post('/webhook_igo_mobilidade', (req, res) => {
 });
 //
 app.post('/webhook_go', (req, res) => {
-//    console.log('\x1b[43m%s\x1b[0m', `GO | ${new Date().toLocaleString('pt-BR')}`)
+    console.log('\x1b[43m%s\x1b[0m', `GO | ${new Date().toLocaleString('pt-BR')}`)
+    const event = req.body;
+    HandleMachineStatus(event, `GO`)
+    res.status(200).send('Event received');
+});
+//
+app.post('/webhook_go_lavras', (req, res) => {
+    console.log('\x1b[43m%s\x1b[0m', `GO | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `GO`)
     res.status(200).send('Event received');
@@ -695,6 +728,7 @@ function IsInRange(_pos){
 function isValidNumericalString(str) {
     return /^\d+$/.test(str);
 }
+
 
 // Set up the recurring process
 setInterval(ProcessCorridas, process.env.CHECK_INTERVAL);
