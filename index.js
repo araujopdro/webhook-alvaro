@@ -424,7 +424,7 @@ app.post('/webhook_go', (req, res) => {
 });
 //
 app.post('/webhook_go_lavras', (req, res) => {
-    console.log('\x1b[43m%s\x1b[0m', `GO Lavras | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[43m%s\x1b[0m', `GO Lavras | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `GO`)
     res.status(200).send('Event received');
