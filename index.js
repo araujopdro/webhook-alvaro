@@ -547,13 +547,17 @@ function HandleMachineStatus(e, origin){
             break;
         case 'F':
             console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (F): Corrida concluída.`)
-            RemoveCorrida(e.id_mch)
+            //RemoveCorrida(e.id_mch)
+            event_corrida.get_position = false;
+
             fluxo_name = 'notifica-corrida-finalizada'
             break;
         case 'C':
             console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (C): Solicitação cancelada.`)
+            event_corrida.get_position = false;
+
             fluxo_name = 'notifica-corrida-cancelada'
-            RemoveCorrida(e.id_mch)
+            //RemoveCorrida(e.id_mch)
             break;
         default:
             console.log('\x1b[31m%s\x1b[0m', `${origin} | ${e.id_mch} (${e.status_solicitacao}): event not handled ;-;`)
@@ -640,7 +644,12 @@ async function SendPulseFlowRun(_bot_id, _contact_id, _flow){
 //
 async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
     try {
-        if(_corrida.get_position == false) throw "Can't get position;"
+        if(_corrida.get_position == false) throw "Can't get position";
+        if(_corrida.current_solicitacao_status == 'C'){
+            _corrida.get_position = false
+            throw "Can't get position, corrida cancelada"
+        }
+
         // console.log('MachineGetPosicaoCondutor',  _corrida)
         // console.log(bot_headers[_corrida.bot_id].api_key)
         // console.log(bot_headers[_corrida.bot_id].auth)
@@ -653,8 +662,9 @@ async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
             }
         });
 
-        console.log('\x1b[42m%s\x1b[0m', 'POSICAO CONDUTOR')
-        console.log(response.data)
+        // console.log('\x1b[42m%s\x1b[0m', 'POSICAO CONDUTOR')
+        // console.log(response.data)
+        // console.log(response.data.response)
 
         return {
             'corrida_index': _corrida_idx,
