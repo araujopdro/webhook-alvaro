@@ -37,6 +37,8 @@ const WriteData = (data) => {
 
 
 const corridas_to_process = ReadData();
+
+
 const bot_headers = {
     '671c1c15e2674ddd100159df': {
         bot_name: 'Pop Car',
