@@ -709,8 +709,8 @@ async function ProcessCorridas() {
 }
 
 function RemoveCorrida(remove_id){
-    console.log('Corrida removida', remove_id)
-    corridas_to_process.splice(corridas_to_process.findIndex((c) => c.id_corrida === remove_id), 1); 
+    //console.log('Corrida removida', remove_id)
+    //corridas_to_process.splice(corridas_to_process.findIndex((c) => c.id_corrida === remove_id), 1); 
 }
 
 function IsInRange(_pos){
