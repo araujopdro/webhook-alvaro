@@ -1,4 +1,4 @@
-module.exports = {
+const bot_headers = {
     '671c1c15e2674ddd100159df': {
         bot_name: 'Pop Car',
         api_key: process.env.API_KEY_VALUE_POPCAR,
@@ -136,7 +136,7 @@ module.exports = {
     },
 
     '668c621f51561bd4b90a4e98': {
-        bot_name: 'GO - Central',
+        bot_name: 'GO - Lavras',
         api_key: process.env.API_KEY_VALUE_GO,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_GO,
         client_id: process.env.CLIENT_ID_FIXCHAT,
@@ -145,7 +145,7 @@ module.exports = {
     },
 
     '666ccb27a4d31aff500d25f1': {
-        bot_name: 'GO - Transporte Urbano Privado',
+        bot_name: 'GO - Três Corações',
         api_key: process.env.API_KEY_VALUE_GO,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_GO,
         client_id: process.env.CLIENT_ID_FIXCHAT,
@@ -189,7 +189,7 @@ module.exports = {
         sendpulse_tkn: null,
     },
 
-    '668c621f51561bd4b90a4e98': {
+    '66c8fecf2e9c0f9d5e0614f7': {
         bot_name: 'Chama - Aracruz',
         api_key: process.env.API_KEY_VALUE_CHAMA_ARACRUZ,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_CHAMA_ARACRUZ,
@@ -197,4 +197,52 @@ module.exports = {
         client_secret: process.env.CLIENT_SECRET_FIXCHAT,
         sendpulse_tkn: null,
     },
-}
+
+    '67740fcabdd0cb1c9b0c3458': {
+        bot_name: 'Du Norte - Rolim de Moura',
+        api_key: process.env.API_KEY_VALUE_DU_NORTE_ROLIM,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_DU_NORTE_ROLIM,
+        client_id: process.env.CLIENT_ID_DU_NORTE,
+        client_secret: process.env.CLIENT_SECRET_DU_NORTE,
+        sendpulse_tkn: null,
+    },
+
+    '673fd1268a26c39dac0386c6': {
+        bot_name: 'Dub - Corridas',
+        api_key: process.env.API_KEY_VALUE_DUB,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_DUB,
+        client_id: process.env.CLIENT_ID_DUB,
+        client_secret: process.env.CLIENT_SECRET_DUB,
+        sendpulse_tkn: null,
+    },
+
+    '677eec3905109fcd18004d00': {
+        bot_name: 'Du Norte - Espigão do Oeste',
+        api_key: process.env.API_KEY_VALUE_DU_NORTE_ESPIGAO_OESTE,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_DU_NORTE_ESPIGAO_OESTE,
+        client_id: process.env.CLIENT_ID_DU_NORTE,
+        client_secret: process.env.CLIENT_SECRET_DU_NORTE,
+        sendpulse_tkn: null,
+    },
+
+    '67519a8e6416f72e240854df': {
+        bot_name: 'Du Norte - Cacoal',
+        api_key: process.env.API_KEY_VALUE_DU_NORTE_CACOAL,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_DU_NORTE_CACOAL,
+        client_id: process.env.CLIENT_ID_DU_NORTE,
+        client_secret: process.env.CLIENT_SECRET_DU_NORTE,
+        sendpulse_tkn: null,
+    },
+
+    '6785bef93d3707837d0d32ad': {
+        bot_name: 'Du Norte - Pimenta Bueno',
+        api_key: process.env.API_KEY_VALUE_DU_NORTE_PIMENTA_BUENO,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_DU_NORTE_PIMENTA_BUENO,
+        client_id: process.env.CLIENT_ID_DU_NORTE,
+        client_secret: process.env.CLIENT_SECRET_DU_NORTE,
+        sendpulse_tkn: null,
+    },
+  }
+
+
+  module.exports = { bot_headers };
