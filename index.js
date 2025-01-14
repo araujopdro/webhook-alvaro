@@ -285,7 +285,7 @@ app.listen(PORT, () => {
 //
 app.post('/corrida_setup', (req, res) => {
     const data = req.body;
-    console.log('\x1b[48m%s\x1b[0m', `Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${data.id_corrida}  ${new Date().toLocaleString('pt-BR')}`)
+    console.log('\x1b[48m%s\x1b[0m', `${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${new Date().toLocaleString('pt-BR')}`)
     corridas_to_process.push({...data, get_position: false})
     WriteData(corridas_to_process);
 
@@ -465,6 +465,13 @@ app.post('/webhook_du_norte_cacoal', (req, res) => {
     res.status(200).send('Event received');
 });
 //
+app.post('/webhook_du_norte_pimenta_bueno', (req, res) => {
+    //console.log('\x1b[43m%s\x1b[0m', `Du Norte - Pimenta Bueno | ${new Date().toLocaleString('pt-BR')}`)
+    const event = req.body;
+    HandleMachineStatus(event, `Du Norte - Pimenta Bueno`)
+    res.status(200).send('Event received');
+});
+//
 app.post('/webhook_dub', (req, res) => {
     //   console.log('\x1b[43m%s\x1b[0m', `Dub - Corridas | ${new Date().toLocaleString('pt-BR')}`)
        const event = req.body;
@@ -510,57 +517,57 @@ function HandleMachineStatus(e, origin){
     let fluxo_name
     
     if(e.status_solicitacao == event_corrida.current_solicitacao_status) {
-        console.log('\x1b[41m%s\x1b[0m', `${origin} | ${e.id_mch} (${e.status_solicitacao}): Status Repetido`)
+        console.log('\x1b[41m%s\x1b[0m', `${e.id_mch} - ${origin} | (${e.status_solicitacao}): Status Repetido`)
         return
     }
     
     switch(e.status_solicitacao){
         case 'L':
-            console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (L)`)
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (L)`)
             //fluxo_name = 'notifica-corrida-pendente'
             break;
         case 'G':
-            console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (G): Esperando um condutor aceitar a solicitação.`)
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (G): Esperando um condutor aceitar a solicitação.`)
             fluxo_name = 'notifica-busca-passageiro'
             break;
         case 'P':
-            console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (P): Solicitação não aceita, aguardando aceitação.`)
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (P): Solicitação não aceita, aguardando aceitação.`)
             fluxo_name = 'notifica-solicitacao-espera'
             break;
         case 'N':
-            console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (N): Nenhum condutor aceitou a solicitação.`)
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (N): Nenhum condutor aceitou a solicitação.`)
             fluxo_name = 'notifica-corrida-nao-atendida'
             break;
         case 'A':
-            console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (A): Solicitação aceita por um condutor. ${e.motorista ? e.motorista.nome : ''}`)
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (A): Solicitação aceita por um condutor. ${e.motorista ? e.motorista.nome : ''}`)
             event_corrida.get_position = true;
             fluxo_name = 'notifica-corrida-aceita'
             break;
         case 'S':
-            console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (S): Solicitação em espera até a conclusão de uma anterior.`)
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (S): Solicitação em espera até a conclusão de uma anterior.`)
             fluxo_name = 'notifica-motorista-em-liberacao'
             break;
         case 'E':
-            console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (E): Corrida iniciada.`)
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (E): Corrida iniciada.`)
             event_corrida.get_position = false;
             fluxo_name = 'notifica-corrida-iniciada'
             break;
         case 'F':
-            console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (F): Corrida concluída.`)
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (F): Corrida concluída.`)
             //RemoveCorrida(e.id_mch)
             event_corrida.get_position = false;
 
             fluxo_name = 'notifica-corrida-finalizada'
             break;
         case 'C':
-            console.log('\x1b[43m%s\x1b[0m', `${origin} | ${e.id_mch} (C): Solicitação cancelada.`)
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (C): Solicitação cancelada.`)
             event_corrida.get_position = false;
 
             fluxo_name = 'notifica-corrida-cancelada'
             //RemoveCorrida(e.id_mch)
             break;
         default:
-            console.log('\x1b[31m%s\x1b[0m', `${origin} | ${e.id_mch} (${e.status_solicitacao}): event not handled ;-;`)
+            console.log('\x1b[31m%s\x1b[0m', `${e.id_mch} - ${origin} | (${e.status_solicitacao}): event not handled ;-;`)
             break;
     }
 
@@ -634,7 +641,7 @@ async function SendPulseFlowRun(_bot_id, _contact_id, _flow){
                 'Authorization': `Bearer ${bot_headers[_bot_id].sendpulse_tkn}`
             }
         })
-        console.log(`SendPulse Flow: ${_flow.name} Success!`);  // 
+        console.log(`${_bot_id} - SendPulse Flow: ${_flow.name} Success!`);  // 
     } catch (error) {
         console.error('Error runing SendPulse Flow:', error);  // 
     }
@@ -645,9 +652,9 @@ async function SendPulseFlowRun(_bot_id, _contact_id, _flow){
 async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
     try {
         if(_corrida.get_position == false) throw "Can't get position";
-        if(_corrida.current_solicitacao_status == 'C'){
+        if(_corrida.current_solicitacao_status == 'C' || _corrida.current_solicitacao_status == 'F'){
             _corrida.get_position = false
-            throw "Can't get position, corrida cancelada"
+            throw "Can't get position, corrida cancelada/concluída"
         }
 
         // console.log('MachineGetPosicaoCondutor',  _corrida)
