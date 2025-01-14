@@ -451,7 +451,7 @@ async function ProcessCorridas() {
         if (successful_results.length > 0) {
             //console.log("Successful requests: ", successful_results)
             successful_results.map(pos => {
-                console.log(`Posições dos motoristas:`)
+                //console.log(`Posições dos motoristas:`)
                 const is_in_range = IsInRange(pos);
                 if (is_in_range) {
                     SendPulseFlowToken(pos.bot_id, pos.contact_id, 'notifica-motorista-chegou', pos.id_corrida)
