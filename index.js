@@ -572,13 +572,13 @@ function HandleMachineStatus(e, origin){
     }
 
     event_corrida.current_solicitacao_status = e.status_solicitacao
-    if(event_corrida != null && fluxo_name != null) SendPulseFlowToken(event_corrida.bot_id, event_corrida.contact_id, fluxo_name)
+    if(event_corrida != null && fluxo_name != null) SendPulseFlowToken(event_corrida.bot_id, event_corrida.contact_id, fluxo_name, e.id_mch)
 }
 
 
 //https://api.sendpulse.com/whatsapp/flows?bot_id=671c1c15e2674ddd100159df
 //Tries to get the flow list from the BOT_ID, it's a success, run the status related FLOW, to the CONTACT ID
-async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name){
+async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name, _corrida_id){
     try {
         const response = await axios.get(`${sendpulse_base_url}/whatsapp/flows?bot_id=${_bot_id}`, {
             headers: {
@@ -591,7 +591,7 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name){
         //console.log(flow_selected_on_status)
 
         //get list of flows successful, RUN flow
-        SendPulseFlowRun(_bot_id, _contact_id, flow_selected_on_status)
+        SendPulseFlowRun(_bot_id, _contact_id, flow_selected_on_status, _corrida_id)
     } catch (error) {
         //get list of flows NOT successful
         if (error.status === 401) {
@@ -622,7 +622,7 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name){
 }
 
 //using the contact id and the flow id and runs it
-async function SendPulseFlowRun(_bot_id, _contact_id, _flow){
+async function SendPulseFlowRun(_bot_id, _contact_id, _flow, _corrida_id){
     try {
         //console.log('SendPulse Flow: Run!');  // 
         if(_contact_id == '') throw "Contact ID is invalid"
@@ -641,7 +641,7 @@ async function SendPulseFlowRun(_bot_id, _contact_id, _flow){
                 'Authorization': `Bearer ${bot_headers[_bot_id].sendpulse_tkn}`
             }
         })
-        console.log(`${_bot_id} - SendPulse Flow: ${_flow.name} Success!`);  // 
+        console.log(`${_corrida_id} - SendPulse Flow: ${_flow.name} Success!`);  // 
     } catch (error) {
         console.error('Error runing SendPulse Flow:', error);  // 
     }
