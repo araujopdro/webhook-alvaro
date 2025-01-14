@@ -275,7 +275,7 @@ const bot_headers = {
         sendpulse_tkn: null,
     },
 
-    '67519a8e6416f72e240854df': {
+    '6785bef93d3707837d0d32ad': {
         bot_name: 'Du Norte - Pimenta Bueno',
         api_key: process.env.API_KEY_VALUE_DU_NORTE_PIMENTA_BUENO,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_DU_NORTE_PIMENTA_BUENO,
