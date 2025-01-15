@@ -202,7 +202,7 @@ app.post('/webhook_iupe', (req, res) => {
 });
 //
 app.post('/webhook_chama_aracruz', (req, res) => {
- //   console.log('\x1b[43m%s\x1b[0m', `Chama | ${new Date().toLocaleString('pt-BR')}`)
+    console.log('\x1b[43m%s\x1b[0m', `Chama | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `Chama`)
     res.status(200).send('Event received');
@@ -259,6 +259,10 @@ function HandleMachineStatus(e, origin){
     if(e.status_solicitacao == event_corrida.current_solicitacao_status) {
         console.log('\x1b[41m%s\x1b[0m', `${e.id_mch} - ${origin} | (${e.status_solicitacao}): Status Repetido`)
         return
+    }
+
+    if(e.status_solicitacao == 'G' && event_corrida.current_solicitacao_status == 'C'){
+        console.log('\x1b[41m%s\x1b[0m', `${e.id_mch} - ${origin} | (${e.status_solicitacao}): Redirecionamento`)
     }
     
     switch(e.status_solicitacao){
