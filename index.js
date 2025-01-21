@@ -243,6 +243,13 @@ app.post('/webhook_du_norte_pimenta_bueno', (req, res) => {
     res.status(200).send('Event received');
 });
 //
+app.post('/webhook_du_norte_vilhena', (req, res) => {
+    //console.log('\x1b[43m%s\x1b[0m', `Du Norte - Vilhena | ${new Date().toLocaleString('pt-BR')}`)
+    const event = req.body;
+    HandleMachineStatus(event, `Du Norte - Vilhena`)
+    res.status(200).send('Event received');
+});
+//
 app.post('/webhook_dub', (req, res) => {
     //   console.log('\x1b[43m%s\x1b[0m', `Dub - Corridas | ${new Date().toLocaleString('pt-BR')}`)
        const event = req.body;

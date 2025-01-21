@@ -243,7 +243,7 @@ const bot_headers = {
         sendpulse_tkn: null,
     },
 
-    '6787c4520e7f0a7cbb0ce128': {
+    '6790190c07ccfb2dbe0eadbf': {
         bot_name: 'Du Norte - Vilhena',
         api_key: process.env.API_KEY_VALUE_DU_NORTE_VILHENA,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_DU_NORTE_VILHENA,
