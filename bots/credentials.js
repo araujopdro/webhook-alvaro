@@ -242,6 +242,15 @@ const bot_headers = {
         client_secret: process.env.CLIENT_SECRET_DU_NORTE,
         sendpulse_tkn: null,
     },
+
+    '6787c4520e7f0a7cbb0ce128': {
+        bot_name: 'Du Norte - Vilhena',
+        api_key: process.env.API_KEY_VALUE_DU_NORTE_VILHENA,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_DU_NORTE_VILHENA,
+        client_id: process.env.CLIENT_ID_DU_NORTE,
+        client_secret: process.env.CLIENT_SECRET_DU_NORTE,
+        sendpulse_tkn: null,
+    },
   }
 
 

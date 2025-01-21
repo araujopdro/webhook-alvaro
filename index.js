@@ -201,8 +201,15 @@ app.post('/webhook_iupe', (req, res) => {
     res.status(200).send('Event received');
 });
 //
+app.post('/webhook_iupe_itumbiara', (req, res) => {
+//    console.log('\x1b[43m%s\x1b[0m', `iupe! | ${new Date().toLocaleString('pt-BR')}`)
+    const event = req.body;
+    HandleMachineStatus(event, `iupe!`)
+    res.status(200).send('Event received');
+});
+//
 app.post('/webhook_chama_aracruz', (req, res) => {
-    console.log('\x1b[43m%s\x1b[0m', `Chama | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[43m%s\x1b[0m', `Chama | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `Chama`)
     res.status(200).send('Event received');
