@@ -97,9 +97,9 @@ app.post('/webhook_un_boituva', (req, res) => {
 });
 //
 app.post('/webhook_un_vilhena', (req, res) => {
-    //console.log('\x1b[43m%s\x1b[0m', `UN - Boituva | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[43m%s\x1b[0m', `UN - Vilhena | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;  
-    HandleMachineStatus(event, `UN - Boituva`)
+    HandleMachineStatus(event, `UN - Vilhena`)
     res.status(200).send('Event received');
 });
 //
