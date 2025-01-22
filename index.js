@@ -368,6 +368,8 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name, _corrida_id
                     }
                 })
                 
+                console.log(`${_bot_id}: sendpulse new token: ${response.data.access_token}`)
+
                 bot_headers[_bot_id].sendpulse_tkn = response.data.access_token
                 return SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name, _corrida_id);  // try again with new token
             } catch (tokenError) {

@@ -238,8 +238,8 @@ const bot_headers = {
         bot_name: 'Du Norte - Pimenta Bueno',
         api_key: process.env.API_KEY_VALUE_DU_NORTE_PIMENTA_BUENO,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_DU_NORTE_PIMENTA_BUENO,
-        client_id: process.env.CLIENT_ID_DU_NORTE,
-        client_secret: process.env.CLIENT_SECRET_DU_NORTE,
+        client_id: process.env.CLIENT_ID_DU_NORTE_PIMENTA_BUENO,
+        client_secret: process.env.CLIENT_SECRET_DU_NORTE_PIMENTA_BUENO,
         sendpulse_tkn: null,
     },
 
