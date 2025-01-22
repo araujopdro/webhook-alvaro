@@ -156,7 +156,7 @@ const bot_headers = {
     '66a419c047d5de7ac1034c7f': {
         bot_name: 'iupe!- Itumbiara',
         api_key: process.env.API_KEY_VALUE_IUPE,
-        auth: process.env.BASIC_AUTHORIZATION_VALUE_IUPE,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_IUPE_ITUMBIARA,
         client_id: process.env.CLIENT_ID_IUPE,
         client_secret: process.env.CLIENT_SECRET_IUPE,
         sendpulse_tkn: null,
@@ -229,6 +229,15 @@ const bot_headers = {
         bot_name: 'Du Norte - Cacoal',
         api_key: process.env.API_KEY_VALUE_DU_NORTE_CACOAL,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_DU_NORTE_CACOAL,
+        client_id: process.env.CLIENT_ID_DU_NORTE,
+        client_secret: process.env.CLIENT_SECRET_DU_NORTE,
+        sendpulse_tkn: null,
+    },
+
+    '6787c4520e7f0a7cbb0ce128': {
+        bot_name: 'Du Norte - Vilhena',
+        api_key: process.env.API_KEY_VALUE_DU_NORTE_VILHENA,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_DU_NORTE_VILHENA,
         client_id: process.env.CLIENT_ID_DU_NORTE,
         client_secret: process.env.CLIENT_SECRET_DU_NORTE,
         sendpulse_tkn: null,
