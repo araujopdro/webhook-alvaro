@@ -96,6 +96,13 @@ app.post('/webhook_un_boituva', (req, res) => {
     res.status(200).send('Event received');
 });
 //
+app.post('/webhook_un_vilhena', (req, res) => {
+    //console.log('\x1b[43m%s\x1b[0m', `UN - Boituva | ${new Date().toLocaleString('pt-BR')}`)
+    const event = req.body;  
+    HandleMachineStatus(event, `UN - Boituva`)
+    res.status(200).send('Event received');
+});
+//
 app.post('/webhook_popcar', (req, res) => {
     //console.log('\x1b[43m%s\x1b[0m', `Pop Car | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body; 

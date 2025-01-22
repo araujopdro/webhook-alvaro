@@ -244,11 +244,11 @@ const bot_headers = {
     },
 
     '6790190c07ccfb2dbe0eadbf': {
-        bot_name: 'Du Norte - Vilhena',
-        api_key: process.env.API_KEY_VALUE_DU_NORTE_VILHENA,
-        auth: process.env.BASIC_AUTHORIZATION_VALUE_DU_NORTE_VILHENA,
-        client_id: process.env.CLIENT_ID_DU_NORTE,
-        client_secret: process.env.CLIENT_SECRET_DU_NORTE,
+        bot_name: 'UN - Vilhena',
+        api_key: process.env.API_KEY_VALUE_UN_VILHENA,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_UN_VILHENA,
+        client_id: process.env.CLIENT_ID_FIXCHAT,
+        client_secret: process.env.CLIENT_SECRET_FIXCHAT,
         sendpulse_tkn: null,
     },
   }
