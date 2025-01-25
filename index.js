@@ -110,6 +110,13 @@ app.post('/webhook_popcar', (req, res) => {
     res.status(200).send('Event received');
 });
 //
+app.post('/webhook_fastcar_rio', (req, res) => {
+    //console.log('\x1b[43m%s\x1b[0m', `Fast Car | ${new Date().toLocaleString('pt-BR')}`)
+    const event = req.body; 
+    HandleMachineStatus(event, `Fast Car - Rio`)
+    res.status(200).send('Event received');
+});
+//
 app.post('/webhook_epitacio_leva', (req, res) => {
     //console.log('\x1b[43m%s\x1b[0m', `Epitacio Leva | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;

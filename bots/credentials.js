@@ -8,6 +8,15 @@ const bot_headers = {
         sendpulse_tkn: null,
     },
 
+    '6793d749c12d84e9180f0d72': {
+        bot_name: 'Fast Car - Rio',
+        api_key: process.env.API_KEY_VALUE_FASTCAR_RIO,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_FASTCAR_RIO,
+        client_id: process.env.CLIENT_ID_FIXCHAT,
+        client_secret: process.env.CLIENT_SECRET_FIXCHAT,
+        sendpulse_tkn: null,
+    },
+
     '676476192e9602bd8b059754': {
         bot_name: 'UN - Boituva',
         api_key: process.env.API_KEY_VALUE_UN_BOITUVA,
