@@ -253,7 +253,14 @@ app.post('/webhook_du_norte_cacoal', (req, res) => {
 app.post('/webhook_un_pimenta_bueno', (req, res) => {
     //console.log('\x1b[43m%s\x1b[0m', `UN - Pimenta Bueno | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
-    HandleMachineStatus(event, `Du Norte - Pimenta Bueno`)
+    HandleMachineStatus(event, `UN - Pimenta Bueno`)
+    res.status(200).send('Event received');
+});
+//
+app.post('/webhook_un_pato_branco', (req, res) => {
+    //console.log('\x1b[43m%s\x1b[0m', `UN - Pato Branco | ${new Date().toLocaleString('pt-BR')}`)
+    const event = req.body;
+    HandleMachineStatus(event, `UN - Pato Branco`)
     res.status(200).send('Event received');
 });
 //

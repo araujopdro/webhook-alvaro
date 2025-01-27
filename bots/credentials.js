@@ -53,6 +53,15 @@ const bot_headers = {
         sendpulse_tkn: null,
     },
 
+    '6797f08f4ec0530540a7ab0': {
+        bot_name: 'UN - Pato Branco',
+        api_key: process.env.API_KEY_VALUE_UN_PATO_BRANCO,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_UN_PATO_BRANCO,
+        client_id: process.env.CLIENT_ID_FIXCHAT,
+        client_secret: process.env.CLIENT_SECRET_FIXCHAT,
+        sendpulse_tkn: null,
+    },
+
     '66f45a98afc0da5096066211': {
         bot_name: 'Epitacio Leva',
         api_key: process.env.API_KEY_VALUE_EPITACIO_LEVA,
@@ -254,8 +263,8 @@ const bot_headers = {
 
     '678fd01a2de442e4100a91d1': {
         bot_name: 'UN - Pimenta Bueno',
-        api_key: process.env.API_KEY_VALUE_DU_NORTE_PIMENTA_BUENO,
-        auth: process.env.BASIC_AUTHORIZATION_VALUE_DU_NORTE_PIMENTA_BUENO,
+        api_key: process.env.API_KEY_VALUE_UN_PIMENTA_BUENO,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_UN_PIMENTA_BUENO,
         client_id: process.env.CLIENT_ID_FIXCHAT,
         client_secret: process.env.CLIENT_SECRET_FIXCHAT,
         sendpulse_tkn: null,
