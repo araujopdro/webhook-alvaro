@@ -53,7 +53,7 @@ const bot_headers = {
         sendpulse_tkn: null,
     },
 
-    '6797f08f4ec0530540a7ab0': {
+    '6797f08bf4ec0530540a7ab0': {
         bot_name: 'UN - Pato Branco',
         api_key: process.env.API_KEY_VALUE_UN_PATO_BRANCO,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_UN_PATO_BRANCO,
