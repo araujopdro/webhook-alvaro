@@ -8,7 +8,7 @@ const bot_headers = {
         sendpulse_tkn: null,
     },
 
-    '6793d749c12d84e9180f0d72': {
+    '67981eaaadce1682390c70cb': {
         bot_name: 'Fast Car - Rio',
         api_key: process.env.API_KEY_VALUE_FASTCAR_RIO,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_FASTCAR_RIO,
