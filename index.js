@@ -209,8 +209,8 @@ app.post('/webhook_go_lavras', (req, res) => {
 });
 //
 app.post('/webhook_iupe', (req, res) => {
-    console.log('\x1b[43m%s\x1b[0m', `iupe! | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
+    console.log('\x1b[43m%s\x1b[0m', `iupe! | ${event.id_mch} | ${new Date().toLocaleString('pt-BR')}`)
     HandleMachineStatus(event, `iupe!`)
     res.status(200).send('Event received');
 });
