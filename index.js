@@ -217,8 +217,22 @@ app.post('/webhook_go_lavras', (req, res) => {
 //
 app.post('/webhook_iupe', (req, res) => {
     const event = req.body;
-    console.log('\x1b[36m%s\x1b[0m', `iupe! | ${event.id_mch} | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[36m%s\x1b[0m', `iupe! | ${event.id_mch} | ${new Date().toLocaleString('pt-BR')}`)
     HandleMachineStatus(event, `iupe!`)
+    res.status(200).send('Event received');
+});
+//
+app.post('/webhook_iupe_itumbiara', (req, res) => {
+    //console.log('\x1b[36m%s\x1b[0m', `iupe! Itumpbiara | ${new Date().toLocaleString('pt-BR')}`)
+    const event = req.body;
+    HandleMachineStatus(event, `iupe! - Itumbiara`)
+    res.status(200).send('Event received');
+});
+//
+app.post('/webhook_iupe_planaltina', (req, res) => {
+    //console.log('\x1b[36m%s\x1b[0m', `iupe! Planaltina | ${new Date().toLocaleString('pt-BR')}`)
+    const event = req.body;
+    HandleMachineStatus(event, `iupe! - Planaltina`)
     res.status(200).send('Event received');
 });
 //

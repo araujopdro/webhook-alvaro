@@ -182,26 +182,8 @@ const bot_headers = {
 
     '66a419c047d5de7ac1034c7f': {
         bot_name: 'iupe!- Itumbiara',
-        api_key: process.env.API_KEY_VALUE_IUPE,
+        api_key: process.env.API_KEY_VALUE_IUPE_ITUMBIARA,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_IUPE_ITUMBIARA,
-        client_id: process.env.CLIENT_ID_IUPE,
-        client_secret: process.env.CLIENT_SECRET_IUPE,
-        sendpulse_tkn: null,
-    },
-
-    '66b568c86cbcd2d5fb09649e': {
-        bot_name: 'iupe!- Águas Lindas de Goias',
-        api_key: process.env.API_KEY_VALUE_IUPE,
-        auth: process.env.BASIC_AUTHORIZATION_VALUE_IUPE,
-        client_id: process.env.CLIENT_ID_IUPE,
-        client_secret: process.env.CLIENT_SECRET_IUPE,
-        sendpulse_tkn: null,
-    },
-
-    '66ae30ccce20be5a7e0b884e': {
-        bot_name: 'iupe!- Rondonópolis',
-        api_key: process.env.API_KEY_VALUE_IUPE,
-        auth: process.env.BASIC_AUTHORIZATION_VALUE_IUPE,
         client_id: process.env.CLIENT_ID_IUPE,
         client_secret: process.env.CLIENT_SECRET_IUPE,
         sendpulse_tkn: null,
@@ -209,8 +191,8 @@ const bot_headers = {
 
     '66a836cf7674f45eaa0e6b3e': {
         bot_name: 'iupe!- Planaltina',
-        api_key: process.env.API_KEY_VALUE_IUPE,
-        auth: process.env.BASIC_AUTHORIZATION_VALUE_IUPE,
+        api_key: process.env.API_KEY_VALUE_IUPE_PLANALTINA,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_IUPE_PLANALTINA,
         client_id: process.env.CLIENT_ID_IUPE,
         client_secret: process.env.CLIENT_SECRET_IUPE,
         sendpulse_tkn: null,
