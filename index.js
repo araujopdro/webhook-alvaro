@@ -189,14 +189,14 @@ app.post('/webhook_vrdrive', (req, res) => {
 //
 app.post('/webhook_quiricar', (req, res) => {
     const event = req.body;
-    console.log('\x1b[36m%s\x1b[0m', `Quiricar | ${event.id_mch} | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[36m%s\x1b[0m', `Quiricar | ${event.id_mch} | ${new Date().toLocaleString('pt-BR')}`)
     HandleMachineStatus(event, `Quiricar`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_igo_mobilidade', (req, res) => {
- //   console.log('\x1b[43m%s\x1b[0m', `iGO Mobilidade | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
+    console.log('\x1b[36m%s\x1b[0m', `iGO Mobilidade | ${event.id_mch} | ${new Date().toLocaleString('pt-BR')}`)
     HandleMachineStatus(event, `iGO Mobilidade`)
     res.status(200).send('Event received');
 });
@@ -219,13 +219,6 @@ app.post('/webhook_iupe', (req, res) => {
     const event = req.body;
     console.log('\x1b[36m%s\x1b[0m', `iupe! | ${event.id_mch} | ${new Date().toLocaleString('pt-BR')}`)
     HandleMachineStatus(event, `iupe!`)
-    res.status(200).send('Event received');
-});
-//
-app.post('/webhook_iupe_itumbiara', (req, res) => {
-    console.log('\x1b[36m%s\x1b[0m', `iupe! Itumpbiara | ${new Date().toLocaleString('pt-BR')}`)
-    const event = req.body;
-    HandleMachineStatus(event, `iupe! - Itumbiara`)
     res.status(200).send('Event received');
 });
 //
