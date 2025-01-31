@@ -144,6 +144,15 @@ const bot_headers = {
         sendpulse_tkn: null,
     },
 
+    '679bade5f7f5f327c70136b2': {
+        bot_name: 'Quiricar',
+        api_key: process.env.API_KEY_VALUE_QUIRICAR,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_QUIRICAR,
+        client_id: process.env.CLIENT_ID_QUIRICAR,
+        client_secret: process.env.CLIENT_SECRET_QUIRICAR,
+        sendpulse_tkn: null,
+    },
+
     '66994baba6462b05e40dd271': {
         bot_name: 'iGO Mobilidade',
         api_key: process.env.API_KEY_VALUE_IGO_MOBILIDADE,

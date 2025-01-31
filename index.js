@@ -187,6 +187,13 @@ app.post('/webhook_vrdrive', (req, res) => {
     res.status(200).send('Event received');
 });
 //
+app.post('/webhook_quiricar', (req, res) => {
+    const event = req.body;
+    console.log('\x1b[36m%s\x1b[0m', `Quiricar | ${event.id_mch} | ${new Date().toLocaleString('pt-BR')}`)
+    HandleMachineStatus(event, `Quiricar`)
+    res.status(200).send('Event received');
+});
+//
 app.post('/webhook_igo_mobilidade', (req, res) => {
  //   console.log('\x1b[43m%s\x1b[0m', `iGO Mobilidade | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
