@@ -196,7 +196,7 @@ app.post('/webhook_quiricar', (req, res) => {
 //
 app.post('/webhook_igo_mobilidade', (req, res) => {
     const event = req.body;
-    console.log('\x1b[36m%s\x1b[0m', `iGO Mobilidade | ${event.id_mch} | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[36m%s\x1b[0m', `iGO Mobilidade | ${event.id_mch} | ${new Date().toLocaleString('pt-BR')}`)
     HandleMachineStatus(event, `iGO Mobilidade`)
     res.status(200).send('Event received');
 });
