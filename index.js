@@ -174,8 +174,9 @@ app.post('/webhook_center_taxi', (req, res) => {
 });
 //
 app.post('/webhook_to_indo', (req, res) => {
-    console.log('\x1b[43m%s\x1b[0m', `To Indo | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
+    //console.log('\x1b[43m%s\x1b[0m', `To Indo | ${new Date().toLocaleString('pt-BR')}`)
+    console.log('\x1b[36m%s\x1b[0m', `To Indo | ${event.id_mch} | ${new Date().toLocaleString('pt-BR')}`)
     HandleMachineStatus(event, `To Indo`)
     res.status(200).send('Event received');
 });
