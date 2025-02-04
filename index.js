@@ -174,7 +174,7 @@ app.post('/webhook_center_taxi', (req, res) => {
 });
 //
 app.post('/webhook_to_indo', (req, res) => {
-   // console.log('\x1b[43m%s\x1b[0m', `To Indo | ${new Date().toLocaleString('pt-BR')}`)
+    console.log('\x1b[43m%s\x1b[0m', `To Indo | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `To Indo`)
     res.status(200).send('Event received');
@@ -223,14 +223,14 @@ app.post('/webhook_iupe', (req, res) => {
 });
 //
 app.post('/webhook_iupe_itumbiara', (req, res) => {
-    console.log('\x1b[36m%s\x1b[0m', `iupe! Itumpbiara | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[36m%s\x1b[0m', `iupe! Itumbiara | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `iupe! - Itumbiara`)
     res.status(200).send('Event received');
 });
 //
 app.post('/webhook_iupe_planaltina', (req, res) => {
-    console.log('\x1b[36m%s\x1b[0m', `iupe! Planaltina | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[36m%s\x1b[0m', `iupe! Planaltina | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
     HandleMachineStatus(event, `iupe! - Planaltina`)
     res.status(200).send('Event received');
@@ -504,7 +504,7 @@ async function ProcessCorridas() {
         //const rejected_results = results.filter(result => result.status === 'rejected').map((result, index) => ({ id: Array.from(corridas_to_process)[index], error: result.reason }));
 
         if (successful_results.length > 0) {
-            //console.log("Successful requests: ", successful_results)
+            console.log("Posição dos motoristas:")
             successful_results.map(pos => {
                 //console.log(`Posições dos motoristas:`)
                 const is_in_range = IsInRange(pos);
