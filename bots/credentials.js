@@ -234,6 +234,15 @@ const bot_headers = {
         sendpulse_tkn: null,
     },
 
+    '677eec3905109fcd18004d00': {
+        bot_name: 'Du Norte - Ji-Paraná',
+        api_key: process.env.API_KEY_VALUE_DU_NORTE_JI_PARANA,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_DU_NORTE_JI_PARANA,
+        client_id: process.env.CLIENT_ID_DU_NORTE,
+        client_secret: process.env.CLIENT_SECRET_DU_NORTE,
+        sendpulse_tkn: null,
+    },
+
     '67519a8e6416f72e240854df': {
         bot_name: 'Du Norte - Cacoal',
         api_key: process.env.API_KEY_VALUE_DU_NORTE_CACOAL,

@@ -265,6 +265,13 @@ app.post('/webhook_du_norte_cacoal', (req, res) => {
     res.status(200).send('Event received');
 });
 //
+app.post('/webhook_du_norte_ji_parana', (req, res) => {
+    const event = req.body;
+    console.log('\x1b[36m%s\x1b[0m', `Du Norte - Ji-Paraná | ${event.id_mch} | ${new Date().toLocaleString('pt-BR')}`)
+    HandleMachineStatus(event, `Du Norte - Ji-Paraná`)
+    res.status(200).send('Event received');
+});
+//
 app.post('/webhook_un_pimenta_bueno', (req, res) => {
     //console.log('\x1b[43m%s\x1b[0m', `UN - Pimenta Bueno | ${new Date().toLocaleString('pt-BR')}`)
     const event = req.body;
