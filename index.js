@@ -50,7 +50,7 @@ app.listen(PORT, () => {
 app.post('/corrida_setup', (req, res) => {
     const data = req.body;
     console.log('\x1b[42m%s\x1b[0m', `${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${new Date().toLocaleString('pt-BR')}`)
-    corridas_to_process.push({...data, get_position: false})
+    corridas_to_process.push({...data, get_position: false, logs: [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${new Date().toLocaleString('pt-BR')}`]})
     WriteData(corridas_to_process);
 
     if(!isValidNumericalString(data.id_corrida)){
