@@ -314,63 +314,72 @@ function HandleMachineStatus(e, origin){
     let fluxo_name, log
     
     if(e.status_solicitacao == event_corrida.current_solicitacao_status) {
-        log = '\x1b[41m%s\x1b[0m', `${e.id_mch} - ${origin} | (${e.status_solicitacao}): Status Repetido | ${new Date().toLocaleString('pt-BR')}`
-        console.log(log)
-        event_corrida.logs ? event_corrida.logs.push(log) : event_corrida.logs = new Array(log)
+        console.log('\x1b[41m%s\x1b[0m', `${e.id_mch} - ${origin} | (${e.status_solicitacao}): Status Repetido | ${new Date().toLocaleString('pt-BR')}`)
         return
     }
 
     if(e.status_solicitacao == 'G' && event_corrida.current_solicitacao_status == 'C'){
-        log = '\x1b[41m%s\x1b[0m', `${e.id_mch} - ${origin} | (${e.status_solicitacao}): Redirecionamento | ${new Date().toLocaleString('pt-BR')}`
+        console.log('\x1b[41m%s\x1b[0m', `${e.id_mch} - ${origin} | (${e.status_solicitacao}): Redirecionamento | ${new Date().toLocaleString('pt-BR')}`)
+        log = `${e.id_mch} - ${origin} | (${e.status_solicitacao}): Redirecionamento | ${new Date().toLocaleString('pt-BR')}`
     }
     
     switch(e.status_solicitacao){
         case 'L':
-            log = '\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (L) | ${new Date().toLocaleString('pt-BR')}`
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (L) | ${new Date().toLocaleString('pt-BR')}`)
+            log = `${e.id_mch} - ${origin} | (L) | ${new Date().toLocaleString('pt-BR')}`
             //fluxo_name = 'notifica-corrida-pendente'
             break;
         case 'G':
-            log = '\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (G): Esperando um condutor aceitar a solicitação. | ${new Date().toLocaleString('pt-BR')}`
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (G): Esperando um condutor aceitar a solicitação. | ${new Date().toLocaleString('pt-BR')}`)
             fluxo_name = 'notifica-busca-passageiro'
+            log = `${e.id_mch} - ${origin} | (G): Esperando um condutor aceitar a solicitação. | ${new Date().toLocaleString('pt-BR')}`
             break;
         case 'P':
-            log = '\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (P): Solicitação não aceita, aguardando aceitação. | ${new Date().toLocaleString('pt-BR')}`
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (P): Solicitação não aceita, aguardando aceitação. | ${new Date().toLocaleString('pt-BR')}`)
+            log = `${e.id_mch} - ${origin} | (P): Solicitação não aceita, aguardando aceitação. | ${new Date().toLocaleString('pt-BR')}`
             fluxo_name = 'notifica-solicitacao-espera'
             break;
         case 'N':
-            log = '\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (N): Nenhum condutor aceitou a solicitação. | ${new Date().toLocaleString('pt-BR')}`
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (N): Nenhum condutor aceitou a solicitação. | ${new Date().toLocaleString('pt-BR')}`)
             fluxo_name = 'notifica-corrida-nao-atendida'
+            log = `${e.id_mch} - ${origin} | (N): Nenhum condutor aceitou a solicitação. | ${new Date().toLocaleString('pt-BR')}`
             break;
         case 'A':
-            log = '\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (A): Solicitação aceita por um condutor. ${e.motorista ? e.motorista.nome : ''} | ${new Date().toLocaleString('pt-BR')}`
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (A): Solicitação aceita por um condutor. ${e.motorista ? e.motorista.nome : ''} | ${new Date().toLocaleString('pt-BR')}`)
+            log = `${e.id_mch} - ${origin} | (A): Solicitação aceita por um condutor. ${e.motorista ? e.motorista.nome : ''} | ${new Date().toLocaleString('pt-BR')}`
             event_corrida.get_position = true;
             fluxo_name = 'notifica-corrida-aceita'
             break;
         case 'S':
-            log = '\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (S): Solicitação em espera até a conclusão de uma anterior. | ${new Date().toLocaleString('pt-BR')}`
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (S): Solicitação em espera até a conclusão de uma anterior. | ${new Date().toLocaleString('pt-BR')}`)
+            log = `${e.id_mch} - ${origin} | (S): Solicitação em espera até a conclusão de uma anterior. | ${new Date().toLocaleString('pt-BR')}`
             fluxo_name = 'notifica-motorista-em-liberacao'
             break;
         case 'E':
-            log = '\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (E): Corrida iniciada. | ${new Date().toLocaleString('pt-BR')}`
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (E): Corrida iniciada. | ${new Date().toLocaleString('pt-BR')}`)
+            log = `${e.id_mch} - ${origin} | (E): Corrida iniciada. | ${new Date().toLocaleString('pt-BR')}`
             event_corrida.get_position = false;
             fluxo_name = 'notifica-corrida-iniciada'
             break;
         case 'F':
-            log = '\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (F): Corrida concluída. | ${new Date().toLocaleString('pt-BR')}`
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (F): Corrida concluída. | ${new Date().toLocaleString('pt-BR')}`)
+            log = `${e.id_mch} - ${origin} | (F): Corrida concluída. | ${new Date().toLocaleString('pt-BR')}`
             //RemoveCorrida(e.id_mch)
             event_corrida.get_position = false;
 
             fluxo_name = 'notifica-corrida-finalizada'
             break;
         case 'C':
-            log = '\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (C): Solicitação cancelada. | ${new Date().toLocaleString('pt-BR')}`
+            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (C): Solicitação cancelada. | ${new Date().toLocaleString('pt-BR')}`)
+            log = `${e.id_mch} - ${origin} | (C): Solicitação cancelada. | ${new Date().toLocaleString('pt-BR')}`
             event_corrida.get_position = false;
 
             fluxo_name = 'notifica-corrida-cancelada'
             //RemoveCorrida(e.id_mch)
             break;
         default:
-            log = '\x1b[31m%s\x1b[0m', `${e.id_mch} - ${origin} | (${e.status_solicitacao}): event not handled ;-;`
+            console.log('\x1b[31m%s\x1b[0m', `${e.id_mch} - ${origin} | (${e.status_solicitacao}): event not handled ;-;`)
+            log = `${e.id_mch} - ${origin} | (${e.status_solicitacao}): event not handled ;-;`
             break;
     }
     console.log(log)
