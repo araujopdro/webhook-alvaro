@@ -50,7 +50,24 @@ app.listen(PORT, () => {
 app.post('/corrida_setup', (req, res) => {
     const data = req.body;
     console.log('\x1b[42m%s\x1b[0m', `${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${new Date().toLocaleString('pt-BR')}`)
-    corridas_to_process.push({...data, get_position: false, logs: [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${new Date().toLocaleString('pt-BR')}`]})
+    
+    const timer = setTimeout(async () => {
+        console.log(`${data.id_corrida} - Webhook demorou demais. Fetching status manutalmente...`);
+        try {
+            const response = await axios.get(`${taxi_base_url}/solicitacaoStatus?id_mch=${data.id_corrida}`);
+            console.log(`Status manual: ${data.id_corrida}:`, response.data);
+            //HandleMachineStatus(response.data, `${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} `)
+
+        } catch (error) {
+            console.error(`Error ao buscar o status manutalmente ${data.id_corrida}:`, error.message);
+        }
+    }, 20000);
+    
+    corridas_to_process.push({...data, 
+        get_position: false, 
+        logs: [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${new Date().toLocaleString('pt-BR')}`],
+        timer: timer
+    })
     WriteData(corridas_to_process);
 
     if(!isValidNumericalString(data.id_corrida)){
@@ -304,6 +321,7 @@ app.post('/webhook_dub', (req, res) => {
 function HandleMachineStatus(e, origin){
     const event_corrida_idx = corridas_to_process.findIndex((c) => c.id_corrida === e.id_mch)
     const event_corrida = event_corrida_idx >= 0 ? corridas_to_process[event_corrida_idx] : null;
+    
     //console.log(e)
     if(event_corrida == null) {
     //    console.log('\x1b[41m%s\x1b[0m', `Corrida: ${e.id_mch} (${e.status_solicitacao})`)
@@ -311,6 +329,7 @@ function HandleMachineStatus(e, origin){
     } else {
         //console.log('\x1b[46m%s\x1b[0m', `${event_corrida && bot_headers[event_corrida.bot_id] ? bot_headers[event_corrida.bot_id].bot_name+' | ' : ''}Corrida: ${e.id_mch} (${e.status_solicitacao})`)
     }
+
     let fluxo_name, log
     
     if(e.status_solicitacao == event_corrida.current_solicitacao_status) {
@@ -385,6 +404,8 @@ function HandleMachineStatus(e, origin){
     console.log(log)
     event_corrida.logs ? event_corrida.logs.push(log) : event_corrida.logs = new Array(log)
     event_corrida.current_solicitacao_status = e.status_solicitacao
+
+    clearTimeout(event_corrida.timer);
 
     WriteData(corridas_to_process);
 
