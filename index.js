@@ -38,8 +38,7 @@ const WriteData = (data) => {
 
 
 const corridas_to_process = ReadData();
-
-
+const corridas_timer = new Map(); 
 //
 app.use(bodyParser.json());
 app.listen(PORT, () => {
@@ -67,7 +66,9 @@ app.post('/corrida_setup', (req, res) => {
         get_position: false, 
         logs: [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${new Date().toLocaleString('pt-BR')}`],
     })
+
     WriteData(corridas_to_process);
+    corridas_timer.set(data.id_corrida, timer);
 
     if(!isValidNumericalString(data.id_corrida)){
         res.status(400).json({
@@ -404,7 +405,10 @@ function HandleMachineStatus(e, origin){
     event_corrida.logs ? event_corrida.logs.push(log) : event_corrida.logs = new Array(log)
     event_corrida.current_solicitacao_status = e.status_solicitacao
 
-    clearTimeout(event_corrida.timer);
+    if(corridas_timer.get(e.id_mch)){
+        clearTimeout(corridas_timer.get(e.id_mch)); // Cancel the timer
+        corridas_timer.delete(e.id_mch);
+    }
 
     WriteData(corridas_to_process);
 
