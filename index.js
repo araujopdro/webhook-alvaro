@@ -66,7 +66,6 @@ app.post('/corrida_setup', (req, res) => {
     corridas_to_process.push({...data, 
         get_position: false, 
         logs: [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${new Date().toLocaleString('pt-BR')}`],
-        timer: timer
     })
     WriteData(corridas_to_process);
 
