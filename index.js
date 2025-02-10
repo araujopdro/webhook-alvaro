@@ -181,7 +181,7 @@ app.post('/webhook_center_taxi', (req, res) => {
 app.post('/webhook_to_indo', (req, res) => {
     const event = req.body;
     //console.log('\x1b[43m%s\x1b[0m', `To Indo | ${new Date().toLocaleString('pt-BR')}`)
-    console.log('\x1b[36m%s\x1b[0m', `To Indo | ${event.id_mch} | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[36m%s\x1b[0m', `To Indo | ${event.id_mch} | ${new Date().toLocaleString('pt-BR')}`)
     HandleMachineStatus(event, `To Indo`)
     res.status(200).send('Event received');
 });
@@ -272,7 +272,7 @@ app.post('/webhook_du_norte_cacoal', (req, res) => {
 //
 app.post('/webhook_du_norte_ji_parana', (req, res) => {
     const event = req.body;
-    console.log('\x1b[36m%s\x1b[0m', `Du Norte - Ji-Paraná | ${event.id_mch} | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[36m%s\x1b[0m', `Du Norte - Ji-Paraná | ${event.id_mch} | ${new Date().toLocaleString('pt-BR')}`)
     HandleMachineStatus(event, `Du Norte - Ji-Paraná`)
     res.status(200).send('Event received');
 });
@@ -389,7 +389,7 @@ function HandleMachineStatus(e, origin){
             log = `${e.id_mch} - ${origin} | (${e.status_solicitacao}): event not handled ;-;`
             break;
     }
-    console.log(log)
+    
     event_corrida.logs ? event_corrida.logs.push(log) : event_corrida.logs = new Array(log)
     event_corrida.current_solicitacao_status = e.status_solicitacao
 
@@ -590,7 +590,6 @@ function TimerProcess(id_corrida, bot_id){
     const timer = setTimeout(async () => {
         console.log(`${id_corrida} - Webhook demorou demais. Fetching status manualmente...`);
         try {
-            console.log(id_corrida)
             const response = await axios.get(`${taxi_base_url}/solicitacaoStatus?id_mch=${id_corrida}`, {
             //const response = await axios.get(`http://193.203.182.20:3000/posicaoCondutor`, {
                 headers: {
@@ -598,7 +597,7 @@ function TimerProcess(id_corrida, bot_id){
                     'Authorization': `${bot_headers[bot_id].auth}`
                 }
             });
-            console.log(`Status manual: ${id_corrida}:`, response.data);
+            console.log(`Status manual: ${id_corrida}:`, response.data.response.status);
             //HandleMachineStatus(response.data, `${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} `)
 
         } catch (error) {
