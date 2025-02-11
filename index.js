@@ -303,27 +303,28 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name, _corrida_id
 
 //using the contact id and the flow id and runs it
 async function SendPulseFlowRun(_bot_id, _contact_id, _flow, _corrida_id){
-    try {
-        if(_contact_id == '') throw "Contact ID is invalid"
-        if(_flow == undefined) throw "Couldn't find Flow. Flow undefined."
+    console.log(_bot_id, _contact_id, _flow, _corrida_id)
+    // try {
+    //     if(_contact_id == '') throw "Contact ID is invalid"
+    //     if(_flow == undefined) throw "Couldn't find Flow. Flow undefined."
 
-        const response = await axios.post(`https://api.sendpulse.com/whatsapp/flows/run`, {
-            'contact_id': `${_contact_id}`,
-            'flow_id': `${_flow.id}`,
-            'external_data': {
-                'tracking_number': '1234-0987-5678-9012'
-            }
-        }, {
-            headers: {
-                'accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${bot_headers[_bot_id].sendpulse_tkn}`
-            }
-        })
-        //console.log(`${_corrida_id} - SendPulse Flow: ${_flow.name} Success!`);  // 
-    } catch (error) {
-        console.error('Error runing SendPulse Flow:', error);  // 
-    }
+    //     const response = await axios.post(`https://api.sendpulse.com/whatsapp/flows/run`, {
+    //         'contact_id': `${_contact_id}`,
+    //         'flow_id': `${_flow.id}`,
+    //         'external_data': {
+    //             'tracking_number': '1234-0987-5678-9012'
+    //         }
+    //     }, {
+    //         headers: {
+    //             'accept': 'application/json',
+    //             'Content-Type': 'application/json',
+    //             'Authorization': `Bearer ${bot_headers[_bot_id].sendpulse_tkn}`
+    //         }
+    //     })
+    //     //console.log(`${_corrida_id} - SendPulse Flow: ${_flow.name} Success!`);  // 
+    // } catch (error) {
+    //     console.error('Error runing SendPulse Flow:', error);  // 
+    // }
 }
 
 
