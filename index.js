@@ -50,7 +50,8 @@ app.post('/corrida_setup', (req, res) => {
     const data = req.body;
     console.log('\x1b[42m%s\x1b[0m', `${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${new Date().toLocaleString('pt-BR')}`)
     data.logs = [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${new Date().toLocaleString('pt-BR')}`]
-    data.get_position = false
+    data.get_position = false;
+    data.corrida_active = true;
     
     corridas_to_process.push({...data})
 
@@ -211,10 +212,10 @@ app.post('/webhook_quiricar', (req, res) => {
     res.status(200).send('Event received');
 });
 //
-app.post('/webhook_igo_mobilidade', (req, res) => {
+app.post('/webhook_igo_mobilidade_jau', (req, res) => {
     const event = req.body;
-    //console.log('\x1b[36m%s\x1b[0m', `iGO Mobilidade | ${event.id_mch} | ${new Date().toLocaleString('pt-BR')}`)
-    HandleMachineStatus(event, `iGO Mobilidade`)
+    console.log('\x1b[36m%s\x1b[0m', `iGO Mobilidade - Jaú | ${event.id_mch} | ${new Date().toLocaleString('pt-BR')}`)
+    HandleMachineStatus(event, `iGO Mobilidade - Jaú`)
     res.status(200).send('Event received');
 });
 //
@@ -499,10 +500,6 @@ async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
             throw "Can't get position, corrida cancelada/concluída"
         }
 
-        // console.log('MachineGetPosicaoCondutor',  _corrida)
-        // console.log(bot_headers[_corrida.bot_id].api_key)
-        // console.log(bot_headers[_corrida.bot_id].auth)
-
         const response = await axios.get(`${taxi_base_url}/posicaoCondutor?id_mch=${_corrida.id_corrida}`, {
         //const response = await axios.get(`http://193.203.182.20:3000/posicaoCondutor`, {
             headers: {
@@ -510,10 +507,6 @@ async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
                 'Authorization': `${bot_headers[_corrida.bot_id].auth}`
             }
         });
-
-        // console.log('\x1b[42m%s\x1b[0m', 'POSICAO CONDUTOR')
-        // console.log(response.data)
-        // console.log(response.data.response)
 
         return {
             'corrida_index': _corrida_idx,

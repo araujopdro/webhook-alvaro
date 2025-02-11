@@ -153,10 +153,19 @@ const bot_headers = {
         sendpulse_tkn: null,
     },
 
+    // '66994baba6462b05e40dd271': {
+    //     bot_name: 'iGO Mobilidade',
+    //     api_key: process.env.API_KEY_VALUE_IGO_MOBILIDADE,
+    //     auth: process.env.BASIC_AUTHORIZATION_VALUE_IGO_MOBILIDADE,
+    //     client_id: process.env.CLIENT_ID_FIXCHAT,
+    //     client_secret: process.env.CLIENT_SECRET_FIXCHAT,
+    //     sendpulse_tkn: null,
+    // },
+
     '66994baba6462b05e40dd271': {
-        bot_name: 'iGO Mobilidade',
-        api_key: process.env.API_KEY_VALUE_IGO_MOBILIDADE,
-        auth: process.env.BASIC_AUTHORIZATION_VALUE_IGO_MOBILIDADE,
+        bot_name: 'iGO Mobilidade - Jaú',
+        api_key: process.env.API_KEY_VALUE_IGO_JAU,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_IGO_JAU,
         client_id: process.env.CLIENT_ID_FIXCHAT,
         client_secret: process.env.CLIENT_SECRET_FIXCHAT,
         sendpulse_tkn: null,
