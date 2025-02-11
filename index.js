@@ -592,10 +592,12 @@ function HandleFetchedStatus(id_corrida, status){
     let fluxo_name, log;
     const corrida = {...corridas_to_process_obj[id_corrida]}
     const origin = bot_headers[corrida.bot_id.replace(/\s/g, "")].bot_name
+    const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
 
     console.log(status, corrida.current_solicitacao_status)
     if(status == corrida.current_solicitacao_status) {
         log = `Status repetido`
+        console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`)
         return
     }
     
@@ -649,7 +651,7 @@ function HandleFetchedStatus(id_corrida, status){
             log = `Event not handled ;-;`
             break;
     }
-    const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
+
     console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`)
     
     corrida.logs ? corrida.logs.push(`${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`) : corrida.logs = new Array(`${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`)
