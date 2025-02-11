@@ -571,7 +571,10 @@ async function PollCorridaStatus(corrida) {
 
         //Remove from pooling
         if (response.data.response.status === "F" || response.data.response.status === "C") {
-            console.log(`Corrida ${corrida.id_corrida} completed, stopping polling.`);
+            const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
+            const origin = bot_headers[corrida.bot_id.replace(/\s/g, "")].bot_name
+            console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${response.data.response.status}): Corrida finalizada/cancelada. | ${cur_date}`)
+
             delete delays[corrida.id_corrida]; // Remove ride from tracking
             return;
         }
@@ -628,7 +631,6 @@ function HandleFetchedStatus(id_corrida, status){
             break;
         case 'F':
             log = `Corrida concluída.`
-            //RemoveCorrida(corrida.id_corrida)
             corrida.get_position = false;
 
             fluxo_name = 'notifica-corrida-finalizada'
@@ -638,7 +640,6 @@ function HandleFetchedStatus(id_corrida, status){
             corrida.get_position = false;
 
             fluxo_name = 'notifica-corrida-cancelada'
-            //RemoveCorrida(corrida.id_corrida)
             break;
         case 'D':
             log = `Aguardando distribuição.`
@@ -650,9 +651,8 @@ function HandleFetchedStatus(id_corrida, status){
     const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
     console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`)
     
-    corrida.logs ? corrida.logs.push(`(${status}): ${log} | ${cur_date}`) : corrida.logs = new Array(`(${status}): ${log} | ${cur_date}`)
+    corrida.logs ? corrida.logs.push(`${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`) : corrida.logs = new Array(`${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`)
     corrida.current_solicitacao_status = status
     
-    console.log(corridas_to_process_obj)
-    //if(corrida != null && fluxo_name != null) SendPulseFlowToken(corrida.bot_id, corrida.contact_id, fluxo_name, e.id_mch)
+    //if(corrida != null && fluxo_name != null) SendPulseFlowToken(corrida.bot_id, corrida.contact_id, fluxo_name, corrida.id_corrida)
 }
