@@ -16,16 +16,14 @@ const taxi_base_url = "https://api.taximachine.com.br/api/integracao";
 const sendpulse_base_url = "https://api.sendpulse.com";
 
 /////////
-const corridas_to_process = {}; 
+const corridas_to_process = await GetPendingCorridas(['F', 'X']);
 //
+console.log(corridas_to_process)
+
 app.use(bodyParser.json());
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
-
-app.get(`/get-corrida`, (req, res) => {
-    res.status(200).send({ status: 'success' });
-})
 
 //
 app.post('/corrida_setup', (req, res) => {
