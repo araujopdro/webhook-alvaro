@@ -54,10 +54,19 @@ app.post('/corrida_setup', (req, res) => {
         logs: [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${new Date().toLocaleString('pt-BR')}`],
     })
 
-    FetchData(`${taxi_base_url}/solicitacaoStatus?id_mch=${data.id_corrida}`, { 'api-key': `${bot_headers[data.bot_id].api_key}`,'Authorization': `${bot_headers[data.bot_id].auth}`});
-
+    FetchData(
+        `${taxi_base_url}/solicitacaoStatus?id_mch=${data.id_corrida}`, 
+        { 'api-key': `${bot_headers[data.bot_id].api_key}`,'Authorization': `${bot_headers[data.bot_id].auth}`}, 
+        data.logs, 
+        bot_headers[data.bot_id.replace(/\s/g, "")].bot_name);
+    
+    TimerProcess(
+        data.id_corrida, 
+        data.bot_id, 
+        data.logs, 
+        bot_headers[data.bot_id.replace(/\s/g, "")].bot_name)
+    
     WriteData(corridas_to_process);
-    //TimerProcess(data.id_corrida, data.bot_id)
 
     if(!isValidNumericalString(data.id_corrida)){
         res.status(400).json({
@@ -587,31 +596,36 @@ function isValidNumericalString(str) {
     return /^\d+$/.test(str);
 }
 
-// function TimerProcess(id_corrida, bot_id){
-//     const timer = setTimeout(async () => {
-//         console.log(`${id_corrida} - Webhook demorou demais. Fetching status manualmente...`);
-//         try {
-//             const response = await axios.get(`${taxi_base_url}/solicitacaoStatus?id_mch=${id_corrida}`, {
-//             //const response = await axios.get(`http://193.203.182.20:3000/posicaoCondutor`, {
-//                 headers: {
-//                     'api-key': `${bot_headers[bot_id].api_key}`,
-//                     'Authorization': `${bot_headers[bot_id].auth}`
-//                 }
-//             });
-//             console.log(`Status manual: ${id_corrida}:`, response.data.response.status);
-//             //HandleMachineStatus(response.data, `${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} `)
+function TimerProcess(id_corrida, bot_id, logs, origin){
+    const timer = setTimeout(async () => {
+        logs.push(`${id_corrida} - ${origin} | Webhook demorou demais. Fetching status manualmente... | ${new Date().toLocaleString('pt-BR')}`)
+        console.log(`${id_corrida} - ${origin} | Webhook demorou demais. Fetching status manualmente... | ${new Date().toLocaleString('pt-BR')}`);
+        try {
+            const response = await axios.get(`${taxi_base_url}/solicitacaoStatus?id_mch=${id_corrida}`, {
+            //const response = await axios.get(`http://193.203.182.20:3000/posicaoCondutor`, {
+                headers: {
+                    'api-key': `${bot_headers[bot_id].api_key}`,
+                    'Authorization': `${bot_headers[bot_id].auth}`
+                }
+            });
+            logs.push(`${id_corrida} - ${origin} | Status manual: ${response.data.response.status} | ${new Date().toLocaleString('pt-BR')}`);
+            console.log(`${id_corrida} - ${origin} | Status manual: ${response.data.response.status} | ${new Date().toLocaleString('pt-BR')}`);
+            //`Status manual: ${id_corrida}:`, response.data.response.status
+            //HandleMachineStatus(response.data, `${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} `)
 
-//         } catch (error) {
-//             console.error(`${id_corrida} - Erro ao buscar o status manualmente`, error.message);
-//         }
-//     }, 20000);
-//     corridas_timer.set(id_corrida, timer);
-// }
+        } catch (error) {
+            logs.push(`${id_corrida} - ${origin} | Erro ao buscar o status manualmente: ${response.data.response.status} | ${new Date().toLocaleString('pt-BR')}`);
+            console.error(`${id_corrida} - ${origin} | Erro ao buscar o status manualmente: ${response.data.response.status} | ${new Date().toLocaleString('pt-BR')}`);
+        }
+    }, 5000);
+    corridas_timer.set(id_corrida, timer);
+}
 
-async function FetchData(url, headers) {
+async function FetchData(url, headers, logs, origin) {
     try {
         const response = await axios.get(url, {headers: headers});
-        console.log("Data received:", response.data);
+        logs.push(`${id_corrida} - ${origin} | Status manual (Fetch Data): ${response.data.response.status} | ${new Date().toLocaleString('pt-BR')}`);
+        console.log(`${id_corrida} - ${origin} | Status manual (Fetch Data): ${response.data.response.status} | ${new Date().toLocaleString('pt-BR')}`);
         return response.data;
     } catch (error) {
         console.error("Error fetching data:", error.message);
