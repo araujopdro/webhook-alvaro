@@ -648,10 +648,10 @@ function HandleFetchedStatus(id_corrida, status){
             log = `Event not handled ;-;`
             break;
     }
-
-    console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${new Date().toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo' })}`)
+    const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
+    console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`)
     
-    corrida.logs ? corrida.logs.push(`(${status}): ${log} | ${new Date().toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo' })}`) : corrida.logs = new Array(`(${status}): ${log} | ${new Date().toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo' })}`)
+    corrida.logs ? corrida.logs.push(`(${status}): ${log} | ${cur_date}`) : corrida.logs = new Array(`(${status}): ${log} | ${cur_date}`)
     corrida.current_solicitacao_status = status
     
     console.log(corridas_to_process_obj)
