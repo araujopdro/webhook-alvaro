@@ -311,7 +311,7 @@ function HandleMachineStatus(e, origin){
     let fluxo_name, log
     
     if(e.status_solicitacao == event_corrida.current_solicitacao_status) {
-        console.log('\x1b[41m%s\x1b[0m', `${e.id_mch} - ${origin} | (${e.status_solicitacao}): Status Repetido | ${new Date().toLocaleString('pt-BR')}`)
+        //console.log('\x1b[41m%s\x1b[0m', `${e.id_mch} - ${origin} | (${e.status_solicitacao}): Status Repetido | ${new Date().toLocaleString('pt-BR')}`)
         return
     }
 
