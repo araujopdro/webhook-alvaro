@@ -593,7 +593,6 @@ function HandleFetchedStatus(id_corrida, status){
     const origin = bot_headers[corrida.bot_id.replace(/\s/g, "")].bot_name
     const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
 
-    //console.log(status, corrida.current_solicitacao_status)
     if(status == corrida.current_solicitacao_status) {
         log = `Status repetido`
         console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`)
@@ -619,7 +618,7 @@ function HandleFetchedStatus(id_corrida, status){
             break;
         case 'A':
             log = `Solicitação aceita por um condutor.`
-            corrida.get_position = true;
+            corridas_to_process_obj[id_corrida].get_position = true;
             fluxo_name = 'notifica-corrida-aceita'
             break;
         case 'S':
@@ -628,18 +627,17 @@ function HandleFetchedStatus(id_corrida, status){
             break;
         case 'E':
             log = `Corrida iniciada.`
-            corrida.get_position = false;
+            corridas_to_process_obj[id_corrida].get_position = false;
             fluxo_name = 'notifica-corrida-iniciada'
             break;
         case 'F':
             log = `Corrida concluída.`
-            corrida.get_position = false;
-
+            corridas_to_process_obj[id_corrida].get_position = false;
             fluxo_name = 'notifica-corrida-finalizada'
             break;
         case 'C':
             log = `Solicitação cancelada.`
-            corrida.get_position = false;
+            corridas_to_process_obj[id_corrida].get_position = false;
 
             fluxo_name = 'notifica-corrida-cancelada'
             break;
@@ -653,8 +651,8 @@ function HandleFetchedStatus(id_corrida, status){
 
     console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`)
 
-    corrida.logs ? corrida.logs.push(`${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`) : corrida.logs = new Array(`${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`);
-    corrida.current_solicitacao_status = status
-    console.log(`current_solicitacao_status:`, corrida.current_solicitacao_status)
-    //if(corrida != null && fluxo_name != null) SendPulseFlowToken(corrida.bot_id, corrida.contact_id, fluxo_name, corrida.id_corrida)
+    corridas_to_process_obj[id_corrida].logs ? corridas_to_process_obj[id_corrida].logs.push(`${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`) : corridas_to_process_obj[id_corrida].logs = new Array(`${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`);
+    corridas_to_process_obj[id_corrida].current_solicitacao_status = status;
+    
+    if(corrida != null && fluxo_name != null) SendPulseFlowToken(corrida.bot_id, corrida.contact_id, fluxo_name, corrida.id_corrida)
 }
