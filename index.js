@@ -571,7 +571,7 @@ async function PollCorridaStatus(corrida) {
         delays[corrida.id_corrida] = 15000;
 
         //Remove from pooling
-        if (response.data.response.status === "F") {
+        if (response.data.response.status === "F" || response.data.response.status === "C") {
             console.log(`Corrida ${corrida.id_corrida} completed, stopping polling.`);
             delete delays[corrida.id_corrida]; // Remove ride from tracking
             return;
