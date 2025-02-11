@@ -38,7 +38,7 @@ const WriteData = (data) => {
 
 
 const corridas_to_process = ReadData();
-const corridas_timer = new Map(); 
+const corridas_to_process_obj = {}; 
 //
 app.use(bodyParser.json());
 app.listen(PORT, () => {
@@ -53,21 +53,10 @@ app.post('/corrida_setup', (req, res) => {
     data.get_position = false;
     data.corrida_active = true;
     
-    corridas_to_process.push({...data})
+    corridas_to_process_obj[data.id_corrida] = {...data};
+    PollCorridaStatus({...data});
 
-    FetchData(
-        data.id_corrida, 
-        `${taxi_base_url}/solicitacaoStatus?id_mch=${data.id_corrida}`, 
-        { 'api-key': `${bot_headers[data.bot_id].api_key}`,'Authorization': `${bot_headers[data.bot_id].auth}`}, 
-        corridas_to_process.at(-1).logs, 
-        bot_headers[data.bot_id.replace(/\s/g, "")].bot_name);
-    
-    TimerProcess(
-        data.id_corrida, 
-        data.bot_id, 
-        corridas_to_process.at(-1).logs, 
-        bot_headers[data.bot_id.replace(/\s/g, "")].bot_name)
-    
+    corridas_to_process.push({...data})
     WriteData(corridas_to_process);
 
     if(!isValidNumericalString(data.id_corrida)){
@@ -79,16 +68,6 @@ app.post('/corrida_setup', (req, res) => {
     }        
 });
 
-//console.log color 
-// 40 BLACK
-// 41 RED
-// 42 GREEN
-// 43 YELLOW
-// 44 BLUE
-// 45 MAGENTA
-// 46 CYAN
-// 47 WHITE
-// 100 GRAY
 
 ////////Webhook Endpoints
 // Each client should point to a different webhook 
@@ -312,9 +291,9 @@ app.post('/webhook_du_norte_vilhena', (req, res) => {
 //
 app.post('/webhook_dub', (req, res) => {
     //   console.log('\x1b[43m%s\x1b[0m', `Dub - Corridas | ${new Date().toLocaleString('pt-BR')}`)
-       const event = req.body;
-       HandleMachineStatus(event, `Dub - Corridas`)
-       res.status(200).send('Event received');
+    const event = req.body;
+    HandleMachineStatus(event, `Dub - Corridas`)
+    res.status(200).send('Event received');
 });
 
 //
@@ -562,10 +541,6 @@ async function ProcessCorridas() {
     }
 }
 
-function RemoveCorrida(remove_id){
-    //console.log('Corrida removida', remove_id)
-    //corridas_to_process.splice(corridas_to_process.findIndex((c) => c.id_corrida === remove_id), 1); 
-}
 
 function IsInRange(_pos){
     //console.log(`${_pos.bot_id}: `, _pos.lat_condutor, _pos.lng_condutor, _pos.lat_partida, _pos.lng_partida)
@@ -590,42 +565,34 @@ function isValidNumericalString(str) {
     return /^\d+$/.test(str);
 }
 
-function TimerProcess(id_corrida, bot_id, logs, origin){
-    const timer = setTimeout(async () => {
-        logs.push(`${id_corrida} - ${origin} | Webhook demorou demais. Fetching status manualmente... | ${new Date().toLocaleString('pt-BR')}`)
-        console.log(`${id_corrida} - ${origin} | Webhook demorou demais. Fetching status manualmente... | ${new Date().toLocaleString('pt-BR')}`);
-        try {
-            const response = await axios.get(`${taxi_base_url}/solicitacaoStatus?id_mch=${id_corrida}`, {
-            //const response = await axios.get(`http://193.203.182.20:3000/posicaoCondutor`, {
-                headers: {
-                    'api-key': `${bot_headers[bot_id].api_key}`,
-                    'Authorization': `${bot_headers[bot_id].auth}`
-                }
-            });
-            logs.push(`${id_corrida} - ${origin} | Status manual: ${response.data.response.status} | ${new Date().toLocaleString('pt-BR')}`);
-            console.log(`${id_corrida} - ${origin} | Status manual: ${response.data.response.status} | ${new Date().toLocaleString('pt-BR')}`);
-            //`Status manual: ${id_corrida}:`, response.data.response.status
-            //HandleMachineStatus(response.data, `${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} `)
-
-        } catch (error) {
-            logs.push(`${id_corrida} - ${origin} | Erro ao buscar o status manualmente: ${response.data.response.status} | ${new Date().toLocaleString('pt-BR')}`);
-            console.error(`${id_corrida} - ${origin} | Erro ao buscar o status manualmente: ${response.data.response.status} | ${new Date().toLocaleString('pt-BR')}`);
-        }
-    }, 5000);
-    corridas_timer.set(id_corrida, timer);
-}
-
-async function FetchData(id_corrida, url, headers, logs, origin) {
-    try {
-        const response = await axios.get(url, {headers: headers});
-        logs.push(`${id_corrida} - ${origin} | Status manual (Fetch Data): ${response.data.response.status} | ${new Date().toLocaleString('pt-BR')}`);
-        console.log(`${id_corrida} - ${origin} | Status manual (Fetch Data): ${response.data.response.status} | ${new Date().toLocaleString('pt-BR')}`);
-        return response.data;
-    } catch (error) {
-        console.error("Error fetching data:", error.message);
-        return null; // Return null or handle the error as needed
-    }
-}
 
 // Set up the recurring process
 setInterval(ProcessCorridas, process.env.CHECK_INTERVAL);
+
+
+let delays = {};
+async function PollCorridaStatus(corrida) {
+    if (!delays[corrida.id_corrida]) {
+        delays[corrida.id_corrida] = 5000; // Initialize delay if not set
+    }
+
+    try {
+        const response = await axios.get(`${taxi_base_url}/solicitacaoStatus?id_mch=${corrida.id_corrida}`);
+        console.log(`Corrida ${corrida.id_corrida}`, response.data);
+
+        // Reset delay on success
+        delays[corrida.id_corrida] = 5000;
+
+        if (response.data.status === "completed") {
+            console.log(`Corrida ${corrida.id_corrida} completed, stopping polling.`);
+            delete delays[corrida.id_corrida]; // Remove ride from tracking
+            return;
+        }
+    } catch (error) {
+        console.error(`Error fetching status for ride ${corrida.id_corrida}:`, error);
+        delays[corrida.id_corrida] = Math.min(delays[corrida.id_corrida] * 2, 60000); // Increase delay up to 1 min
+    }
+
+    // Schedule the next poll
+    setTimeout(() => PollCorridaStatus(corrida), delays[corrida.id_corrida]);
+}
