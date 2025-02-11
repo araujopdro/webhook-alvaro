@@ -16,7 +16,7 @@ const taxi_base_url = "https://api.taximachine.com.br/api/integracao";
 const sendpulse_base_url = "https://api.sendpulse.com";
 
 /////////
-const corridas_to_process = await GetPendingCorridas(['F', 'X']);
+const corridas_to_process = GetPendingCorridas(['F', 'X']);
 //
 console.log(corridas_to_process)
 
