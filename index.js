@@ -622,7 +622,7 @@ function TimerProcess(id_corrida, bot_id, logs, origin){
     corridas_timer.set(id_corrida, timer);
 }
 
-async function FetchData(url, headers, logs, origin) {
+async function FetchData(id_corrida, url, headers, logs, origin) {
     try {
         const response = await axios.get(url, {headers: headers});
         logs.push(`${id_corrida} - ${origin} | Status manual (Fetch Data): ${response.data.response.status} | ${new Date().toLocaleString('pt-BR')}`);
