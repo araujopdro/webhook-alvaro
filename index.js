@@ -327,7 +327,6 @@ async function SendPulseFlowRun(_bot_id, _contact_id, _flow, _corrida_id){
 }
 
 
-const { db } = require('./db/database.js');
 // Insert function example
 function InsertCorrida(corrida) {
     return new Promise((resolve, reject) => {
