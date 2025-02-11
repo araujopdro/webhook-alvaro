@@ -54,7 +54,7 @@ app.post('/corrida_setup', (req, res) => {
         logs: [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${new Date().toLocaleString('pt-BR')}`],
     })
 
-    FetchData(`${taxi_base_url}/solicitacaoStatus?id_mch=${id_corrida}`, { 'api-key': `${bot_headers[data.bot_id].api_key}`,'Authorization': `${bot_headers[data.bot_id].auth}`});
+    FetchData(`${taxi_base_url}/solicitacaoStatus?id_mch=${data.id_corrida}`, { 'api-key': `${bot_headers[data.bot_id].api_key}`,'Authorization': `${bot_headers[data.bot_id].auth}`});
 
     WriteData(corridas_to_process);
     //TimerProcess(data.id_corrida, data.bot_id)
