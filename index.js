@@ -4,8 +4,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 const geolib = require('geolib');
-const fs = require("fs");
-const db_file_path = "./corridas.json";
+// const fs = require("fs");
+// const db_file_path = "./corridas.json";
+const { db } = require('./db/database.js');
 const { bot_headers } = require('./bots/credentials.js');
 
 const app = express();
@@ -305,25 +306,60 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name, _corrida_id
 //using the contact id and the flow id and runs it
 async function SendPulseFlowRun(_bot_id, _contact_id, _flow, _corrida_id){
     console.log(`SendPulseFlowRun`, _bot_id, _contact_id, _flow, _corrida_id)
-    // try {
-    //     if(_contact_id == '') throw "Contact ID is invalid"
-    //     if(_flow == undefined) throw "Couldn't find Flow. Flow undefined."
+    try {
+        if(_contact_id == '') throw "Contact ID is invalid"
+        if(_flow == undefined) throw "Couldn't find Flow. Flow undefined."
 
-    //     const response = await axios.post(`https://api.sendpulse.com/whatsapp/flows/run`, {
-    //         'contact_id': `${_contact_id}`,
-    //         'flow_id': `${_flow.id}`,
-    //         'external_data': {
-    //             'tracking_number': '1234-0987-5678-9012'
-    //         }
-    //     }, {
-    //         headers: {
-    //             'accept': 'application/json',
-    //             'Content-Type': 'application/json',
-    //             'Authorization': `Bearer ${bot_headers[_bot_id].sendpulse_tkn}`
-    //         }
-    //     })
-    //     //console.log(`${_corrida_id} - SendPulse Flow: ${_flow.name} Success!`);  // 
-    // } catch (error) {
-    //     console.error('Error runing SendPulse Flow:', error);  // 
-    // }
+        const response = await axios.post(`https://api.sendpulse.com/whatsapp/flows/run`, {
+            'contact_id': `${_contact_id}`,
+            'flow_id': `${_flow.id}`,
+            'external_data': {
+                'tracking_number': '1234-0987-5678-9012'
+            }
+        }, {
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${bot_headers[_bot_id].sendpulse_tkn}`
+            }
+        })
+        //console.log(`${_corrida_id} - SendPulse Flow: ${_flow.name} Success!`);  // 
+    } catch (error) {
+        console.error('Error runing SendPulse Flow:', error);  // 
+    }
 }
+
+
+// Insert function example
+function InsertCorrida(corrida) {
+    return new Promise((resolve, reject) => {
+      db.run(
+        `INSERT INTO corridas (
+          id_corrida,
+          bot_id,
+          contact_id,
+          lat_partida,
+          lng_partida,
+          logs,
+          get_position,
+          corrida_active,
+          current_solicitacao_status
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          corrida.id_corrida,
+          corrida.bot_id,
+          corrida.contact_id,
+          corrida.lat_partida,
+          corrida.lng_partida,
+          JSON.stringify(corrida.logs), // Convert array to JSON string
+          corrida.get_position ? 1 : 0,
+          corrida.corrida_active ? 1 : 0,
+          corrida.current_solicitacao_status
+        ],
+        function(err) {
+          if (err) return reject(err);
+          resolve(this.lastID);
+        }
+      );
+    });
+  }
