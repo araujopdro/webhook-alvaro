@@ -153,7 +153,7 @@ async function ProcessCorridas() {
     if (corridas_entries.length === 0) return; //nothing to process
 
     //const promises = Array.from(corridas_to_process).map( (corrida, idx) => MachineGetPosicaoCondutor(corrida, idx));
-    //console.log(corridas_entries)
+    console.log(corridas_entries)
     const promises = corridas_entries.map((corrida) => MachineGetPosicaoCondutor( corrida ));
 
     try {
