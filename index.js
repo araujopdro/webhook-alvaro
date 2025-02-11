@@ -49,14 +49,15 @@ app.listen(PORT, () => {
 app.post('/corrida_setup', (req, res) => {
     const data = req.body;
     console.log('\x1b[42m%s\x1b[0m', `${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${new Date().toLocaleString('pt-BR')}`)
-    
     corridas_to_process.push({...data, 
         get_position: false, 
         logs: [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${new Date().toLocaleString('pt-BR')}`],
     })
 
+    FetchData(`${taxi_base_url}/solicitacaoStatus?id_mch=${id_corrida}`, { 'api-key': `${bot_headers[data.bot_id].api_key}`,'Authorization': `${bot_headers[data.bot_id].auth}`});
+
     WriteData(corridas_to_process);
-    TimerProcess(data.id_corrida, data.bot_id)
+    //TimerProcess(data.id_corrida, data.bot_id)
 
     if(!isValidNumericalString(data.id_corrida)){
         res.status(400).json({
@@ -393,13 +394,13 @@ function HandleMachineStatus(e, origin){
     event_corrida.logs ? event_corrida.logs.push(log) : event_corrida.logs = new Array(log)
     event_corrida.current_solicitacao_status = e.status_solicitacao
 
-    if(corridas_timer.get(e.id_mch)){
-        clearTimeout(corridas_timer.get(e.id_mch)); // Cancel the timer
-        corridas_timer.delete(e.id_mch);
-    }
+    // if(corridas_timer.get(e.id_mch)){
+    //     clearTimeout(corridas_timer.get(e.id_mch)); // Cancel the timer
+    //     corridas_timer.delete(e.id_mch);
+    // }
 
     WriteData(corridas_to_process);
-    TimerProcess(e.id_mch, event_corrida.bot_id)
+    //TimerProcess(e.id_mch, event_corrida.bot_id)
     
     if(event_corrida != null && fluxo_name != null) SendPulseFlowToken(event_corrida.bot_id, event_corrida.contact_id, fluxo_name, e.id_mch)
 }
@@ -586,25 +587,36 @@ function isValidNumericalString(str) {
     return /^\d+$/.test(str);
 }
 
-function TimerProcess(id_corrida, bot_id){
-    const timer = setTimeout(async () => {
-        console.log(`${id_corrida} - Webhook demorou demais. Fetching status manualmente...`);
-        try {
-            const response = await axios.get(`${taxi_base_url}/solicitacaoStatus?id_mch=${id_corrida}`, {
-            //const response = await axios.get(`http://193.203.182.20:3000/posicaoCondutor`, {
-                headers: {
-                    'api-key': `${bot_headers[bot_id].api_key}`,
-                    'Authorization': `${bot_headers[bot_id].auth}`
-                }
-            });
-            console.log(`Status manual: ${id_corrida}:`, response.data.response.status);
-            //HandleMachineStatus(response.data, `${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} `)
+// function TimerProcess(id_corrida, bot_id){
+//     const timer = setTimeout(async () => {
+//         console.log(`${id_corrida} - Webhook demorou demais. Fetching status manualmente...`);
+//         try {
+//             const response = await axios.get(`${taxi_base_url}/solicitacaoStatus?id_mch=${id_corrida}`, {
+//             //const response = await axios.get(`http://193.203.182.20:3000/posicaoCondutor`, {
+//                 headers: {
+//                     'api-key': `${bot_headers[bot_id].api_key}`,
+//                     'Authorization': `${bot_headers[bot_id].auth}`
+//                 }
+//             });
+//             console.log(`Status manual: ${id_corrida}:`, response.data.response.status);
+//             //HandleMachineStatus(response.data, `${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} `)
 
-        } catch (error) {
-            console.error(`${id_corrida} - Erro ao buscar o status manualmente`, error.message);
-        }
-    }, 20000);
-    corridas_timer.set(id_corrida, timer);
+//         } catch (error) {
+//             console.error(`${id_corrida} - Erro ao buscar o status manualmente`, error.message);
+//         }
+//     }, 20000);
+//     corridas_timer.set(id_corrida, timer);
+// }
+
+async function FetchData(url, headers) {
+    try {
+        const response = await axios.get(url, headers);
+        console.log("Data received:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching data:", error.message);
+        return null; // Return null or handle the error as needed
+    }
 }
 
 // Set up the recurring process
