@@ -52,8 +52,8 @@ app.post('/corrida_setup', (req, res) => {
     data.get_position = false;
     data.corrida_active = true;
     
-    corridas_to_process_obj[data.id_corrida] = {...data};
-    PollCorridaStatus({...data});
+    // corridas_to_process_obj[data.id_corrida] = {...data};
+    // PollCorridaStatus({...data});
 
     corridas_to_process.push({...data})
     WriteData(corridas_to_process);
