@@ -49,21 +49,21 @@ app.listen(PORT, () => {
 app.post('/corrida_setup', (req, res) => {
     const data = req.body;
     console.log('\x1b[42m%s\x1b[0m', `${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${new Date().toLocaleString('pt-BR')}`)
-    corridas_to_process.push({...data, 
-        get_position: false, 
-        logs: [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${new Date().toLocaleString('pt-BR')}`],
-    })
+    data.logs = [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${new Date().toLocaleString('pt-BR')}`]
+    data.get_position = false
+    
+    corridas_to_process.push({...data})
 
     FetchData(
         `${taxi_base_url}/solicitacaoStatus?id_mch=${data.id_corrida}`, 
         { 'api-key': `${bot_headers[data.bot_id].api_key}`,'Authorization': `${bot_headers[data.bot_id].auth}`}, 
-        data.logs, 
+        corridas_to_process.at(-1).logs, 
         bot_headers[data.bot_id.replace(/\s/g, "")].bot_name);
     
     TimerProcess(
         data.id_corrida, 
         data.bot_id, 
-        data.logs, 
+        corridas_to_process.at(-1).logs, 
         bot_headers[data.bot_id.replace(/\s/g, "")].bot_name)
     
     WriteData(corridas_to_process);
