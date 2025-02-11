@@ -15,7 +15,6 @@ const taxi_base_url = "https://api.taximachine.com.br/api/integracao";
 const sendpulse_base_url = "https://api.sendpulse.com";
 
 /////////
-//const corridas_to_process = ReadData();
 const corridas_to_process = {}; 
 //
 app.use(bodyParser.json());
@@ -29,8 +28,24 @@ app.post('/corrida_setup', (req, res) => {
     console.log('\x1b[42m%s\x1b[0m', `${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${new Date().toLocaleString('pt-BR')}`)
     data.logs = [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${new Date().toLocaleString('pt-BR')}`]
     data.get_position = false;
-    data.corrida_active = true;
-    
+
+    ////data
+    // {
+    //     bot_id: '6704679a3a85573fe70d0904',
+    //     id_corrida: '495710301',
+    //     contact_id: '11111111',
+    //     lat_partida: '-30.857200400',
+    //     lng_partida: '-51.786323800',
+    //     logs: [
+    //     '495710301 - Corrida cadastrada pelo bot: Win Cars | 11/02/2025, 17:11:44',
+    //     '495710301 - Win Cars | (A): Solicitação aceita por um condutor. | 11/02/2025, 14:11:45',
+    //     '495710301 - Win Cars | (E): Corrida iniciada. | 11/02/2025, 14:14:50'
+    //     ],
+    //     get_position: false,
+    //     corrida_active: true,
+    //     current_solicitacao_status: 'E'
+    // }
+
     corridas_to_process[data.id_corrida] = {...data};
     PollCorridaStatus({...data});
 
@@ -149,11 +164,8 @@ async function MachineGetPosicaoCondutor(corrida) {
 //
 async function ProcessCorridas() {
     const corridas_entries = Object.values(corridas_to_process);
-    console.log(corridas_entries)
-
     if (corridas_entries.length === 0) return; //nothing to process
 
-    //const promises = Array.from(corridas_to_process).map( (corrida, idx) => MachineGetPosicaoCondutor(corrida, idx));
     const promises = corridas_entries.map((corrida) => MachineGetPosicaoCondutor( corrida ));
 
     try {
@@ -242,10 +254,10 @@ function HandleFetchedStatus(id_corrida, status){
     const corrida = {...corridas_to_process[id_corrida]}
     const origin = bot_headers[corrida.bot_id.replace(/\s/g, "")].bot_name
     const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
-    //console.log(status, corrida.current_solicitacao_status)
+    
     if(status == corrida.current_solicitacao_status) {
         log = `Status repetido`
-        console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`)
+        //console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`)
         return
     }
     
