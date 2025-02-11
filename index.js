@@ -117,7 +117,7 @@ async function ProcessCorridas() {
                 const is_in_range = IsInRange(pos);
                 if (is_in_range) {
                     SendPulseFlowToken(pos.bot_id, pos.contact_id, 'notifica-motorista-chegou', pos.id_corrida)
-                    corridas_to_process[pos.corrida_index].get_position = false;
+                    corridas_to_process[pos.id_corrida].get_position = false;
                 }
             });
         }
