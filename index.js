@@ -323,44 +323,44 @@ function HandleMachineStatus(e, origin){
     
     switch(e.status_solicitacao){
         case 'L':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (L) | ${new Date().toLocaleString('pt-BR')}`)
+         //  console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (L) | ${new Date().toLocaleString('pt-BR')}`)
             log = `${e.id_mch} - ${origin} | (L) | ${new Date().toLocaleString('pt-BR')}`
             //fluxo_name = 'notifica-corrida-pendente'
             break;
         case 'G':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (G): Esperando um condutor aceitar a solicitação. | ${new Date().toLocaleString('pt-BR')}`)
+       //     console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (G): Esperando um condutor aceitar a solicitação. | ${new Date().toLocaleString('pt-BR')}`)
             fluxo_name = 'notifica-busca-passageiro'
             log = `${e.id_mch} - ${origin} | (G): Esperando um condutor aceitar a solicitação. | ${new Date().toLocaleString('pt-BR')}`
             break;
         case 'P':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (P): Solicitação não aceita, aguardando aceitação. | ${new Date().toLocaleString('pt-BR')}`)
+         //   console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (P): Solicitação não aceita, aguardando aceitação. | ${new Date().toLocaleString('pt-BR')}`)
             log = `${e.id_mch} - ${origin} | (P): Solicitação não aceita, aguardando aceitação. | ${new Date().toLocaleString('pt-BR')}`
             fluxo_name = 'notifica-solicitacao-espera'
             break;
         case 'N':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (N): Nenhum condutor aceitou a solicitação. | ${new Date().toLocaleString('pt-BR')}`)
+          //  console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (N): Nenhum condutor aceitou a solicitação. | ${new Date().toLocaleString('pt-BR')}`)
             fluxo_name = 'notifica-corrida-nao-atendida'
             log = `${e.id_mch} - ${origin} | (N): Nenhum condutor aceitou a solicitação. | ${new Date().toLocaleString('pt-BR')}`
             break;
         case 'A':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (A): Solicitação aceita por um condutor. ${e.motorista ? e.motorista.nome : ''} | ${new Date().toLocaleString('pt-BR')}`)
+         //   console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (A): Solicitação aceita por um condutor. ${e.motorista ? e.motorista.nome : ''} | ${new Date().toLocaleString('pt-BR')}`)
             log = `${e.id_mch} - ${origin} | (A): Solicitação aceita por um condutor. ${e.motorista ? e.motorista.nome : ''} | ${new Date().toLocaleString('pt-BR')}`
             event_corrida.get_position = true;
             fluxo_name = 'notifica-corrida-aceita'
             break;
         case 'S':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (S): Solicitação em espera até a conclusão de uma anterior. | ${new Date().toLocaleString('pt-BR')}`)
+       //     console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (S): Solicitação em espera até a conclusão de uma anterior. | ${new Date().toLocaleString('pt-BR')}`)
             log = `${e.id_mch} - ${origin} | (S): Solicitação em espera até a conclusão de uma anterior. | ${new Date().toLocaleString('pt-BR')}`
             fluxo_name = 'notifica-motorista-em-liberacao'
             break;
         case 'E':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (E): Corrida iniciada. | ${new Date().toLocaleString('pt-BR')}`)
+         //   console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (E): Corrida iniciada. | ${new Date().toLocaleString('pt-BR')}`)
             log = `${e.id_mch} - ${origin} | (E): Corrida iniciada. | ${new Date().toLocaleString('pt-BR')}`
             event_corrida.get_position = false;
             fluxo_name = 'notifica-corrida-iniciada'
             break;
         case 'F':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (F): Corrida concluída. | ${new Date().toLocaleString('pt-BR')}`)
+           // console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (F): Corrida concluída. | ${new Date().toLocaleString('pt-BR')}`)
             log = `${e.id_mch} - ${origin} | (F): Corrida concluída. | ${new Date().toLocaleString('pt-BR')}`
             //RemoveCorrida(e.id_mch)
             event_corrida.get_position = false;
@@ -368,15 +368,20 @@ function HandleMachineStatus(e, origin){
             fluxo_name = 'notifica-corrida-finalizada'
             break;
         case 'C':
-            console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (C): Solicitação cancelada. | ${new Date().toLocaleString('pt-BR')}`)
+          //  console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (C): Solicitação cancelada. | ${new Date().toLocaleString('pt-BR')}`)
             log = `${e.id_mch} - ${origin} | (C): Solicitação cancelada. | ${new Date().toLocaleString('pt-BR')}`
             event_corrida.get_position = false;
 
             fluxo_name = 'notifica-corrida-cancelada'
             //RemoveCorrida(e.id_mch)
             break;
+        case 'D':
+          //  console.log('\x1b[43m%s\x1b[0m', `${e.id_mch} - ${origin} | (D): Aguardando distribuição. | ${new Date().toLocaleString('pt-BR')}`)
+            
+            log = `${e.id_mch} - ${origin} | (D): Aguardando distribuição. | ${new Date().toLocaleString('pt-BR')}`
+            break;
         default:
-            console.log('\x1b[31m%s\x1b[0m', `${e.id_mch} - ${origin} | (${e.status_solicitacao}): event not handled ;-;`)
+           // console.log('\x1b[31m%s\x1b[0m', `${e.id_mch} - ${origin} | (${e.status_solicitacao}): event not handled ;-;`)
             log = `${e.id_mch} - ${origin} | (${e.status_solicitacao}): event not handled ;-;`
             break;
     }
@@ -384,13 +389,7 @@ function HandleMachineStatus(e, origin){
     event_corrida.logs ? event_corrida.logs.push(log) : event_corrida.logs = new Array(log)
     event_corrida.current_solicitacao_status = e.status_solicitacao
 
-    // if(corridas_timer.get(e.id_mch)){
-    //     clearTimeout(corridas_timer.get(e.id_mch)); // Cancel the timer
-    //     corridas_timer.delete(e.id_mch);
-    // }
-
     WriteData(corridas_to_process);
-    //TimerProcess(e.id_mch, event_corrida.bot_id)
     
     if(event_corrida != null && fluxo_name != null) SendPulseFlowToken(event_corrida.bot_id, event_corrida.contact_id, fluxo_name, e.id_mch)
 }
@@ -406,9 +405,7 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name, _corrida_id
                 'Authorization': `Bearer ${bot_headers[_bot_id].sendpulse_tkn}`
             }
         })
-        
         const flow_selected_on_status = response.data.data.find((f) => f.name == _fluxo_name)
-        //console.log(flow_selected_on_status)
 
         //get list of flows successful, RUN flow
         SendPulseFlowRun(_bot_id, _contact_id, flow_selected_on_status, _corrida_id)
@@ -417,9 +414,6 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name, _corrida_id
         if (error.status === 401) {
             //status 401 not auth, which means that the current SENDPULSE TOKEN it's invalid and tries to get a new one
             try {
-                //console.log('401 - post get token')
-                // console.log(_bot_id)
-                // console.log(bot_headers[_bot_id])
                 const response = await axios.post(`${sendpulse_base_url}/oauth/access_token`, {
                     'grant_type': 'client_credentials',
                     'client_id': `${bot_headers[_bot_id].client_id}`,
@@ -429,8 +423,6 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name, _corrida_id
                         'Content-Type': 'application/json'
                     }
                 })
-                
-                //console.log(`${_bot_id}: sendpulse new token: ${response.data.access_token}`)
 
                 bot_headers[_bot_id].sendpulse_tkn = response.data.access_token
                 return SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name, _corrida_id);  // try again with new token
@@ -446,7 +438,6 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name, _corrida_id
 //using the contact id and the flow id and runs it
 async function SendPulseFlowRun(_bot_id, _contact_id, _flow, _corrida_id){
     try {
-        //console.log('SendPulse Flow: Run!');  // 
         if(_contact_id == '') throw "Contact ID is invalid"
         if(_flow == undefined) throw "Couldn't find Flow. Flow undefined."
 
@@ -509,22 +500,17 @@ async function MachineGetPosicaoCondutor(_corrida, _corrida_idx) {
 
 //
 async function ProcessCorridas() {
-    if (corridas_to_process.length === 0){
-      //  console.log('0 corridas esperando processamento.')
-        return; //nothing to process
-    }
+    if (corridas_to_process.length === 0) return; //nothing to process
 
-   // console.log(corridas_to_process)
     const promises = Array.from(corridas_to_process).map( (corrida, idx) => MachineGetPosicaoCondutor(corrida, idx));
     try {
         const results = await Promise.allSettled(promises);
         const successful_results = results.filter(result => result.status === 'fulfilled').map(result => result.value);
-        //const rejected_results = results.filter(result => result.status === 'rejected').map((result, index) => ({ id: Array.from(corridas_to_process)[index], error: result.reason }));
+        const rejected_results = results.filter(result => result.status === 'rejected').map((result, index) => ({ id: Array.from(corridas_to_process)[index], error: result.reason }));
 
         if (successful_results.length > 0) {
             console.log("Posição dos motoristas:")
             successful_results.map(pos => {
-                //console.log(`Posições dos motoristas:`)
                 const is_in_range = IsInRange(pos);
                 if (is_in_range) {
                     SendPulseFlowToken(pos.bot_id, pos.contact_id, 'notifica-motorista-chegou', pos.id_corrida)
@@ -532,9 +518,9 @@ async function ProcessCorridas() {
                 }
             });
         }
-        // if (rejected_results.length > 0) {
-        //   console.error("Rejected requests: ", rejected_results)
-        // }
+        if (rejected_results.length > 0) {
+          console.error("Rejected requests: ", rejected_results)
+        }
     } catch (error) {
         console.error('Error processing IDs:', error);
     }
@@ -542,10 +528,7 @@ async function ProcessCorridas() {
 
 
 function IsInRange(_pos){
-    //console.log(`${_pos.bot_id}: `, _pos.lat_condutor, _pos.lng_condutor, _pos.lat_partida, _pos.lng_partida)
-
     if(_pos.lat_condutor == undefined || _pos.lng_condutor == undefined) {
-
         console.log('\x1b[41m%s\x1b[0m', `${_pos.id_corrida}: Posição motorista undefined`)
         return false
     }
@@ -554,26 +537,23 @@ function IsInRange(_pos){
         { latitude: _pos.lat_condutor, longitude: _pos.lng_condutor },
         { latitude: _pos.lat_partida, longitude: _pos.lng_partida }
     )
+
     console.log('\x1b[44m%s\x1b[0m', `${_pos.id_corrida} - Distancia do motorista: ${distance}`)
+    
     if (distance <= process.env.DEFAULT_MIN_DISTANCE) return true;
     else return false;
-    
 }
 
 function isValidNumericalString(str) {
     return /^\d+$/.test(str);
 }
 
-
 // Set up the recurring process
 setInterval(ProcessCorridas, process.env.CHECK_INTERVAL);
 
-
 let delays = {};
 async function PollCorridaStatus(corrida) {
-    if (!delays[corrida.id_corrida]) {
-        delays[corrida.id_corrida] = 15000; // Initialize delay if not set
-    }
+    if (!delays[corrida.id_corrida]) delays[corrida.id_corrida] = 15000; // Initialize delay if not set
 
     try {
         const response = await axios.get(`${taxi_base_url}/solicitacaoStatus?id_mch=${corrida.id_corrida}`, {
@@ -582,22 +562,102 @@ async function PollCorridaStatus(corrida) {
                 'Authorization': `${bot_headers[corrida.bot_id].auth}`
             }
         });
-        console.log(`Corrida ${corrida.id_corrida}`, response.data);
+        //response.data = { success: true, response: { status: 'P' } }
+        //console.log(`Corrida ${corrida.id_corrida}`, response.data.response);
+        HandleFetchedStatus(corrida.id_corrida, response.data.response)
 
         // Reset delay on success
         delays[corrida.id_corrida] = 15000;
 
-        if (response.data.status === "completed") {
+        //Remove from pooling
+        if (response.data.response.status === "F") {
             console.log(`Corrida ${corrida.id_corrida} completed, stopping polling.`);
             delete delays[corrida.id_corrida]; // Remove ride from tracking
             return;
         }
     } catch (error) {
-        //console.error(`Error fetching status for ride ${corrida.id_corrida}:`, error);
-        console.error(`Error fetching status for ride ${corrida.id_corrida}:`);
-        delays[corrida.id_corrida] = Math.min(delays[corrida.id_corrida] * 2, 40000); // Increase delay up to 1 min
+        console.error(`Error fetching status for ride ${corrida.id_corrida}:`, error);
+        delays[corrida.id_corrida] = Math.min(delays[corrida.id_corrida] * 2, 30000); // Increase delay up to 1 min
     }
 
     // Schedule the next poll
     setTimeout(() => PollCorridaStatus(corrida), delays[corrida.id_corrida]);
+}
+
+//
+function HandleFetchedStatus(id_corrida, status){
+    let fluxo_name, log;
+    const corrida = {...corridas_to_process_obj[id_corrida]}
+    const origin = bot_headers[corrida.bot_id.replace(/\s/g, "")].bot_name
+
+    if(e.status_solicitacao == corrida.current_solicitacao_status) {
+        console.log('\x1b[41m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${e.status_solicitacao}): Status Repetido | ${new Date().toLocaleString('pt-BR')}`)
+        return
+    }
+
+    if(e.status_solicitacao == 'G' && corrida.current_solicitacao_status == 'C'){
+        console.log('\x1b[41m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${e.status_solicitacao}): Redirecionamento | ${new Date().toLocaleString('pt-BR')}`)
+        log = `${corrida.id_corrida} - ${origin} | (${e.status_solicitacao}): Redirecionamento | ${new Date().toLocaleString('pt-BR')}`
+    }
+    
+    switch(status){
+        case 'L':
+            log = `${corrida.id_corrida} - ${origin} | (L) | ${new Date().toLocaleString('pt-BR')}`
+            //fluxo_name = 'notifica-corrida-pendente'
+            break;
+        case 'G':
+            fluxo_name = 'notifica-busca-passageiro'
+            log = `${corrida.id_corrida} - ${origin} | (G): Esperando um condutor aceitar a solicitação. | ${new Date().toLocaleString('pt-BR')}`
+            break;
+        case 'P':
+            log = `${corrida.id_corrida} - ${origin} | (P): Solicitação não aceita, aguardando aceitação. | ${new Date().toLocaleString('pt-BR')}`
+            fluxo_name = 'notifica-solicitacao-espera'
+            break;
+        case 'N':
+            fluxo_name = 'notifica-corrida-nao-atendida'
+            log = `${corrida.id_corrida} - ${origin} | (N): Nenhum condutor aceitou a solicitação. | ${new Date().toLocaleString('pt-BR')}`
+            break;
+        case 'A':
+            log = `${corrida.id_corrida} - ${origin} | (A): Solicitação aceita por um condutor. ${e.motorista ? e.motorista.nome : ''} | ${new Date().toLocaleString('pt-BR')}`
+            corrida.get_position = true;
+            fluxo_name = 'notifica-corrida-aceita'
+            break;
+        case 'S':
+            log = `${corrida.id_corrida} - ${origin} | (S): Solicitação em espera até a conclusão de uma anterior. | ${new Date().toLocaleString('pt-BR')}`
+            fluxo_name = 'notifica-motorista-em-liberacao'
+            break;
+        case 'E':
+            log = `${corrida.id_corrida} - ${origin} | (E): Corrida iniciada. | ${new Date().toLocaleString('pt-BR')}`
+            corrida.get_position = false;
+            fluxo_name = 'notifica-corrida-iniciada'
+            break;
+        case 'F':
+            log = `${corrida.id_corrida} - ${origin} | (F): Corrida concluída. | ${new Date().toLocaleString('pt-BR')}`
+            //RemoveCorrida(corrida.id_corrida)
+            corrida.get_position = false;
+
+            fluxo_name = 'notifica-corrida-finalizada'
+            break;
+        case 'C':
+            log = `${corrida.id_corrida} - ${origin} | (C): Solicitação cancelada. | ${new Date().toLocaleString('pt-BR')}`
+            corrida.get_position = false;
+
+            fluxo_name = 'notifica-corrida-cancelada'
+            //RemoveCorrida(corrida.id_corrida)
+            break;
+        case 'D':
+            
+            log = `${corrida.id_corrida} - ${origin} | (D): Aguardando distribuição. | ${new Date().toLocaleString('pt-BR')}`
+            break;
+        default:
+            log = `${corrida.id_corrida} - ${origin} | (${status}): event not handled ;-;`
+            break;
+    }
+
+    console.log('\x1b[43m%s\x1b[0m', `${log}`)
+    
+    corrida.logs ? corrida.logs.push(log) : corrida.logs = new Array(log)
+    corrida.current_solicitacao_status = status
+    
+    //if(corrida != null && fluxo_name != null) SendPulseFlowToken(corrida.bot_id, corrida.contact_id, fluxo_name, e.id_mch)
 }
