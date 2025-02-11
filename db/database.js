@@ -1,7 +1,6 @@
-// database.js
 const sqlite3 = require('sqlite3').verbose();
 
-// Create/connect to database
+// Create database connection
 const db = new sqlite3.Database('./corridas.db', (err) => {
   if (err) {
     console.error(err.message);
@@ -9,7 +8,7 @@ const db = new sqlite3.Database('./corridas.db', (err) => {
   console.log('Connected to database');
 });
 
-// Create table
+// Create table (if not exists)
 db.serialize(() => {
   db.run(`
     CREATE TABLE IF NOT EXISTS corridas (
@@ -18,7 +17,7 @@ db.serialize(() => {
       contact_id TEXT NOT NULL,
       lat_partida TEXT NOT NULL,
       lng_partida TEXT NOT NULL,
-      logs TEXT,  -- Will store JSON array
+      logs TEXT,
       get_position INTEGER DEFAULT 0,
       corrida_active INTEGER DEFAULT 1,
       current_solicitacao_status TEXT
@@ -26,4 +25,5 @@ db.serialize(() => {
   `);
 });
 
+// Export the db instance directly
 module.exports = db;

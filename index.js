@@ -6,7 +6,7 @@ const axios = require('axios');
 const geolib = require('geolib');
 // const fs = require("fs");
 // const db_file_path = "./corridas.json";
-const { db } = require('./db/database.js');
+const db = require('./db/database.js');
 const { bot_headers } = require('./bots/credentials.js');
 
 const app = express();
@@ -327,6 +327,7 @@ async function SendPulseFlowRun(_bot_id, _contact_id, _flow, _corrida_id){
 }
 
 
+const { db } = require('./db/database.js');
 // Insert function example
 function InsertCorrida(corrida) {
     return new Promise((resolve, reject) => {
