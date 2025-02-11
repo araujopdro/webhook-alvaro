@@ -193,7 +193,7 @@ app.post('/webhook_quiricar', (req, res) => {
 //
 app.post('/webhook_igo_mobilidade_jau', (req, res) => {
     const event = req.body;
-    console.log('\x1b[36m%s\x1b[0m', `iGO Mobilidade - Jaú | ${event.id_mch} | ${new Date().toLocaleString('pt-BR')}`)
+    //console.log('\x1b[36m%s\x1b[0m', `iGO Mobilidade - Jaú | ${event.id_mch} | ${new Date().toLocaleString('pt-BR')}`)
     HandleMachineStatus(event, `iGO Mobilidade - Jaú`)
     res.status(200).send('Event received');
 });
@@ -506,7 +506,7 @@ async function ProcessCorridas() {
     try {
         const results = await Promise.allSettled(promises);
         const successful_results = results.filter(result => result.status === 'fulfilled').map(result => result.value);
-        const rejected_results = results.filter(result => result.status === 'rejected').map((result, index) => ({ id: Array.from(corridas_to_process)[index], error: result.reason }));
+        //const rejected_results = results.filter(result => result.status === 'rejected').map((result, index) => ({ id: Array.from(corridas_to_process)[index], error: result.reason }));
 
         if (successful_results.length > 0) {
             console.log("Posição dos motoristas:")
@@ -519,7 +519,7 @@ async function ProcessCorridas() {
             });
         }
         if (rejected_results.length > 0) {
-          console.error("Rejected requests: ", rejected_results)
+          //console.error("Rejected requests: ", rejected_results)
         }
     } catch (error) {
         console.error('Error processing IDs:', error);
