@@ -518,9 +518,9 @@ async function ProcessCorridas() {
                 }
             });
         }
-        if (rejected_results.length > 0) {
-          //console.error("Rejected requests: ", rejected_results)
-        }
+        // if (rejected_results.length > 0) {
+        //   //console.error("Rejected requests: ", rejected_results)
+        // }
     } catch (error) {
         console.error('Error processing IDs:', error);
     }
