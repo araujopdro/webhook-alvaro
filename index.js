@@ -25,7 +25,6 @@ const ReadData = () => {
     }
 };
 
-
 // Function to write data to the JSON file
 const WriteData = (data) => {
     try {
@@ -36,7 +35,7 @@ const WriteData = (data) => {
     }
 };
 
-
+/////////
 const corridas_to_process = ReadData();
 const corridas_to_process_obj = {}; 
 //
@@ -653,7 +652,7 @@ function HandleFetchedStatus(id_corrida, status){
     }
 
     console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`)
-    
+
     corrida.logs ? corrida.logs.push(`${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`) : corrida.logs = new Array(`${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`)
     corrida.current_solicitacao_status = status
     
