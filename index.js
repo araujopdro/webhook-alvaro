@@ -463,7 +463,7 @@ async function SendPulseFlowRun(_bot_id, _contact_id, _flow, _corrida_id){
                 'Authorization': `Bearer ${bot_headers[_bot_id].sendpulse_tkn}`
             }
         })
-        console.log(`${_corrida_id} - SendPulse Flow: ${_flow.name} Success!`);  // 
+        //console.log(`${_corrida_id} - SendPulse Flow: ${_flow.name} Success!`);  // 
     } catch (error) {
         console.error('Error runing SendPulse Flow:', error);  // 
     }
@@ -572,7 +572,7 @@ setInterval(ProcessCorridas, process.env.CHECK_INTERVAL);
 let delays = {};
 async function PollCorridaStatus(corrida) {
     if (!delays[corrida.id_corrida]) {
-        delays[corrida.id_corrida] = 5000; // Initialize delay if not set
+        delays[corrida.id_corrida] = 15000; // Initialize delay if not set
     }
 
     try {
@@ -585,7 +585,7 @@ async function PollCorridaStatus(corrida) {
         console.log(`Corrida ${corrida.id_corrida}`, response.data);
 
         // Reset delay on success
-        delays[corrida.id_corrida] = 5000;
+        delays[corrida.id_corrida] = 15000;
 
         if (response.data.status === "completed") {
             console.log(`Corrida ${corrida.id_corrida} completed, stopping polling.`);
@@ -594,7 +594,7 @@ async function PollCorridaStatus(corrida) {
         }
     } catch (error) {
         console.error(`Error fetching status for ride ${corrida.id_corrida}:`, error);
-        delays[corrida.id_corrida] = Math.min(delays[corrida.id_corrida] * 2, 60000); // Increase delay up to 1 min
+        delays[corrida.id_corrida] = Math.min(delays[corrida.id_corrida] * 2, 30000); // Increase delay up to 1 min
     }
 
     // Schedule the next poll
