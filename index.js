@@ -55,6 +55,7 @@ app.post('/corrida_setup', (req, res) => {
     corridas_to_process.push({...data})
 
     FetchData(
+        data.id_corrida, 
         `${taxi_base_url}/solicitacaoStatus?id_mch=${data.id_corrida}`, 
         { 'api-key': `${bot_headers[data.bot_id].api_key}`,'Authorization': `${bot_headers[data.bot_id].auth}`}, 
         corridas_to_process.at(-1).logs, 
