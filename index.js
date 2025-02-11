@@ -590,14 +590,9 @@ function HandleFetchedStatus(id_corrida, status){
     const corrida = {...corridas_to_process_obj[id_corrida]}
     const origin = bot_headers[corrida.bot_id.replace(/\s/g, "")].bot_name
 
-    if(e.status_solicitacao == corrida.current_solicitacao_status) {
-        console.log('\x1b[41m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${e.status_solicitacao}): Status Repetido | ${new Date().toLocaleString('pt-BR')}`)
+    if(status == corrida.current_solicitacao_status) {
+        log = `Status repetido`
         return
-    }
-
-    if(e.status_solicitacao == 'G' && corrida.current_solicitacao_status == 'C'){
-        console.log('\x1b[41m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${e.status_solicitacao}): Redirecionamento | ${new Date().toLocaleString('pt-BR')}`)
-        log = `${corrida.id_corrida} - ${origin} | (${e.status_solicitacao}): Redirecionamento | ${new Date().toLocaleString('pt-BR')}`
     }
     
     switch(status){
@@ -655,8 +650,9 @@ function HandleFetchedStatus(id_corrida, status){
 
     console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${new Date().toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo' })}`)
     
-    corrida.logs ? corrida.logs.push(log) : corrida.logs = new Array(log)
+    corrida.logs ? corrida.logs.push(`(${status}): ${log} | ${new Date().toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo' })}`) : corrida.logs = new Array(`(${status}): ${log} | ${new Date().toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo' })}`)
     corrida.current_solicitacao_status = status
     
+    console.log(corridas_to_process_obj)
     //if(corrida != null && fluxo_name != null) SendPulseFlowToken(corrida.bot_id, corrida.contact_id, fluxo_name, e.id_mch)
 }
