@@ -610,7 +610,7 @@ function isValidNumericalString(str) {
 
 async function FetchData(url, headers) {
     try {
-        const response = await axios.get(url, headers);
+        const response = await axios.get(url, {headers: headers});
         console.log("Data received:", response.data);
         return response.data;
     } catch (error) {
