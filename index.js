@@ -303,7 +303,7 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name, _corrida_id
 
 //using the contact id and the flow id and runs it
 async function SendPulseFlowRun(_bot_id, _contact_id, _flow, _corrida_id){
-    console.log(_bot_id, _contact_id, _flow, _corrida_id)
+    console.log(`SendPulseFlowRun: `,_bot_id, _contact_id, _flow.name, _corrida_id)
     // try {
     //     if(_contact_id == '') throw "Contact ID is invalid"
     //     if(_flow == undefined) throw "Couldn't find Flow. Flow undefined."
