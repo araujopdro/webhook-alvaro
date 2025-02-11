@@ -14,27 +14,6 @@ const PORT = 3000;
 const taxi_base_url = "https://api.taximachine.com.br/api/integracao";
 const sendpulse_base_url = "https://api.sendpulse.com";
 
-// Function to read data from the JSON file
-const ReadData = () => {
-    try {
-      const data = fs.readFileSync(db_file_path, "utf8");
-      return JSON.parse(data);
-    } catch (error) {
-      console.error("Error reading data:", error);
-      return {}; // Return an empty object if the file doesn't exist
-    }
-};
-
-// Function to write data to the JSON file
-const WriteData = (data) => {
-    try {
-      fs.writeFileSync(db_file_path, JSON.stringify(data, null, 2));
-      //console.log("Data saved!");
-    } catch (error) {
-      console.error("Error writing data:", error);
-    }
-};
-
 /////////
 //const corridas_to_process = ReadData();
 const corridas_to_process = {}; 
@@ -54,9 +33,6 @@ app.post('/corrida_setup', (req, res) => {
     
     corridas_to_process[data.id_corrida] = {...data};
     PollCorridaStatus({...data});
-
-    //corridas_to_process.push({...data})
-    //WriteData(corridas_to_process);
 
     if(!isValidNumericalString(data.id_corrida)){
         res.status(400).json({
@@ -177,7 +153,7 @@ async function ProcessCorridas() {
     if (corridas_entries.length === 0) return; //nothing to process
 
     //const promises = Array.from(corridas_to_process).map( (corrida, idx) => MachineGetPosicaoCondutor(corrida, idx));
-
+    console.log(corridas_entries)
     const promises = corridas_entries.map((corrida) => MachineGetPosicaoCondutor( corrida ));
 
     try {
@@ -227,7 +203,7 @@ function isValidNumericalString(str) {
 let delays = {};
 async function PollCorridaStatus(corrida) {
     if (!delays[corrida.id_corrida]) delays[corrida.id_corrida] = 15000; // Initialize delay if not set
-
+    console.log(corrida)
     try {
         const response = await axios.get(`${taxi_base_url}/solicitacaoStatus?id_mch=${corrida.id_corrida}`, {
             headers: {
@@ -236,7 +212,7 @@ async function PollCorridaStatus(corrida) {
             }
         });
         //response.data = { success: true, response: { status: 'P' } }
-        //console.log(`Corrida ${corrida.id_corrida}`, response.data.response);
+        console.log(`Corrida ${corrida.id_corrida}`, response.data.response);
         HandleFetchedStatus(corrida.id_corrida, response.data.response.status)
 
         // Reset delay on success
@@ -269,7 +245,7 @@ function HandleFetchedStatus(id_corrida, status){
     console.log(status, corrida.current_solicitacao_status)
     if(status == corrida.current_solicitacao_status) {
         log = `Status repetido`
-        //console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`)
+        console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`)
         return
     }
     
