@@ -593,8 +593,9 @@ async function PollCorridaStatus(corrida) {
             return;
         }
     } catch (error) {
-        console.error(`Error fetching status for ride ${corrida.id_corrida}:`, error);
-        delays[corrida.id_corrida] = Math.min(delays[corrida.id_corrida] * 2, 30000); // Increase delay up to 1 min
+        //console.error(`Error fetching status for ride ${corrida.id_corrida}:`, error);
+        console.error(`Error fetching status for ride ${corrida.id_corrida}:`);
+        delays[corrida.id_corrida] = Math.min(delays[corrida.id_corrida] * 2, 40000); // Increase delay up to 1 min
     }
 
     // Schedule the next poll
