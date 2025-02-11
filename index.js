@@ -16,7 +16,7 @@ const taxi_base_url = "https://api.taximachine.com.br/api/integracao";
 const sendpulse_base_url = "https://api.sendpulse.com";
 
 /////////
-
+const 
 const corridas_to_process = {}; 
 //
 app.use(bodyParser.json());
@@ -320,7 +320,7 @@ async function SendPulseFlowRun(_bot_id, _contact_id, _flow, _corrida_id){
                 'Authorization': `Bearer ${bot_headers[_bot_id].sendpulse_tkn}`
             }
         })
-        const origin = bot_headers[_corrida_id.replace(/\s/g, "")].bot_name
+        const origin = bot_headers[data.bot_id.replace(/\s/g, "")].bot_name
         const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
         corridas_to_process[_corrida_id].logs.push(`${_corrida_id} - ${origin} | SendPulse Flow: ${_flow.name} Success! | ${cur_date}`)
         //console.log(`${_corrida_id} - SendPulse Flow: ${_flow.name} Success!`);  // 
