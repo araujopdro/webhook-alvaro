@@ -556,6 +556,7 @@ async function PollCorridaStatus(corrida) {
     if (!delays[corrida.id_corrida]) delays[corrida.id_corrida] = 15000; // Initialize delay if not set
 
     try {
+        console.log(bot_headers[corrida.bot_id])
         const response = await axios.get(`${taxi_base_url}/solicitacaoStatus?id_mch=${corrida.id_corrida}`, {
             headers: {
                 'api-key': `${bot_headers[corrida.bot_id].api_key}`,
