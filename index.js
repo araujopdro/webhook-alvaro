@@ -565,7 +565,7 @@ async function PollCorridaStatus(corrida) {
         });
         //response.data = { success: true, response: { status: 'P' } }
         //console.log(`Corrida ${corrida.id_corrida}`, response.data.response);
-        HandleFetchedStatus(corrida.id_corrida, response.data.response)
+        HandleFetchedStatus(corrida.id_corrida, response.data.response.status)
 
         // Reset delay on success
         delays[corrida.id_corrida] = 15000;
