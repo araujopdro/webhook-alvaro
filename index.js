@@ -148,7 +148,7 @@ async function MachineGetPosicaoCondutor(corrida) {
 
 //
 async function ProcessCorridas() {
-    const corridas_entries = Object.entries(corridas_to_process);
+    const corridas_entries = Object.values(corridas_to_process);
     console.log(corridas_entries)
 
     if (corridas_entries.length === 0) return; //nothing to process
