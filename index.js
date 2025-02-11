@@ -595,7 +595,7 @@ function HandleFetchedStatus(id_corrida, status){
 
     if(status == corrida.current_solicitacao_status) {
         log = `Status repetido`
-        console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`)
+        //console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`)
         return
     }
     
@@ -654,5 +654,5 @@ function HandleFetchedStatus(id_corrida, status){
     corridas_to_process_obj[id_corrida].logs ? corridas_to_process_obj[id_corrida].logs.push(`${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`) : corridas_to_process_obj[id_corrida].logs = new Array(`${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`);
     corridas_to_process_obj[id_corrida].current_solicitacao_status = status;
     
-    if(corrida != null && fluxo_name != null) SendPulseFlowToken(corrida.bot_id, corrida.contact_id, fluxo_name, corrida.id_corrida)
+    //if(corrida != null && fluxo_name != null) SendPulseFlowToken(corrida.bot_id, corrida.contact_id, fluxo_name, corrida.id_corrida)
 }
