@@ -29,9 +29,11 @@ app.get(`/get-corrida`, (req, res) => {
 
 //
 app.post('/corrida_setup', (req, res) => {
+    const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
+
     const data = req.body;
-    console.log('\x1b[42m%s\x1b[0m', `${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${new Date().toLocaleString('pt-BR')}`)
-    data.logs = [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${new Date().toLocaleString('pt-BR')}`]
+    console.log('\x1b[42m%s\x1b[0m', `${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${cur_date}`)
+    data.logs = [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${cur_date}`]
     data.get_position = false;
 
     ////data
@@ -165,7 +167,7 @@ async function PollCorridaStatus(corrida) {
             }
         });
         //response.data = { success: true, response: { status: 'P' } }
-        //console.log(`Corrida ${corrida.id_corrida}`, response.data.response);
+        console.log(response.data.response);
         HandleFetchedStatus(corrida.id_corrida, response.data.response.status)
 
         // Reset delay on success
