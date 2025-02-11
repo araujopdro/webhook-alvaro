@@ -593,6 +593,7 @@ function HandleFetchedStatus(id_corrida, status){
     const corrida = {...corridas_to_process_obj[id_corrida]}
     const origin = bot_headers[corrida.bot_id.replace(/\s/g, "")].bot_name
 
+    console.log(status, corrida.current_solicitacao_status)
     if(status == corrida.current_solicitacao_status) {
         log = `Status repetido`
         return
