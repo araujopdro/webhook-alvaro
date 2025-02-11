@@ -602,59 +602,58 @@ function HandleFetchedStatus(id_corrida, status){
     
     switch(status){
         case 'L':
-            log = `${corrida.id_corrida} - ${origin} | (L) | ${new Date().toLocaleString('pt-BR')}`
-            //fluxo_name = 'notifica-corrida-pendente'
+            log = `Aguardando liberação`
+            fluxo_name = 'notifica-corrida-pendente'
             break;
         case 'G':
             fluxo_name = 'notifica-busca-passageiro'
-            log = `${corrida.id_corrida} - ${origin} | (G): Esperando um condutor aceitar a solicitação. | ${new Date().toLocaleString('pt-BR')}`
+            log = `Esperando um condutor aceitar a solicitação.`
             break;
         case 'P':
-            log = `${corrida.id_corrida} - ${origin} | (P): Solicitação não aceita, aguardando aceitação. | ${new Date().toLocaleString('pt-BR')}`
+            log = `Solicitação não aceita, aguardando aceitação.`
             fluxo_name = 'notifica-solicitacao-espera'
             break;
         case 'N':
             fluxo_name = 'notifica-corrida-nao-atendida'
-            log = `${corrida.id_corrida} - ${origin} | (N): Nenhum condutor aceitou a solicitação. | ${new Date().toLocaleString('pt-BR')}`
+            log = `Nenhum condutor aceitou a solicitação.`
             break;
         case 'A':
-            log = `${corrida.id_corrida} - ${origin} | (A): Solicitação aceita por um condutor. ${e.motorista ? e.motorista.nome : ''} | ${new Date().toLocaleString('pt-BR')}`
+            log = `Solicitação aceita por um condutor.`
             corrida.get_position = true;
             fluxo_name = 'notifica-corrida-aceita'
             break;
         case 'S':
-            log = `${corrida.id_corrida} - ${origin} | (S): Solicitação em espera até a conclusão de uma anterior. | ${new Date().toLocaleString('pt-BR')}`
+            log = `Solicitação em espera até a conclusão de uma anterior.`
             fluxo_name = 'notifica-motorista-em-liberacao'
             break;
         case 'E':
-            log = `${corrida.id_corrida} - ${origin} | (E): Corrida iniciada. | ${new Date().toLocaleString('pt-BR')}`
+            log = `Corrida iniciada.`
             corrida.get_position = false;
             fluxo_name = 'notifica-corrida-iniciada'
             break;
         case 'F':
-            log = `${corrida.id_corrida} - ${origin} | (F): Corrida concluída. | ${new Date().toLocaleString('pt-BR')}`
+            log = `Corrida concluída.`
             //RemoveCorrida(corrida.id_corrida)
             corrida.get_position = false;
 
             fluxo_name = 'notifica-corrida-finalizada'
             break;
         case 'C':
-            log = `${corrida.id_corrida} - ${origin} | (C): Solicitação cancelada. | ${new Date().toLocaleString('pt-BR')}`
+            log = `Solicitação cancelada.`
             corrida.get_position = false;
 
             fluxo_name = 'notifica-corrida-cancelada'
             //RemoveCorrida(corrida.id_corrida)
             break;
         case 'D':
-            
-            log = `${corrida.id_corrida} - ${origin} | (D): Aguardando distribuição. | ${new Date().toLocaleString('pt-BR')}`
+            log = `Aguardando distribuição.`
             break;
         default:
-            log = `${corrida.id_corrida} - ${origin} | (${status}): event not handled ;-;`
+            log = `Event not handled ;-;`
             break;
     }
 
-    console.log('\x1b[43m%s\x1b[0m', `${log}`)
+    console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${new Date().toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo' })}`)
     
     corrida.logs ? corrida.logs.push(log) : corrida.logs = new Array(log)
     corrida.current_solicitacao_status = status
