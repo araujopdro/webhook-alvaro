@@ -159,9 +159,6 @@ function isValidNumericalString(str) {
     return /^\d+$/.test(str);
 }
 
-
-
-
 let delays = {};
 async function PollCorridaStatus(corrida) {
     if (!delays[corrida.id_corrida]) delays[corrida.id_corrida] = 15000; // Initialize delay if not set

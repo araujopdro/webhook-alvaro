@@ -1,3 +1,4 @@
 .env
 node_modules/
 webhook-alvaro.code-workspace
+corridas.db
