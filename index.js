@@ -6,7 +6,7 @@ const axios = require('axios');
 const geolib = require('geolib');
 // const fs = require("fs");
 // const db_file_path = "./corridas.json";
-const db = require('./db/database.js');
+const { db, GetPendingCorridas, UpdateCorrida, InsertCorrida } = require('./db/database.js');
 const { bot_headers } = require('./bots/credentials.js');
 
 const app = express();
@@ -15,9 +15,21 @@ const PORT = 3000;
 const taxi_base_url = "https://api.taximachine.com.br/api/integracao";
 const sendpulse_base_url = "https://api.sendpulse.com";
 
+let corridas_to_process
 /////////
-const corridas_to_process = {}; 
-//
+(async () => {
+    try {
+        corridas_to_process = await GetPendingCorridas(['F', 'C']);
+        // Use the data here
+        console.log('Pending corridas:', corridas_to_process);
+        // Set up the recurring process
+        setInterval(ProcessCorridas, process.env.CHECK_INTERVAL);
+    } catch (error) {
+        console.error('Error fetching corridas:', error);
+    }
+})();
+///////
+
 app.use(bodyParser.json());
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
@@ -31,6 +43,7 @@ app.post('/corrida_setup', (req, res) => {
     console.log('\x1b[42m%s\x1b[0m', `${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${cur_date}`)
     data.logs = [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${cur_date}`]
     data.get_position = false;
+    data.current_solicitacao_status = 'X'
 
     ////data
     // {
@@ -124,8 +137,6 @@ async function ProcessCorridas() {
         console.error('Error processing IDs:', error);
     }
 }
-// Set up the recurring process
-setInterval(ProcessCorridas, process.env.CHECK_INTERVAL);
 
 function IsInRange(_pos){
     if(_pos.lat_condutor == undefined || _pos.lng_condutor == undefined) {
@@ -255,6 +266,8 @@ function HandleFetchedStatus(id_corrida, status){
     corridas_to_process[id_corrida].logs ? corridas_to_process[id_corrida].logs.push(`${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`) : corridas_to_process[id_corrida].logs = new Array(`${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`);
     corridas_to_process[id_corrida].current_solicitacao_status = status;
     
+    UpdateCorrida(corrida);
+    
     if(corrida != null && fluxo_name != null) SendPulseFlowToken(corrida.bot_id, corrida.contact_id, fluxo_name, corrida.id_corrida)
 }
 
@@ -328,37 +341,3 @@ async function SendPulseFlowRun(_bot_id, _contact_id, _flow, _corrida_id){
     }
 }
 
-
-// Insert function example
-function InsertCorrida(corrida) {
-    return new Promise((resolve, reject) => {
-      db.run(
-        `INSERT INTO corridas (
-          id_corrida,
-          bot_id,
-          contact_id,
-          lat_partida,
-          lng_partida,
-          logs,
-          get_position,
-          corrida_active,
-          current_solicitacao_status
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [
-          corrida.id_corrida,
-          corrida.bot_id,
-          corrida.contact_id,
-          corrida.lat_partida,
-          corrida.lng_partida,
-          JSON.stringify(corrida.logs), // Convert array to JSON string
-          corrida.get_position ? 1 : 0,
-          corrida.corrida_active ? 1 : 0,
-          corrida.current_solicitacao_status
-        ],
-        function(err) {
-          if (err) return reject(err);
-          resolve(this.lastID);
-        }
-      );
-    });
-  }

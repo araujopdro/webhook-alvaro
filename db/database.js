@@ -19,7 +19,6 @@ db.serialize(() => {
         lng_partida TEXT NOT NULL,
         logs TEXT,
         get_position INTEGER DEFAULT 0,
-        corrida_active INTEGER DEFAULT 1,
         current_solicitacao_status TEXT
         )
     `);
@@ -32,8 +31,7 @@ async function GetPendingCorridas(excluded_statuses = ['F', 'C']) {
       
       db.all(
             `SELECT * FROM corridas 
-            WHERE current_solicitacao_status NOT IN (${placeholders})
-            AND corrida_active = 1`,
+            WHERE current_solicitacao_status NOT IN (${placeholders})`,
             excluded_statuses,  // Pass array of statuses to exclude
             (err, rows) => {
                 if (err) return reject(err);
@@ -51,5 +49,62 @@ async function GetPendingCorridas(excluded_statuses = ['F', 'C']) {
     });
 }
 
+function UpdateCorrida(corrida) {
+    return new Promise((resolve, reject) => {
+        // Convert logs array to a string before storing it
+        const logs_to_string = JSON.stringify(logs);
+
+        db.run(`
+            UPDATE corridas
+            SET logs = ?, get_position = ?, current_solicitacao_status = ?
+            WHERE id_corrida = ?`, 
+            [
+                logs_to_string, 
+                corrida.get_position, 
+                corrida.current_solicitacao_status, 
+                corrida.id_corrida
+            ], 
+            function (err) {
+                if (err) return reject(err);
+                resolve(this.lastID);
+            }
+        );
+    });
+}
+
+// Insert function example
+function InsertCorrida(corrida) {
+    return new Promise((resolve, reject) => {
+      db.run(
+        `INSERT INTO corridas (
+          id_corrida,
+          bot_id,
+          contact_id,
+          lat_partida,
+          lng_partida,
+          logs,
+          get_position,
+          corrida_active,
+          current_solicitacao_status
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          corrida.id_corrida,
+          corrida.bot_id,
+          corrida.contact_id,
+          corrida.lat_partida,
+          corrida.lng_partida,
+          JSON.stringify(corrida.logs), // Convert array to JSON string
+          corrida.get_position ? 1 : 0,
+          corrida.corrida_active ? 1 : 0,
+          corrida.current_solicitacao_status
+        ],
+        function(err) {
+          if (err) return reject(err);
+          resolve(this.lastID);
+        }
+      );
+    });
+}
+
 // Export the db instance directly
-module.exports = db;
+module.exports = { db, GetPendingCorridas, UpdateCorrida, InsertCorrida };
