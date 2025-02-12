@@ -52,7 +52,7 @@ async function GetPendingCorridas(excluded_statuses = ['F', 'C']) {
 function UpdateCorrida(corrida) {
     return new Promise((resolve, reject) => {
         // Convert logs array to a string before storing it
-        const logs_to_string = JSON.stringify(logs);
+        const logs_to_string = JSON.stringify(corrida.logs);
 
         db.run(`
             UPDATE corridas
