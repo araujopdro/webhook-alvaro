@@ -123,8 +123,8 @@ async function ProcessCorridas() {
         if (successful_results.length > 0) {
             const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
             console.log(`Posição dos motoristas | ${cur_date}`)
-            successful_results.map(pos => {
-                const is_in_range = IsInRange(pos);
+            successful_results.map(corrida => {
+                const is_in_range = IsInRange(corrida);
                 if (is_in_range) {
 
                     const origin = bot_headers[corrida.bot_id.replace(/\s/g, "")].bot_name
