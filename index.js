@@ -296,7 +296,7 @@ function HandleFetchedStatus(id_corrida, status){
     
     UpdateCorrida(corridas_to_process[id_corrida]);
     
-    if(corrida != null && fluxo_name != null) SendPulseFlowToken(corrida, fluxo_name)
+    if(corrida != null && fluxo_name != null) SendPulseFlowToken(corridas_to_process[id_corrida], fluxo_name)
 }
 
 
