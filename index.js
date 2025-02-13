@@ -121,12 +121,18 @@ async function ProcessCorridas() {
         //const rejected_results = results.filter(result => result.status === 'rejected').map((result, index) => ({ id: Array.from(corridas_to_process)[index], error: result.reason }));
 
         if (successful_results.length > 0) {
-            console.log("Posição dos motoristas:")
+            const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
+            console.log(`Posição dos motoristas | ${cur_date}`)
             successful_results.map(pos => {
                 const is_in_range = IsInRange(pos);
                 if (is_in_range) {
-                    SendPulseFlowToken(pos.bot_id, pos.contact_id, 'notifica-motorista-chegou', pos.id_corrida)
-                    corridas_to_process[pos.id_corrida].get_position = false;
+
+                    const origin = bot_headers[corrida.bot_id.replace(/\s/g, "")].bot_name
+                    console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${response.data.response.status}): Corrida finalizada/cancelada. | ${cur_date}`)
+                    corridas_to_process[corrida.id_corrida].logs.push(`${corrida.id_corrida} - ${origin} | (${response.data.response.status}): Corrida finalizada/cancelada. | ${cur_date}`)
+                    
+                    SendPulseFlowToken(corrida.bot_id, corrida.contact_id, 'notifica-motorista-chegou', corrida.id_corrida)
+                    corridas_to_process[corrida.id_corrida].get_position = false;
                 }
             });
         }
