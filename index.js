@@ -277,7 +277,7 @@ function HandleFetchedStatus(id_corrida, status){
     corridas_to_process[id_corrida].logs ? corridas_to_process[id_corrida].logs.push(`${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`) : corridas_to_process[id_corrida].logs = new Array(`${corrida.id_corrida} - ${origin} | (${status}): ${log} | ${cur_date}`);
     corridas_to_process[id_corrida].current_solicitacao_status = status;
     
-    UpdateCorrida(corrida);
+    UpdateCorrida(corridas_to_process[id_corrida]);
     
     if(corrida != null && fluxo_name != null) SendPulseFlowToken(corrida.bot_id, corrida.contact_id, fluxo_name, corrida.id_corrida)
 }
