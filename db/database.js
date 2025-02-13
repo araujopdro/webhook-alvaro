@@ -36,12 +36,16 @@ async function GetPendingCorridas(excluded_statuses = ['F', 'C']) {
             (err, rows) => {
                 if (err) return reject(err);
                 
-                const corridas = rows.map(row => ({
-                    ...row,
-                    logs: JSON.parse(row.logs),
-                    get_position: Boolean(row.get_position),
-                    corrida_active: Boolean(row.corrida_active)
-                }));
+                const corridas = rows.reduce((acc, row) => {
+                    acc[row.id_corrida] = {
+                        ...row,
+                        logs: JSON.parse(row.logs),
+                        get_position: Boolean(row.get_position),
+                        corrida_active: Boolean(row.corrida_active)
+                    };
+                    return acc;
+                }, {});
+                
         
                 resolve(corridas);
             }
