@@ -49,7 +49,7 @@ app.post('/corrida_setup', (req, res) => {
     data.logs = [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${cur_date}`]
     data.get_position = false;
     data.current_solicitacao_status = 'X'
-    data.cidade = FormatCityName(data.cidade)
+    data.cidade = FormatCityName(data.cidade ? data.cidade : '')
     
     console.log(data.cidade)
     
