@@ -99,8 +99,8 @@ async function MachineGetPosicaoCondutor(corrida) {
 
         const response = await axios.get(`${taxi_base_url}/posicaoCondutor?id_mch=${corrida.id_corrida}`, {
             headers: {
-                'api-key': `${bot_headers[corrida.bot_id+corrida.cidade].api_key}`,
-                'Authorization': `${bot_headers[corrida.bot_id+corrida.cidade].auth}`
+                'api-key': `${bot_headers[corrida.bot_id].api_key}`,
+                'Authorization': `${bot_headers[corrida.bot_id].auth}`
             }
         });
 
@@ -194,8 +194,8 @@ async function PoolCorridaStatus(corrida) {
     try {
         const response = await axios.get(`${taxi_base_url}/solicitacaoStatus?id_mch=${corrida.id_corrida}`, {
             headers: {
-                'api-key': `${bot_headers[corrida.bot_id+corrida.cidade].api_key}`,
-                'Authorization': `${bot_headers[corrida.bot_id+corrida.cidade].auth}`
+                'api-key': `${bot_headers[corrida.bot_id].api_key}`,
+                'Authorization': `${bot_headers[corrida.bot_id].auth}`
             }
         });
         //response.data = { success: true, response: { status: 'P' } }
