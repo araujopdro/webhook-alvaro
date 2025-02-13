@@ -203,8 +203,9 @@ async function PollCorridaStatus(corrida) {
             return;
         }
     } catch (error) {
+        console.log(error)
         if(error.response.status == 400){
-            console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${response.data.response.status}): Erro de acesso a api. | ${cur_date}`)
+            console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (400): Erro de acesso a api. | ${cur_date}`)
 
             delete delays[corrida.id_corrida];
         } else {
