@@ -92,12 +92,12 @@ function InsertCorrida(corrida) {
           get_position,
           corrida_active,
           current_solicitacao_status
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           corrida.id_corrida,
           corrida.bot_id,
           corrida.contact_id,
-          corrida.cidadde,
+          corrida.cidade,
           corrida.lat_partida,
           corrida.lng_partida,
           JSON.stringify(corrida.logs), // Convert array to JSON string
