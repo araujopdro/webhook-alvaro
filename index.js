@@ -30,7 +30,7 @@ let corridas_to_process
         const corridas_entries = Object.values(corridas_to_process);
         if (corridas_entries.length === 0) return; //nothing to process
 
-        corridas_entries.map((corrida) => PollCorridaStatus( corrida ));
+        //corridas_entries.map((corrida) => PollCorridaStatus( corrida ));
     } catch (error) {
         console.error('Error fetching corridas:', error);
     }
@@ -160,8 +160,8 @@ async function ProcessCorridasPosicao() {
 
 function IsInRange(_pos){
     if(_pos.lat_condutor == undefined || _pos.lng_condutor == undefined) {
-        console.log('\x1b[41m%s\x1b[0m', `${_pos.id_corrida}: Posição motorista undefined`)
         corridas_to_process[corrida.id_corrida].posicao_undefined ? corridas_to_process[corrida.id_corrida].posicao_undefined++ : corridas_to_process[corrida.id_corrida].posicao_undefined = 1;
+        console.log('\x1b[41m%s\x1b[0m', `${_pos.id_corrida}: Posição motorista undefined | ${corridas_to_process[corrida.id_corrida].posicao_undefined}`)
         if(corridas_to_process[corrida.id_corrida].posicao_undefined >= 200) corridas_to_process[corrida.id_corrida].get_position = false
         return false
     }
