@@ -217,11 +217,13 @@ async function PoolCorridaStatus(corrida) {
         if(error.response && error.response.status == 400){
             console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (400): Erro de acesso a api. | ${cur_date}`)
             delete delays[corrida.id_corrida];
+            return;
         } else if(error.response && error.response.status == 429){
             console.error(`Error fetching status for ride ${corrida.id_corrida}:`, error.response.status);
             delays[corrida.id_corrida] = Math.min(delays[corrida.id_corrida] * 2, 30000); // Increase delay up to 1 min
         } else {
             console.error(`Error:`, error);
+            return;
         }
     }
 
