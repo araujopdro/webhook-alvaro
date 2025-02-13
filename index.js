@@ -21,16 +21,16 @@ let corridas_to_process
     try {
         corridas_to_process = await GetPendingCorridas(['F', 'C', 'X']);
         // Use the data here
-        //console.log('Pending corridas:', Object.keys(corridas_to_process).length);
+        console.log('Pending corridas:', Object.keys(corridas_to_process).length);
         console.log("corridas_to_process: ", corridas_to_process)
         // Set up the recurring process
         setInterval(ProcessCorridasPosicao, process.env.CHECK_INTERVAL);
 
-        //PollCorridaStatus({...data});
+        
         const corridas_entries = Object.values(corridas_to_process);
         if (corridas_entries.length === 0) return; //nothing to process
 
-        //corridas_entries.map((corrida) => PollCorridaStatus( corrida ));
+        corridas_entries.map((corrida) => PoolCorridaStatus( corrida ));
     } catch (error) {
         console.error('Error fetching corridas:', error);
     }
@@ -84,7 +84,7 @@ app.post('/corrida_setup', (req, res) => {
     data.cidade = FormatCityName(data.cidade ? data.cidade : '')
 
     corridas_to_process[data.id_corrida] = {...data};
-    PollCorridaStatus({...data});
+    PoolCorridaStatus({...data});
     InsertCorrida({...data}) 
     
 });
@@ -162,7 +162,7 @@ function IsInRange(_pos){
     if(_pos.lat_condutor == undefined || _pos.lng_condutor == undefined) {
         corridas_to_process[corrida.id_corrida].posicao_undefined ? corridas_to_process[corrida.id_corrida].posicao_undefined++ : corridas_to_process[corrida.id_corrida].posicao_undefined = 1;
         console.log('\x1b[41m%s\x1b[0m', `${_pos.id_corrida}: Posição motorista undefined | ${corridas_to_process[corrida.id_corrida].posicao_undefined}`)
-        if(corridas_to_process[corrida.id_corrida].posicao_undefined >= 200) corridas_to_process[corrida.id_corrida].get_position = false
+        if(corridas_to_process[corrida.id_corrida].posicao_undefined >= 100) corridas_to_process[corrida.id_corrida].get_position = false
         return false
     }
 
@@ -182,7 +182,7 @@ function isValidNumericalString(str) {
 }
 
 let delays = {};
-async function PollCorridaStatus(corrida) {
+async function PoolCorridaStatus(corrida) {
     if (!delays[corrida.id_corrida]) delays[corrida.id_corrida] = 15000; // Initialize delay if not set
     //console.log(corrida)
 
@@ -223,7 +223,7 @@ async function PollCorridaStatus(corrida) {
     }
 
     // Schedule the next poll
-    setTimeout(() => PollCorridaStatus(corrida), delays[corrida.id_corrida]);
+    setTimeout(() => PoolCorridaStatus(corrida), delays[corrida.id_corrida]);
 }
 
 //
