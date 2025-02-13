@@ -80,8 +80,8 @@ app.post('/corrida_setup', (req, res) => {
         res.status(200).send({ status: 'success', body: {...req.body} });
     }    
 
-    console.log('\x1b[42m%s\x1b[0m', `${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${cur_date}`)
-    data.logs = [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${cur_date}`]
+    console.log('\x1b[42m%s\x1b[0m', `${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id].bot_name} | ${cur_date}`)
+    data.logs = [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id].bot_name} | ${cur_date}`]
     data.get_position = false;
     data.current_solicitacao_status = 'X'
 
@@ -143,7 +143,7 @@ async function ProcessCorridasPosicao() {
                 const is_in_range = IsInRange(corrida);
                 if (is_in_range) {
 
-                    const origin = bot_headers[corrida.bot_id.replace(/\s/g, "")].bot_name
+                    const origin = bot_headers[corrida.bot_id].bot_name
                     console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (X): Motorista chegou. | ${cur_date}`)
                     corridas_to_process[corrida.id_corrida].logs.push(`${corrida.id_corrida} - ${origin} | (X): Motorista chegou. | ${cur_date}`)
 
@@ -189,7 +189,7 @@ async function PoolCorridaStatus(corrida) {
     //console.log(corrida)
 
     const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
-    const origin = bot_headers[corrida.bot_id.replace(/\s/g, "")].bot_name
+    const origin = bot_headers[corrida.bot_id].bot_name
 
     try {
         const response = await axios.get(`${taxi_base_url}/solicitacaoStatus?id_mch=${corrida.id_corrida}`, {
@@ -231,7 +231,7 @@ async function PoolCorridaStatus(corrida) {
 function HandleFetchedStatus(id_corrida, status){
     let fluxo_name, log;
     const corrida = {...corridas_to_process[id_corrida]}
-    const origin = bot_headers[corrida.bot_id.replace(/\s/g, "")].bot_name
+    const origin = bot_headers[corrida.bot_id].bot_name
     const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
     
     if(status == corrida.current_solicitacao_status) {
@@ -361,7 +361,7 @@ async function SendPulseFlowRun(_bot_id, _contact_id, _flow, _corrida_id){
                 'Authorization': `Bearer ${bot_headers[_bot_id].sendpulse_tkn}`
             }
         })
-        const origin = bot_headers[_bot_id.replace(/\s/g, "")].bot_name
+        const origin = bot_headers[_bot_id].bot_name
         const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
         corridas_to_process[_corrida_id].logs.push(`${_corrida_id} - ${origin} | SendPulse Flow: ${_flow.name} Success! | ${cur_date}`)
         console.log('\x1b[43m%s\x1b[0m', `${_corrida_id} - ${origin} | SendPulse Flow: ${_flow.name} Success! | ${cur_date}`)
