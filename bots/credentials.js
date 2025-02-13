@@ -153,7 +153,7 @@ const bot_headers = {
         sendpulse_tkn: null,
     },
 
-    '66994baba6462b05e40dd271': {
+    '66994baba6462b05e40dd271jau': {
         bot_name: 'iGO Mobilidade - Jaú',
         api_key: process.env.API_KEY_VALUE_IGO_JAU,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_IGO_JAU,
@@ -162,7 +162,7 @@ const bot_headers = {
         sendpulse_tkn: null,
     },
 
-    '66994baba6462b05e40dd271': {
+    '66994baba6462b05e40dd271ibiuna': {
         bot_name: 'iGO Mobilidade - Ibiúna',
         api_key: process.env.API_KEY_VALUE_IGO_IBIUNA,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_IGO_IBIUNA,
@@ -171,7 +171,7 @@ const bot_headers = {
         sendpulse_tkn: null,
     },
 
-    '66994baba6462b05e40dd271': {
+    '66994baba6462b05e40dd271avare': {
         bot_name: 'iGO Mobilidade - Avaré',
         api_key: process.env.API_KEY_VALUE_IGO_AVARE,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_IGO_AVARE,
@@ -180,7 +180,7 @@ const bot_headers = {
         sendpulse_tkn: null,
     },
 
-    '66994baba6462b05e40dd271': {
+    '66994baba6462b05e40dd271garca': {
         bot_name: 'iGO Mobilidade - Garça',
         api_key: process.env.API_KEY_VALUE_IGO_GARCA,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_IGO_GARCA,
@@ -189,7 +189,7 @@ const bot_headers = {
         sendpulse_tkn: null,
     },
 
-    '66994baba6462b05e40dd271': {
+    '66994baba6462b05e40dd271itapeva': {
         bot_name: 'iGO Mobilidade - Itapeva',
         api_key: process.env.API_KEY_VALUE_IGO_ITAPEVA,
         auth: process.env.BASIC_AUTHORIZATION_VALUE_IGO_ITAPEVA,
