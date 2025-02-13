@@ -51,7 +51,7 @@ app.post('/corrida_setup', (req, res) => {
     data.current_solicitacao_status = 'X'
     data.cidade = FormatCityName(data.cidade ? data.cidade : '')
     
-    console.log(data.cidade)
+    console.log("Cidade: ",data.cidade)
     
     ////data
     // {
