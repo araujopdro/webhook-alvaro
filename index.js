@@ -24,7 +24,13 @@ let corridas_to_process
         //console.log('Pending corridas:', Object.keys(corridas_to_process).length);
         console.log("corridas_to_process: ", corridas_to_process)
         // Set up the recurring process
-        setInterval(ProcessCorridas, process.env.CHECK_INTERVAL);
+        setInterval(ProcessCorridasPosicao, process.env.CHECK_INTERVAL);
+
+        //PollCorridaStatus({...data});
+        const corridas_entries = Object.values(corridas_to_process);
+        if (corridas_entries.length === 0) return; //nothing to process
+
+        corridas_entries.map((corrida) => PollCorridaStatus( corrida ));
     } catch (error) {
         console.error('Error fetching corridas:', error);
     }
@@ -70,7 +76,7 @@ app.post('/corrida_setup', (req, res) => {
     } else {
         res.status(200).send({ status: 'success', body: {...req.body} });
     }    
-    
+
     console.log('\x1b[42m%s\x1b[0m', `${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${cur_date}`)
     data.logs = [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${cur_date}`]
     data.get_position = false;
@@ -117,7 +123,7 @@ async function MachineGetPosicaoCondutor(corrida) {
 }
 
 //
-async function ProcessCorridas() {
+async function ProcessCorridasPosicao() {
     const corridas_entries = Object.values(corridas_to_process);
     if (corridas_entries.length === 0) return; //nothing to process
 
@@ -155,6 +161,8 @@ async function ProcessCorridas() {
 function IsInRange(_pos){
     if(_pos.lat_condutor == undefined || _pos.lng_condutor == undefined) {
         console.log('\x1b[41m%s\x1b[0m', `${_pos.id_corrida}: Posição motorista undefined`)
+        corridas_to_process[corrida.id_corrida].posicao_undefined ? corridas_to_process[corrida.id_corrida].posicao_undefined++ : corridas_to_process[corrida.id_corrida].posicao_undefined = 1;
+        if(corridas_to_process[corrida.id_corrida].posicao_undefined >= 200) corridas_to_process[corrida.id_corrida].get_position = false
         return false
     }
 
