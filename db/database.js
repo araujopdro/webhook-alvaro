@@ -15,6 +15,7 @@ db.serialize(() => {
         id_corrida TEXT PRIMARY KEY,
         bot_id TEXT NOT NULL,
         contact_id TEXT NOT NULL,
+        cidade TEXT NOT NULL,
         lat_partida TEXT NOT NULL,
         lng_partida TEXT NOT NULL,
         logs TEXT,
@@ -84,6 +85,7 @@ function InsertCorrida(corrida) {
           id_corrida,
           bot_id,
           contact_id,
+          cidade,
           lat_partida,
           lng_partida,
           logs,
@@ -95,6 +97,7 @@ function InsertCorrida(corrida) {
           corrida.id_corrida,
           corrida.bot_id,
           corrida.contact_id,
+          corrida.cidadde,
           corrida.lat_partida,
           corrida.lng_partida,
           JSON.stringify(corrida.logs), // Convert array to JSON string
