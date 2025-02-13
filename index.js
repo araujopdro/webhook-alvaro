@@ -68,6 +68,9 @@ app.post('/corrida_setup', (req, res) => {
     //     current_solicitacao_status: 'E'
     // }
     const data = req.body;
+    data.cidade = FormatCityName(data.cidade ? data.cidade : '')
+    data.bot_id = data.bot_id + data.cidade
+    console.log(data.bot_id)
     
     if(!isValidNumericalString(data.id_corrida)){
         res.status(400).json({
@@ -81,7 +84,6 @@ app.post('/corrida_setup', (req, res) => {
     data.logs = [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${cur_date}`]
     data.get_position = false;
     data.current_solicitacao_status = 'X'
-    data.cidade = FormatCityName(data.cidade ? data.cidade : '')
 
     corridas_to_process[data.id_corrida] = {...data};
     PoolCorridaStatus({...data});
