@@ -49,9 +49,13 @@ app.post('/corrida_setup', (req, res) => {
     data.logs = [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${cur_date}`]
     data.get_position = false;
     data.current_solicitacao_status = 'X'
-
+    data.cidade = FormatCityName(data.cidade)
+    
+    console.log(data.cidade)
+    
     ////data
     // {
+    //     cidade: 'Itapeva'
     //     bot_id: '6704679a3a85573fe70d0904',
     //     id_corrida: '495710301',
     //     contact_id: '11111111',
@@ -357,3 +361,10 @@ async function SendPulseFlowRun(_bot_id, _contact_id, _flow, _corrida_id){
     }
 }
 
+function FormatCityName(city) {
+    return city
+        .toLowerCase() // Converte para minúsculas
+        .normalize("NFD") // Separa os caracteres acentuados
+        .replace(/[\u0300-\u036f]/g, "") // Remove a acentuação
+        .replace(/\s+/g, "-"); // Substitui espaços por traços
+}
