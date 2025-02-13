@@ -21,7 +21,8 @@ let corridas_to_process
     try {
         corridas_to_process = await GetPendingCorridas(['F', 'C', 'X']);
         // Use the data here
-        console.log('Pending corridas:', Object.keys(corridas_to_process).length);
+        //console.log('Pending corridas:', Object.keys(corridas_to_process).length);
+        console.log("corridas_to_process: ", corridas_to_process)
         // Set up the recurring process
         setInterval(ProcessCorridas, process.env.CHECK_INTERVAL);
     } catch (error) {
@@ -50,9 +51,7 @@ app.post('/corrida_setup', (req, res) => {
     data.get_position = false;
     data.current_solicitacao_status = 'X'
     data.cidade = FormatCityName(data.cidade ? data.cidade : '')
-    
-    console.log("Cidade: ",data.cidade)
-    
+
     ////data
     // {
     //     cidade: 'Itapeva'
@@ -92,8 +91,8 @@ async function MachineGetPosicaoCondutor(corrida) {
 
         const response = await axios.get(`${taxi_base_url}/posicaoCondutor?id_mch=${corrida.id_corrida}`, {
             headers: {
-                'api-key': `${bot_headers[corrida.bot_id].api_key}`,
-                'Authorization': `${bot_headers[corrida.bot_id].auth}`
+                'api-key': `${bot_headers[corrida.bot_id+corrida.cidade].api_key}`,
+                'Authorization': `${bot_headers[corrida.bot_id+corrida.cidade].auth}`
             }
         });
 
@@ -185,8 +184,8 @@ async function PollCorridaStatus(corrida) {
     try {
         const response = await axios.get(`${taxi_base_url}/solicitacaoStatus?id_mch=${corrida.id_corrida}`, {
             headers: {
-                'api-key': `${bot_headers[corrida.bot_id].api_key}`,
-                'Authorization': `${bot_headers[corrida.bot_id].auth}`
+                'api-key': `${bot_headers[corrida.bot_id+corrida.cidade].api_key}`,
+                'Authorization': `${bot_headers[corrida.bot_id+corrida.cidade].auth}`
             }
         });
         //response.data = { success: true, response: { status: 'P' } }
