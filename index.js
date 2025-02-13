@@ -35,6 +35,11 @@ app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
+app.get('/status', (req, res) => {
+    const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
+    res.json({ message: 'Server is running!', timestamp: cur_date , corridas: corridas_to_process});
+});
+
 //
 app.post('/corrida_setup', (req, res) => {
     const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
