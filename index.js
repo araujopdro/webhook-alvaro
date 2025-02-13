@@ -44,14 +44,6 @@ app.get('/status', (req, res) => {
 //
 app.post('/corrida_setup', (req, res) => {
     const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
-
-    const data = req.body;
-    console.log('\x1b[42m%s\x1b[0m', `${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${cur_date}`)
-    data.logs = [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${cur_date}`]
-    data.get_position = false;
-    data.current_solicitacao_status = 'X'
-    data.cidade = FormatCityName(data.cidade ? data.cidade : '')
-
     ////data
     // {
     //     cidade: 'Itapeva'
@@ -69,18 +61,26 @@ app.post('/corrida_setup', (req, res) => {
     //     corrida_active: true,
     //     current_solicitacao_status: 'E'
     // }
-
-    corridas_to_process[data.id_corrida] = {...data};
-    PollCorridaStatus({...data});
-    InsertCorrida({...data}) 
-
+    const data = req.body;
+    
     if(!isValidNumericalString(data.id_corrida)){
         res.status(400).json({
             error: 'Missing required fields: id_corrida',
         })
     } else {
         res.status(200).send({ status: 'success', body: {...req.body} });
-    }        
+    }    
+    
+    console.log('\x1b[42m%s\x1b[0m', `${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${cur_date}`)
+    data.logs = [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id.replace(/\s/g, "")].bot_name} | ${cur_date}`]
+    data.get_position = false;
+    data.current_solicitacao_status = 'X'
+    data.cidade = FormatCityName(data.cidade ? data.cidade : '')
+
+    corridas_to_process[data.id_corrida] = {...data};
+    PollCorridaStatus({...data});
+    InsertCorrida({...data}) 
+    
 });
 
 
