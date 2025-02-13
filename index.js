@@ -163,6 +163,10 @@ let delays = {};
 async function PollCorridaStatus(corrida) {
     if (!delays[corrida.id_corrida]) delays[corrida.id_corrida] = 15000; // Initialize delay if not set
     //console.log(corrida)
+
+    const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
+    const origin = bot_headers[corrida.bot_id.replace(/\s/g, "")].bot_name
+
     try {
         const response = await axios.get(`${taxi_base_url}/solicitacaoStatus?id_mch=${corrida.id_corrida}`, {
             headers: {
@@ -179,15 +183,19 @@ async function PollCorridaStatus(corrida) {
 
         //Remove from pooling
         if (response.data.response.status === "F" || response.data.response.status === "C") {
-            const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
-            const origin = bot_headers[corrida.bot_id.replace(/\s/g, "")].bot_name
             console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${response.data.response.status}): Corrida finalizada/cancelada. | ${cur_date}`)
 
             delete delays[corrida.id_corrida]; // Remove ride from tracking
             return;
         }
     } catch (error) {
-        console.error(`Error fetching status for ride ${corrida.id_corrida}:`, error.response.status);
+        if(error.response.status == 400){
+            console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${response.data.response.status}): Erro de acesso a api. | ${cur_date}`)
+
+            delete delays[corrida.id_corrida];
+        } else {
+            console.error(`Error fetching status for ride ${corrida.id_corrida}:`, error.response.status);
+        }
         delays[corrida.id_corrida] = Math.min(delays[corrida.id_corrida] * 2, 30000); // Increase delay up to 1 min
     }
 
@@ -332,7 +340,7 @@ async function SendPulseFlowRun(_bot_id, _contact_id, _flow, _corrida_id){
         const origin = bot_headers[_bot_id.replace(/\s/g, "")].bot_name
         const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
         corridas_to_process[_corrida_id].logs.push(`${_corrida_id} - ${origin} | SendPulse Flow: ${_flow.name} Success! | ${cur_date}`)
-        //console.log(`${_corrida_id} - SendPulse Flow: ${_flow.name} Success!`);  // 
+        console.log('\x1b[43m%s\x1b[0m', `${_corrida_id} - ${origin} | SendPulse Flow: ${_flow.name} Success! | ${cur_date}`)
     } catch (error) {
         console.error('Error runing SendPulse Flow:', error);  // 
     }
