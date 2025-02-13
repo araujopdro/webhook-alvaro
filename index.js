@@ -68,11 +68,12 @@ app.post('/corrida_setup', (req, res) => {
     //     current_solicitacao_status: 'E'
     // }
     const data = req.body;
-    
+    console.log(data)
     if(!isValidNumericalString(data.id_corrida)){
         res.status(400).json({
             error: 'Missing required fields: id_corrida',
         })
+        return;
     } else {
         res.status(200).send({ status: 'success', body: {...req.body} });
     }    
