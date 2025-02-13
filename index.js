@@ -19,7 +19,7 @@ let corridas_to_process
 /////////
 (async () => {
     try {
-        corridas_to_process = await GetPendingCorridas(['F', 'C', null]);
+        corridas_to_process = await GetPendingCorridas(['F', 'C']);
         // Use the data here
         console.log('Pending corridas:', corridas_to_process);
         // Set up the recurring process
