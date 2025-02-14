@@ -205,7 +205,7 @@ async function PoolCorridaStatus(corrida) {
                 'Authorization': `${bot_headers[corrida.bot_id].auth}`
             }
         });
-        console.log(response.data.response)
+        console.log(response2.data.response[0])
         //response.data = { success: true, response: { status: 'P' } }
         //console.log(response.data.response);
         HandleFetchedStatus(corrida.id_corrida, response.data.response.status)
