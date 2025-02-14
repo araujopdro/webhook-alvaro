@@ -73,7 +73,7 @@ app.post('/corrida_setup', (req, res) => {
     data.bot_name = GetCredential(data.bot_id, data.cidade, 'bot_name')
     data.api_key = GetCredential(data.bot_id, data.cidade, 'api_key')
     data.auth = GetCredential(data.bot_id, data.cidade, 'auth')
-    data.client_id = GetCredential(data.bot_id, cidata.cidadedade, 'client_id')
+    data.client_id = GetCredential(data.bot_id, data.cidade, 'client_id')
     data.client_secret = GetCredential(data.bot_id, data.cidade, 'client_secret')
     data.sendpulse_tkn = GetCredential(data.bot_id, data.cidade, 'sendpulse_tkn')
 
