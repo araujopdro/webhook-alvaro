@@ -410,9 +410,9 @@ function GetCredential(bot_id, cidade, credentials) {
 
     // Try cidade-based config first
     if (cidade && bot_config[cidade]) {
-        return bot_config[cidade]['credentials'];
+        return bot_config[cidade][credentials];
     }
     
     // Fallback to direct bot_name
-    return bot_config['credentials'];
+    return bot_config[credentials];
 }
