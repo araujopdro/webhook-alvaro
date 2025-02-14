@@ -70,7 +70,7 @@ app.post('/corrida_setup', (req, res) => {
     const data = req.body;
     data.cidade = FormatCityName(data.cidade ? data.cidade : '')
     data.bot_id = data.bot_id + data.cidade
-    console.log(data.bot_id)
+    //console.log(data.bot_id)
     
     if(!isValidNumericalString(data.id_corrida)){
         res.status(400).json({
@@ -192,7 +192,7 @@ async function PoolCorridaStatus(corrida) {
     const origin = bot_headers[corrida.bot_id].bot_name
 
     try {
-        const response = await axios.get(`${taxi_base_url}/solicitacaoStatus?id_mch=${corrida.id_corrida}`, {
+        const response = await axios.get(`${taxi_base_url}/solicitacao?id_mch=${corrida.id_corrida}`, {
             headers: {
                 'api-key': `${bot_headers[corrida.bot_id].api_key}`,
                 'Authorization': `${bot_headers[corrida.bot_id].auth}`
@@ -200,7 +200,7 @@ async function PoolCorridaStatus(corrida) {
         });
         //response.data = { success: true, response: { status: 'P' } }
         //console.log(response.data.response);
-        HandleFetchedStatus(corrida.id_corrida, response.data.response.status)
+        HandleFetchedStatus(corrida.id_corrida, response.data.response.status_solicitacao)
 
         // Reset delay on success
         delays[corrida.id_corrida] = 15000;
@@ -215,11 +215,11 @@ async function PoolCorridaStatus(corrida) {
     } catch (error) {
         //console.log(error)
         if(error.response && error.response.status == 400){
-            console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (400): Erro de acesso a api. | ${cur_date}`)
+            console.log('\x1b[41m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (400): Erro de acesso a api. | ${cur_date}`)
             delete delays[corrida.id_corrida];
             return;
         } else if(error.response && error.response.status == 429){
-            console.error(`Error fetching status for ride ${corrida.id_corrida}:`, error.response.status);
+            console.log('\x1b[41m%s\x1b[0m', `Error fetching status for ride ${corrida.id_corrida}: ${error.response.status}| ${cur_date}`)
             delays[corrida.id_corrida] = Math.min(delays[corrida.id_corrida] * 2, 30000); // Increase delay up to 1 min
         } else {
             console.error(`Error:`, error);
