@@ -160,20 +160,20 @@ async function ProcessCorridasPosicao() {
     }
 }
 
-function IsInRange(_pos){
-    if(_pos.lat_condutor == undefined || _pos.lng_condutor == undefined) {
+function IsInRange(corrida){
+    if(corrida.lat_condutor == undefined || corrida.lng_condutor == undefined) {
         corridas_to_process[corrida.id_corrida].posicao_undefined ? corridas_to_process[corrida.id_corrida].posicao_undefined++ : corridas_to_process[corrida.id_corrida].posicao_undefined = 1;
-        console.log('\x1b[41m%s\x1b[0m', `${_pos.id_corrida}: Posição motorista undefined | ${corridas_to_process[corrida.id_corrida].posicao_undefined}`)
+        console.log('\x1b[41m%s\x1b[0m', `${corrida.id_corrida}: Posição motorista undefined | ${corridas_to_process[corrida.id_corrida].posicao_undefined}`)
         if(corridas_to_process[corrida.id_corrida].posicao_undefined >= 100) corridas_to_process[corrida.id_corrida].get_position = false
         return false
     }
 
     const distance = geolib.getDistance(
-        { latitude: _pos.lat_condutor, longitude: _pos.lng_condutor },
-        { latitude: _pos.lat_partida, longitude: _pos.lng_partida }
+        { latitude: corrida.lat_condutor, longitude: corrida.lng_condutor },
+        { latitude: corrida.lat_partida, longitude: corrida.lng_partida }
     )
 
-    console.log('\x1b[44m%s\x1b[0m', `${_pos.id_corrida} - Distancia do motorista: ${distance}`)
+    console.log('\x1b[44m%s\x1b[0m', `${corrida.id_corrida} - Distancia do motorista: ${distance}`)
     
     if (distance <= process.env.DEFAULT_MIN_DISTANCE) return true;
     else return false;
