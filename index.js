@@ -69,9 +69,14 @@ app.post('/corrida_setup', (req, res) => {
     // }
     const data = req.body;
     data.cidade = FormatCityName(data.cidade ? data.cidade : '')
-    data.bot_id = data.bot_id + data.cidade
-    //console.log(data.bot_id)
-    
+
+    data.bot_name = GetCredential(data.bot_id, data.cidade, 'bot_name')
+    data.api_key = GetCredential(data.bot_id, data.cidade, 'api_key')
+    data.auth = GetCredential(data.bot_id, data.cidade, 'auth')
+    data.client_id = GetCredential(data.bot_id, cidata.cidadedade, 'client_id')
+    data.client_secret = GetCredential(data.bot_id, data.cidade, 'client_secret')
+    data.sendpulse_tkn = GetCredential(data.bot_id, data.cidade, 'sendpulse_tkn')
+
     if(!isValidNumericalString(data.id_corrida)){
         res.status(400).json({
             error: 'Missing required fields: id_corrida',
@@ -85,6 +90,8 @@ app.post('/corrida_setup', (req, res) => {
     data.get_position = false;
     data.current_solicitacao_status = 'X'
 
+    console.log(data)
+    
     corridas_to_process[data.id_corrida] = {...data};
     PoolCorridaStatus({...data});
     InsertCorrida({...data}) 
@@ -395,4 +402,17 @@ function FormatCityName(city) {
         .normalize("NFD") // Separa os caracteres acentuados
         .replace(/[\u0300-\u036f]/g, "") // Remove a acentuação
         .replace(/\s+/g, "-"); // Substitui espaços por traços
+}
+
+function GetCredential(bot_id, cidade, credentials) {
+    const bot_config = bot_headers[bot_id];
+    if (!bot_config) return undefined;
+
+    // Try cidade-based config first
+    if (cidade && bot_config[cidade]) {
+        return bot_config[cidade]['credentials'];
+    }
+    
+    // Fallback to direct bot_name
+    return bot_config['credentials'];
 }
