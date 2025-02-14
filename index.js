@@ -22,7 +22,7 @@ let corridas_to_process
         corridas_to_process = await GetPendingCorridas(['F', 'C', 'X']);
         // Use the data here
         console.log('Pending corridas:', Object.keys(corridas_to_process).length);
-        console.log("corridas_to_process: ", corridas_to_process)
+        //console.log("corridas_to_process: ", corridas_to_process)
         // Set up the recurring process
         setInterval(ProcessCorridasPosicao, process.env.CHECK_INTERVAL);
 
@@ -90,7 +90,7 @@ app.post('/corrida_setup', (req, res) => {
     data.get_position = false;
     data.current_solicitacao_status = 'X'
 
-    console.log(data)
+    //console.log(data)
     
     corridas_to_process[data.id_corrida] = {...data};
     PoolCorridaStatus({...data});
