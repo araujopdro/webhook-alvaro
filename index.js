@@ -212,7 +212,7 @@ async function PoolCorridaStatus(corrida) {
             throw "Couldn't find corrida status"
         }
          
-        console.log(response_status)
+        //console.log(response_status)
         //response.data = { success: true, response: { status: 'P' } }
         //console.log(response.data.response);
         HandleFetchedStatus(corrida.id_corrida, response_status)
