@@ -192,12 +192,12 @@ async function PoolCorridaStatus(corrida) {
     const origin = bot_headers[corrida.bot_id].bot_name
 
     try {
-        const response = await axios.get(`${taxi_base_url}/solicitacaoStatus?id_mch=${corrida.id_corrida}`, {
-            headers: {
-                'api-key': `${bot_headers[corrida.bot_id].api_key}`,
-                'Authorization': `${bot_headers[corrida.bot_id].auth}`
-            }
-        });
+        // const response = await axios.get(`${taxi_base_url}/solicitacaoStatus?id_mch=${corrida.id_corrida}`, {
+        //     headers: {
+        //         'api-key': `${bot_headers[corrida.bot_id].api_key}`,
+        //         'Authorization': `${bot_headers[corrida.bot_id].auth}`
+        //     }
+        // });
 
         const response2 = await axios.get(`${taxi_base_url}/solicitacao?id_mch=${corrida.id_corrida}`, {
             headers: {
@@ -205,17 +205,24 @@ async function PoolCorridaStatus(corrida) {
                 'Authorization': `${bot_headers[corrida.bot_id].auth}`
             }
         });
-        console.log(response2.data.response[0])
+        let response_status
+        if(response2.data.response[0]){
+            response_status = response2.data.response[0].status_solicitacao
+        }else {
+            throw "Couldn't find corrida status"
+        }
+         
+        console.log(response_status)
         //response.data = { success: true, response: { status: 'P' } }
         //console.log(response.data.response);
-        HandleFetchedStatus(corrida.id_corrida, response.data.response.status)
+        HandleFetchedStatus(corrida.id_corrida, response_status)
 
         // Reset delay on success
         delays[corrida.id_corrida] = 15000;
 
         //Remove from pooling
-        if (response.data.response.status === "F" || response.data.response.status === "C") {
-            console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${response.data.response.status}): Corrida finalizada/cancelada. | ${cur_date}`)
+        if (response_status === "F" || response_status === "C") {
+            console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (${response_status}): Corrida finalizada/cancelada. | ${cur_date}`)
 
             delete delays[corrida.id_corrida]; // Remove ride from tracking
             return;
