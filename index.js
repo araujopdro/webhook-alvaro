@@ -85,8 +85,8 @@ app.post('/corrida_setup', (req, res) => {
         res.status(200).send({ status: 'success', body: {...req.body} });
     }    
 
-    console.log('\x1b[42m%s\x1b[0m', `${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id].bot_name} | ${cur_date}`)
-    data.logs = [`${data.id_corrida} - Corrida cadastrada pelo bot: ${bot_headers[data.bot_id].bot_name} | ${cur_date}`]
+    console.log('\x1b[42m%s\x1b[0m', `${data.id_corrida} - Corrida cadastrada pelo bot: ${data.bot_name} | ${cur_date}`)
+    data.logs = [`${data.id_corrida} - Corrida cadastrada pelo bot: ${data.bot_name} | ${cur_date}`]
     data.get_position = false;
     data.current_solicitacao_status = 'X'
 
@@ -106,8 +106,8 @@ async function MachineGetPosicaoCondutor(corrida) {
 
         const response = await axios.get(`${taxi_base_url}/posicaoCondutor?id_mch=${corrida.id_corrida}`, {
             headers: {
-                'api-key': `${bot_headers[corrida.bot_id].api_key}`,
-                'Authorization': `${bot_headers[corrida.bot_id].auth}`
+                'api-key': `${corrida.api_key}`,
+                'Authorization': `${corrida.auth}`
             }
         });
 
@@ -150,11 +150,11 @@ async function ProcessCorridasPosicao() {
                 const is_in_range = IsInRange(corrida);
                 if (is_in_range) {
 
-                    const origin = bot_headers[corrida.bot_id].bot_name
+                    const origin = corrida.bot_name
                     console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (X): Motorista chegou. | ${cur_date}`)
                     corridas_to_process[corrida.id_corrida].logs.push(`${corrida.id_corrida} - ${origin} | (X): Motorista chegou. | ${cur_date}`)
 
-                    SendPulseFlowToken(corrida.bot_id, corrida.contact_id, 'notifica-motorista-chegou', corrida.id_corrida)
+                    SendPulseFlowToken(corrida, 'notifica-motorista-chegou')
                     corridas_to_process[corrida.id_corrida].get_position = false;
                 }
             });
@@ -196,20 +196,20 @@ async function PoolCorridaStatus(corrida) {
     //console.log(corrida)
 
     const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
-    const origin = bot_headers[corrida.bot_id].bot_name
+    const origin = corrida.bot_name
 
     try {
         // const response = await axios.get(`${taxi_base_url}/solicitacaoStatus?id_mch=${corrida.id_corrida}`, {
         //     headers: {
-        //         'api-key': `${bot_headers[corrida.bot_id].api_key}`,
-        //         'Authorization': `${bot_headers[corrida.bot_id].auth}`
+        //         'api-key': `${corrida.api_key}`,
+        //         'Authorization': `${corrida.auth}`
         //     }
         // });
 
         const response2 = await axios.get(`${taxi_base_url}/solicitacao?id_mch=${corrida.id_corrida}`, {
             headers: {
-                'api-key': `${bot_headers[corrida.bot_id].api_key}`,
-                'Authorization': `${bot_headers[corrida.bot_id].auth}`
+                'api-key': `${corrida.api_key}`,
+                'Authorization': `${corrida.auth}`
             }
         });
         let response_status
@@ -257,7 +257,7 @@ async function PoolCorridaStatus(corrida) {
 function HandleFetchedStatus(id_corrida, status){
     let fluxo_name, log;
     const corrida = {...corridas_to_process[id_corrida]}
-    const origin = bot_headers[corrida.bot_id].bot_name
+    const origin = corrida.bot_name
     const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
     
     if(status == corrida.current_solicitacao_status) {
@@ -323,24 +323,24 @@ function HandleFetchedStatus(id_corrida, status){
     
     UpdateCorrida(corridas_to_process[id_corrida]);
     
-    if(corrida != null && fluxo_name != null) SendPulseFlowToken(corrida.bot_id, corrida.contact_id, fluxo_name, corrida.id_corrida)
+    if(corrida != null && fluxo_name != null) SendPulseFlowToken(corrida, fluxo_name)
 }
 
 
 //https://api.sendpulse.com/whatsapp/flows?bot_id=671c1c15e2674ddd100159df
 //Tries to get the flow list from the BOT_ID, it's a success, run the status related FLOW, to the CONTACT ID
-async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name, _corrida_id){
+async function SendPulseFlowToken(corrida, fluxo_name){
     try {
-        const response = await axios.get(`${sendpulse_base_url}/whatsapp/flows?bot_id=${_bot_id}`, {
+        const response = await axios.get(`${sendpulse_base_url}/whatsapp/flows?bot_id=${corrida.bot_id}`, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${bot_headers[_bot_id].sendpulse_tkn}`
+                'Authorization': `Bearer ${corrida.sendpulse_tkn}`
             }
         })
-        const flow_selected_on_status = response.data.data.find((f) => f.name == _fluxo_name)
+        const flow_selected_on_status = response.data.data.find((f) => f.name == fluxo_name)
 
         //get list of flows successful, RUN flow
-        SendPulseFlowRun(_bot_id, _contact_id, flow_selected_on_status, _corrida_id)
+        SendPulseFlowRun(corrida, flow_selected_on_status)
     } catch (error) {
         //get list of flows NOT successful
         if (error.status === 401) {
@@ -348,16 +348,16 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name, _corrida_id
             try {
                 const response = await axios.post(`${sendpulse_base_url}/oauth/access_token`, {
                     'grant_type': 'client_credentials',
-                    'client_id': `${bot_headers[_bot_id].client_id}`,
-                    'client_secret': `${bot_headers[_bot_id].client_secret}`
+                    'client_id': `${corrida.client_id}`,
+                    'client_secret': `${corrida.client_secret}`
                 }, {
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 })
 
-                bot_headers[_bot_id].sendpulse_tkn = response.data.access_token
-                return SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name, _corrida_id);  // try again with new token
+                corrida.sendpulse_tkn = response.data.access_token
+                return SendPulseFlowToken(corrida, fluxo_name);  // try again with new token
             } catch (tokenError) {
                 console.error('Error getting SendPulse Access Token:', tokenError);  // error getting new token
             }
@@ -368,15 +368,14 @@ async function SendPulseFlowToken(_bot_id, _contact_id, _fluxo_name, _corrida_id
 }
 
 //using the contact id and the flow id and runs it
-async function SendPulseFlowRun(_bot_id, _contact_id, _flow, _corrida_id){
-    //console.log(`SendPulseFlowRun: `,_bot_id, _contact_id, _flow.name, _corrida_id)
+async function SendPulseFlowRun(corrida, flow){
     try {
-        if(_contact_id == '') throw "Contact ID is invalid"
-        if(_flow == undefined) throw "Couldn't find Flow. Flow undefined."
+        if(corrida.contact_id == '') throw "Contact ID is invalid"
+        if(flow == undefined) throw "Couldn't find Flow. Flow undefined."
 
         const response = await axios.post(`https://api.sendpulse.com/whatsapp/flows/run`, {
-            'contact_id': `${_contact_id}`,
-            'flow_id': `${_flow.id}`,
+            'contact_id': `${corrida.contact_id}`,
+            'flow_id': `${flow.id}`,
             'external_data': {
                 'tracking_number': '1234-0987-5678-9012'
             }
@@ -384,13 +383,13 @@ async function SendPulseFlowRun(_bot_id, _contact_id, _flow, _corrida_id){
             headers: {
                 'accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${bot_headers[_bot_id].sendpulse_tkn}`
+                'Authorization': `Bearer ${corrida.sendpulse_tkn}`
             }
         })
-        const origin = bot_headers[_bot_id].bot_name
+        const origin = corrida.bot_name
         const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
-        corridas_to_process[_corrida_id].logs.push(`${_corrida_id} - ${origin} | SendPulse Flow: ${_flow.name} Success! | ${cur_date}`)
-        console.log('\x1b[43m%s\x1b[0m', `${_corrida_id} - ${origin} | SendPulse Flow: ${_flow.name} Success! | ${cur_date}`)
+        corridas_to_process[corrida.corrida_id].logs.push(`${corrida.corrida_id} - ${origin} | SendPulse Flow: ${flow.name} Success! | ${cur_date}`)
+        console.log('\x1b[43m%s\x1b[0m', `${corrida.corrida_id} - ${origin} | SendPulse Flow: ${flow.name} Success! | ${cur_date}`)
     } catch (error) {
         console.error('Error runing SendPulse Flow:', error);  // 
     }
