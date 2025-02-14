@@ -198,6 +198,14 @@ async function PoolCorridaStatus(corrida) {
                 'Authorization': `${bot_headers[corrida.bot_id].auth}`
             }
         });
+
+        const response2 = await axios.get(`${taxi_base_url}/solicitacao?id_mch=${corrida.id_corrida}`, {
+            headers: {
+                'api-key': `${bot_headers[corrida.bot_id].api_key}`,
+                'Authorization': `${bot_headers[corrida.bot_id].auth}`
+            }
+        });
+        console.log(response2)
         //response.data = { success: true, response: { status: 'P' } }
         //console.log(response.data.response);
         HandleFetchedStatus(corrida.id_corrida, response.data.response.status)
