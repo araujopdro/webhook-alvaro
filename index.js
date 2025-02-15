@@ -385,13 +385,12 @@ async function SendPulseFlowRun(corrida, flow){
                 'Authorization': `Bearer ${corrida.sendpulse_tkn}`
             }
         })
-        console.log(corrida.corrida_id)
 
         const origin = corrida.bot_name
         const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
         
-        corridas_to_process[corrida.corrida_id].logs.push(`${corrida.corrida_id} - ${origin} | SendPulse Flow: ${flow.name} Success! | ${cur_date}`)
-        console.log('\x1b[43m%s\x1b[0m', `${corrida.corrida_id} - ${origin} | SendPulse Flow: ${flow.name} Success! | ${cur_date}`)
+        corridas_to_process[corrida.id_corrida].logs.push(`${corrida.id_corrida} - ${origin} | SendPulse Flow: ${flow.name} Success! | ${cur_date}`)
+        console.log('\x1b[43m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | SendPulse Flow: ${flow.name} Success! | ${cur_date}`)
     } catch (error) {
         console.error('Error runing SendPulse Flow:', error);  // 
     }
