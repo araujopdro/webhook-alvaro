@@ -111,11 +111,7 @@ async function MachineGetPosicaoCondutor(corrida) {
         });
 
         return {
-            'id_corrida': corrida.id_corrida,
-            'bot_id': corrida.bot_id,
-            'contact_id': corrida.contact_id,
-            'lat_partida': corrida.lat_partida, 
-            'lng_partida': corrida.lng_partida, 
+            ...corrida,
             'lat_condutor': response.data.response.lat_condutor, 
             'lng_condutor': response.data.response.lng_condutor 
         };
