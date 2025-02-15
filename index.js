@@ -385,6 +385,8 @@ async function SendPulseFlowRun(corrida, flow){
                 'Authorization': `Bearer ${corrida.sendpulse_tkn}`
             }
         })
+        console.log(corrida.corrida_id)
+
         const origin = corrida.bot_name
         const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
         
