@@ -355,8 +355,8 @@ async function SendPulseFlowToken(corrida, fluxo_name){
                     }
                 })
 
-                corrida.sendpulse_tkn = response.data.access_token
-                return SendPulseFlowToken(corrida, fluxo_name);  // try again with new token
+                corridas_to_process[corrida.id_corrida].sendpulse_tkn = response.data.access_token
+                return SendPulseFlowToken(corridas_to_process[corrida.id_corrida], fluxo_name);  // try again with new token
             } catch (tokenError) {
                 console.error('Error getting SendPulse Access Token:', tokenError);  // error getting new token
             }
