@@ -346,6 +346,8 @@ async function SendPulseFlowToken(corrida, fluxo_name){
         if (error.status === 401) {
             //status 401 not auth, which means that the current SENDPULSE TOKEN it's invalid and tries to get a new one
             try {
+                console.log(corrida.client_id)
+                console.log(corrida.client_secret)
                 const response = await axios.post(`${sendpulse_base_url}/oauth/access_token`, {
                     'grant_type': 'client_credentials',
                     'client_id': `${corrida.client_id}`,
@@ -359,7 +361,7 @@ async function SendPulseFlowToken(corrida, fluxo_name){
                 corridas_to_process[corrida.id_corrida].sendpulse_tkn = response.data.access_token
                 return SendPulseFlowToken(corridas_to_process[corrida.id_corrida], fluxo_name);  // try again with new token
             } catch (tokenError) {
-                console.error('Error getting SendPulse Access Token:', tokenError);  // error getting new token
+                //console.error('Error getting SendPulse Access Token:', tokenError);  // error getting new token
             }
         } else {
             console.error('Error:', error);  // error getting new token
