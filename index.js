@@ -6,7 +6,7 @@ const axios = require('axios');
 const geolib = require('geolib');
 // const fs = require("fs");
 // const db_file_path = "./corridas.json";
-const { db, GetPendingCorridas, UpdateCorrida, InsertCorrida } = require('./db/database.js');
+const { GetPendingCorridas, UpdateCorrida, InsertCorrida } = require('./db/database.js');
 const { bot_headers } = require('./bots/credentials.js');
 
 const app = express();
@@ -24,8 +24,7 @@ let corridas_to_process
         console.log('Pending corridas:', Object.keys(corridas_to_process).length);
         //console.log("corridas_to_process: ", corridas_to_process)
         // Set up the recurring process
-        setInterval(ProcessCorridasPosicao, process.env.CHECK_INTERVAL);
-
+        setInterval(ProcessCorridasPosicao, process.env.CHECK_INTERVAL);        
         
         const corridas_entries = Object.values(corridas_to_process);
         if (corridas_entries.length === 0) return; //nothing to process
@@ -197,7 +196,7 @@ async function PoolCorridaStatus(corrida) {
 
     const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
     const origin = corrida.bot_name
-
+    
     try {
         // const response = await axios.get(`${taxi_base_url}/solicitacaoStatus?id_mch=${corrida.id_corrida}`, {
         //     headers: {

@@ -1,4 +1,5 @@
 const sqlite3 = require('sqlite3').verbose();
+const { bot_headers } = require('../bots/credentials.js');
 
 // Create database connection
 const db = new sqlite3.Database('./corridas.db', (err) => {
@@ -42,7 +43,14 @@ async function GetPendingCorridas(excluded_statuses = ['F', 'C']) {
                         ...row,
                         logs: JSON.parse(row.logs),
                         get_position: Boolean(row.get_position),
-                        corrida_active: Boolean(row.corrida_active)
+                        corrida_active: Boolean(row.corrida_active),
+                        bot_name: GetCredential(data.bot_id, data.cidade, 'bot_name'),
+                        api_key: GetCredential(data.bot_id, data.cidade, 'api_key'),
+                        auth: GetCredential(data.bot_id, data.cidade, 'auth'),
+                        client_id: GetCredential(data.bot_id, data.cidade, 'client_id'),
+                        client_secret: GetCredential(data.bot_id, data.cidade, 'client_secret'),
+                        sendpulse_tkn: GetCredential(data.bot_id, data.cidade, 'sendpulse_tkn'),
+                        
                     };
                     return acc;
                 }, {});
@@ -111,6 +119,19 @@ function InsertCorrida(corrida) {
         }
       );
     });
+}
+
+function GetCredential(bot_id, cidade, credentials) {
+    const bot_config = bot_headers[bot_id];
+    if (!bot_config) return undefined;
+
+    // Try cidade-based config first
+    if (cidade && bot_config[cidade]) {
+        return bot_config[cidade][credentials];
+    }
+    
+    // Fallback to direct bot_name
+    return bot_config[credentials];
 }
 
 // Export the db instance directly
