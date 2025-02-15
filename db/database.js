@@ -44,12 +44,12 @@ async function GetPendingCorridas(excluded_statuses = ['F', 'C']) {
                         logs: JSON.parse(row.logs),
                         get_position: Boolean(row.get_position),
                         corrida_active: Boolean(row.corrida_active),
-                        bot_name: GetCredential(data.bot_id, data.cidade, 'bot_name'),
-                        api_key: GetCredential(data.bot_id, data.cidade, 'api_key'),
-                        auth: GetCredential(data.bot_id, data.cidade, 'auth'),
-                        client_id: GetCredential(data.bot_id, data.cidade, 'client_id'),
-                        client_secret: GetCredential(data.bot_id, data.cidade, 'client_secret'),
-                        sendpulse_tkn: GetCredential(data.bot_id, data.cidade, 'sendpulse_tkn'),
+                        bot_name: GetCredential(row.bot_id, row.cidade, 'bot_name'),
+                        api_key: GetCredential(row.bot_id, row.cidade, 'api_key'),
+                        auth: GetCredential(row.bot_id, row.cidade, 'auth'),
+                        client_id: GetCredential(row.bot_id, row.cidade, 'client_id'),
+                        client_secret: GetCredential(row.bot_id, row.cidade, 'client_secret'),
+                        sendpulse_tkn: GetCredential(row.bot_id, row.cidade, 'sendpulse_tkn'),
                         
                     };
                     return acc;
