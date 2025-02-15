@@ -342,6 +342,7 @@ async function SendPulseFlowToken(corrida, fluxo_name){
         SendPulseFlowRun(corrida, flow_selected_on_status)
     } catch (error) {
         //get list of flows NOT successful
+        console.log(corrida)
         if (error.status === 401) {
             //status 401 not auth, which means that the current SENDPULSE TOKEN it's invalid and tries to get a new one
             try {
