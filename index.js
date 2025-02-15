@@ -322,7 +322,7 @@ function HandleFetchedStatus(id_corrida, status){
     
     UpdateCorrida(corridas_to_process[id_corrida]);
     
-    if(corrida != null && fluxo_name != null) SendPulseFlowToken(corrida, fluxo_name)
+    if(corrida != null && fluxo_name != null) SendPulseFlowToken(corridas_to_process[id_corrida], fluxo_name)
 }
 
 
@@ -387,9 +387,7 @@ async function SendPulseFlowRun(corrida, flow){
         })
         const origin = corrida.bot_name
         const cur_date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
-        console.log(corrida.corrida_id)
-        console.log(corridas_to_process)
-        console.log(corridas_to_process[corrida.corrida_id])
+        
         corridas_to_process[corrida.corrida_id].logs.push(`${corrida.corrida_id} - ${origin} | SendPulse Flow: ${flow.name} Success! | ${cur_date}`)
         console.log('\x1b[43m%s\x1b[0m', `${corrida.corrida_id} - ${origin} | SendPulse Flow: ${flow.name} Success! | ${cur_date}`)
     } catch (error) {
