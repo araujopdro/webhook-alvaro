@@ -81,7 +81,7 @@ app.post('/corrida_setup', (req, res) => {
             error: 'Missing required fields: id_corrida',
         })
     } else if(data.api_key == undefined || data.api_key == undefined){
-        console.log(data.bot_id)
+        //console.log(data.bot_id)
         res.status(400).json({
             error: 'api_key/auth undefined',
         })
