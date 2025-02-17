@@ -80,9 +80,16 @@ app.post('/corrida_setup', (req, res) => {
         res.status(400).json({
             error: 'Missing required fields: id_corrida',
         })
+    } else if(data.api_key == undefined || data.api_key == undefined){
+        console.log(data.bot_id)
+        res.status(400).json({
+            error: 'api_key/auth undefined',
+        })
     } else {
         res.status(200).send({ status: 'success', body: {...req.body} });
     }    
+
+    
 
     console.log('\x1b[42m%s\x1b[0m', `${data.id_corrida} - Corrida cadastrada pelo bot: ${data.bot_name} | ${cur_date}`)
     data.logs = [`${data.id_corrida} - Corrida cadastrada pelo bot: ${data.bot_name} | ${cur_date}`]
