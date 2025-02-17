@@ -230,7 +230,7 @@ async function PoolCorridaStatus(corrida) {
             return;
         }
     } catch (error) {
-        //console.log(error)
+        console.log(error)
         if(error.response && error.response.status == 400){
             console.log('\x1b[41m%s\x1b[0m', `${corrida.id_corrida} - ${origin} | (400): Erro de acesso a api. | ${cur_date}`)
             delete delays[corrida.id_corrida];
