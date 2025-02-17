@@ -107,6 +107,15 @@ const bot_headers = {
         sendpulse_tkn: null,
     },
 
+    '67b38990fcff7f4015087d0e': {
+        bot_name: 'Me Levi',
+        api_key: process.env.API_KEY_VALUE_ME_LEVI,
+        auth: process.env.BASIC_AUTHORIZATION_VALUE_ME_LEVI,
+        client_id: process.env.CLIENT_ID_ME_LEVI,
+        client_secret: process.env.CLIENT_SECRET_ME_LEVI,
+        sendpulse_tkn: null,
+    },
+
     '66c4d7e830862626a708624b': {
         bot_name: 'Rota Pop',
         api_key: process.env.API_KEY_VALUE_ROTA_POP,
